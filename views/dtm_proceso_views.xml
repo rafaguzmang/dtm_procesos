@@ -195,10 +195,26 @@
                <field name="model">dtm.proceso</field>
                <field name ="arch" type="xml">
                    <search>
-                        <field name="ot_number"/>
+
                         <filter string="OT" name="proceso_ot" domain="[('tipe_order','=','OT')]"/>
                         <filter string="NPI" name="proceso_npi" domain="[('tipe_order','=','NPI')]"/>
-
+                        <filter string="Corte" name="proceso_terminado" domain="[('status','=','corte')]"/>
+                        <filter string="Doblado" name="proceso_ot" domain="[('status','=','doblado')]"/>
+                        <filter string="Soldadura" name="proceso_npi" domain="[('status','=','soldadura')]"/>
+                        <filter string="Lavado" name="proceso_terminado" domain="[('status','=','lavado')]"/>
+                        <filter string="Pintura" name="proceso_ot" domain="[('status','=','pintura')]"/>
+                        <filter string="Ensamble" name="proceso_npi" domain="[('status','=','ensamble')]"/>
+                        <filter string="Terminado" name="proceso_terminado" domain="[('status','=','terminado')]"/>
+                        <separator/>
+                        <filter string="No OT" name="proceso_ot" domain="[('tipe_order','!=','OT')]"/>
+                        <filter string="No NPI" name="proceso_npi" domain="[('tipe_order','!=','NPI')]"/>
+                        <filter string="No Corte" name="proceso_terminado_quitar" domain="[('status','!=','corte')]"/>
+                        <filter string="No Doblado" name="proceso_ot_quitar" domain="[('status','!=','doblado')]"/>
+                        <filter string="No Soldadura" name="proceso_npi_quitar" domain="[('status','!=','soldadura')]"/>
+                        <filter string="No Lavado" name="proceso_terminado_quitar" domain="[('status','!=','lavado')]"/>
+                        <filter string="No Pintura" name="proceso_ot_quitar" domain="[('status','!=','pintura')]"/>
+                        <filter string="No Ensamble" name="proceso_npi_quitar" domain="[('status','!=','ensamble')]"/>
+                        <filter string="No Terminado" name="proceso_terminado_quitar" domain="[('status','!=','terminado')]"/>
                    </search>
 
 
