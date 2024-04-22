@@ -47,7 +47,6 @@ class Proceso(models.Model):
                 # print(get.ot_number,modulo,get.name_client)
                 get_this = self.env['dtm.proceso'].search([("ot_number","=",get.ot_number),("tipe_order","=",get.tipe_order)])
                 vals = {
-                    "sequence":get.sequence,
                     "ot_number":get.ot_number,
                     "tipe_order":get.tipe_order,
                     "name_client":get.name_client,
@@ -63,7 +62,7 @@ class Proceso(models.Model):
                     "notes":get.notes
 
                 }
-                # print(get.ot_number,get.materials_ids)
+                print(get.ot_number,get.materials_ids)
 
                 if re.match(".*odt.*",str(modulo)):
                     vals["po_number"] = get.po_number

@@ -12,7 +12,7 @@
             <field name="model">dtm.proceso</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="sequence" widget="handle"></field>
+<!--                    <field name="sequence" widget="handle"></field>-->
                     <field name="ot_number"/>
                     <field name="tipe_order"/>
                     <field name="date_rel" widget="date"/>

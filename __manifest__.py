@@ -1,5 +1,5 @@
 {
-    "name":"Compras",
+    "name":"Procesos",
 
     'version': '1.0',
     'author': "Rafael Guzmán",
