@@ -62,7 +62,7 @@ class Proceso(models.Model):
                     "notes":get.notes
 
                 }
-                print(get.ot_number,get.materials_ids)
+                # print(get.ot_number,get.materials_ids)
 
                 if re.match(".*odt.*",str(modulo)):
                     vals["po_number"] = get.po_number
@@ -117,34 +117,34 @@ class Proceso(models.Model):
                 get_this.rechazo_id = lines
 
                 lines = []
-                for materi in get.anexos_id:
-                    datos = {
-                        "documentos":materi.documentos,
-                        "nombre":materi.nombre
-                    }
-                    if self.env['dtm.proceso.anexos'].search([("documentos","=",materi.documentos),("nombre","=",materi.nombre)]):
-
-                        line = (1,get_this.id,datos)
-                    else:
-                        line = (0,get_this.id,datos)
-                    lines.append(line)
-
-                get_this.anexos_id = lines
-
-                lines = []
-                for materi in get.cortadora_id:
-                    datos = {
-                        "documentos":materi.documentos,
-                        "nombre":materi.nombre
-                    }
-                    if self.env['dtm.proceso.cortadora'].search([("documentos","=",materi.documentos),("nombre","=",materi.nombre)]):
-
-                        line = (1,get_this.id,datos)
-                    else:
-                        line = (0,get_this.id,datos)
-                    lines.append(line)
-
-                get_this.cortadora_id = lines
+                # for materi in get.anexos_id:
+                #     datos = {
+                #         "documentos":materi.documentos,
+                #         "nombre":materi.nombre
+                #     }
+                #     if self.env['dtm.proceso.anexos'].search([("documentos","=",materi.documentos),("nombre","=",materi.nombre)]):
+                #
+                #         line = (1,get_this.id,datos)
+                #     else:
+                #         line = (0,get_this.id,datos)
+                #     lines.append(line)
+                #
+                # get_this.anexos_id = lines
+                #
+                # lines = []
+                # for materi in get.cortadora_id:
+                #     datos = {
+                #         "documentos":materi.documentos,
+                #         "nombre":materi.nombre
+                #     }
+                #     if self.env['dtm.proceso.cortadora'].search([("documentos","=",materi.documentos),("nombre","=",materi.nombre)]):
+                #
+                #         line = (1,get_this.id,datos)
+                #     else:
+                #         line = (0,get_this.id,datos)
+                #     lines.append(line)
+                #
+                # get_this.cortadora_id = lines
 
                 lines = []
                 for materi in get.tubos_id:
