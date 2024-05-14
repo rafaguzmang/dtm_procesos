@@ -158,6 +158,7 @@
                                 <field name="cortadora_id" >
                                      <tree>
                                             <field name="nombre" invisible="0"></field>
+                                            <field name="cortado" />
                                      </tree>
                                      <form>
                                         <group >

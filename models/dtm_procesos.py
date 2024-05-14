@@ -5,7 +5,7 @@ class Proceso(models.Model):
     _name = "dtm.proceso"
     _description = "Modulo para indicar el status de la ODT o NPI"
 
-    status = fields.Selection(string="Estatus",selection=[("corte","Corte"),("doblado","Doblado"),("soldadura","Soldadura"),("lavado","Lavado"),("pintura","Pintura"),("ensamble","Ensamble"),("terminado","Terminado")])
+    status = fields.Selection(string="Estatus",selection=[("corte","Corte"),("cortedoblado","Corte - Doblado"),("doblado","Doblado"),("soldadura","Soldadura"),("lavado","Lavado"),("pintura","Pintura"),("ensamble","Ensamble"),("terminado","Terminado")])
 
     sequence = fields.Integer()
     ot_number = fields.Char(string="NÚMERO",readonly=True)
@@ -69,6 +69,7 @@ class Cortadora(models.Model):
 
     documentos = fields.Binary()
     nombre = fields.Char()
+    cortado = fields.Char("Cortado")
 
 class Tubos(models.Model):
     _name = "dtm.proceso.tubos"
