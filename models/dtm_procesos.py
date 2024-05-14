@@ -18,17 +18,17 @@ class Proceso(models.Model):
     version_ot = fields.Integer(string="VERSIÓN OT",readonly=True)
     color = fields.Char(string="COLOR",readonly=True)
     cuantity = fields.Integer(string="CANTIDAD",readonly=True)
-    materials_ids = fields.Many2many("dtm.proceso.materials",readonly=True)
+    materials_ids = fields.Many2many("dtm.materials.line",readonly=True)
     firma = fields.Char(string="Firma", readonly = True)
 
     planos = fields.Boolean(string="Planos",default=False,readonly=True)
     nesteos = fields.Boolean(string="Nesteos",default=False,readonly=True)
 
-    rechazo_id = fields.Many2many("dtm.proceso.rechazo")
+    rechazo_id = fields.Many2many("dtm.odt.rechazo")
 
-    anexos_id = fields.One2many("dtm.proceso.anexos","model_id")
-    cortadora_id = fields.One2many("dtm.proceso.cortadora","model_id")
-    tubos_id = fields.One2many("dtm.proceso.tubos","model_id")
+    anexos_id = fields.Many2many("dtm.proceso.anexos")
+    cortadora_id = fields.Many2many("dtm.proceso.cortadora")
+    tubos_id = fields.Many2many("dtm.proceso.tubos")
 
     #---------------------Resumen de descripción------------
 
@@ -59,7 +59,6 @@ class Documentos(models.Model):
     _name = "dtm.proceso.anexos"
     _description = "Guarda todos los planos de la orden de trabajo"
 
-    model_id = fields.Many2one("dtm.proceso")
     documentos = fields.Binary()
     nombre = fields.Char()
 
@@ -68,7 +67,6 @@ class Cortadora(models.Model):
     _name = "dtm.proceso.cortadora"
     _description = "Guarda los nesteos del Radán"
 
-    model_id = fields.Many2one("dtm.proceso")
     documentos = fields.Binary()
     nombre = fields.Char()
 
@@ -76,7 +74,6 @@ class Tubos(models.Model):
     _name = "dtm.proceso.tubos"
     _description = "Guarda los nesteos de la cortadora de tubos"
 
-    model_id = fields.Many2one("dtm.proceso")
     documentos = fields.Binary()
     nombre = fields.Char()
 

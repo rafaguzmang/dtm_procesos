@@ -4,6 +4,7 @@
     'version': '1.0',
     'author': "Rafael Guzmán",
     "description": "Modulo para el área de compras",
+    "depends":["dtm_odt"],
     "data":[
         'security/ir.model.access.csv',
         #Views
