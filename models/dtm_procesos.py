@@ -36,6 +36,20 @@ class Proceso(models.Model):
 
     notes = fields.Text()
 
+
+    def action_firma(self):
+        self.firma = self.env.user.partner_id.name
+        get_ot = self.env['dtm.odt'].search([("ot_number","=",self.ot_number)])
+        print("resultado",get_ot)
+        get_ot.write({"firma_produccion": self.firma})
+
+
+    def action_imprimir_formato(self): # Imprime según el formato que se esté llenando
+        return self.env.ref("dtm_odt.formato_orden_de_trabajo").report_action(self)
+
+    def action_imprimir_materiales(self): # Imprime según el formato que se esté llenando
+        return self.env.ref("dtm_odt.formato_lista_materiales").report_action(self)
+
 class TestModelLine(models.Model):
     _name = "dtm.proceso.materials"
     _description = "Tabla de materiales"
