@@ -1,11 +1,12 @@
 from odoo import api,models,fields
 import re
+from datetime import datetime
 
 class Proceso(models.Model):
     _name = "dtm.proceso"
     _description = "Modulo para indicar el status de la ODT o NPI"
 
-    status = fields.Selection(string="Estatus",selection=[("corte","Corte"),("cortedoblado","Corte - Doblado"),("doblado","Doblado"),("soldadura","Soldadura"),("lavado","Lavado"),("pintura","Pintura"),("ensamble","Ensamble"),("terminado","Terminado")])
+    status = fields.Selection(string="Estatus",selection=[("corte","Corte"),("corterevision","Corte - Revisión FAI"),("revision","Revisión FAI"),("corterevision","Corte - Revisión FAI"),("cortedoblado","Corte - Doblado"),("doblado","Doblado"),("soldadura","Soldadura"),("lavado","Lavado"),("pintura","Pintura"),("ensamble","Ensamble"),("terminado","Terminado")])
 
     sequence = fields.Integer()
     ot_number = fields.Char(string="NÚMERO",readonly=True)
@@ -28,7 +29,10 @@ class Proceso(models.Model):
 
     anexos_id = fields.Many2many("dtm.proceso.anexos")
     cortadora_id = fields.Many2many("dtm.proceso.cortadora")
+    primera_pieza_id = fields.Many2many("dtm.proceso.primer")
     tubos_id = fields.Many2many("dtm.proceso.tubos")
+
+    material_cortado = fields.Boolean(default=False)
 
     #---------------------Resumen de descripción------------
 
@@ -37,11 +41,84 @@ class Proceso(models.Model):
     notes = fields.Text()
 
 
+    def action_liberar(self):
+
+        vals = {
+            "orden_trabajo":self.ot_number,
+            "fecha_entrada": datetime.today(),
+            "nombre_orden":self.product_name,
+            "tipo_orden": "OT"
+        }
+
+        get_corte = self.env['dtm.materiales.laser'].search([("orden_trabajo","=",self.ot_number)])
+        get_corte_realizado = self.env['dtm.laser.realizados'].search([("orden_trabajo","=",self.ot_number)])
+        if get_corte_realizado:
+            get_corte_realizado.unlink() #Quita la orden del apartado realizado para poder incluir los siguientes archivos
+
+        if get_corte:
+            get_corte.write(vals)
+        else:
+            get_corte.create(vals)
+            get_corte = self.env['dtm.materiales.laser'].search([("orden_trabajo","=",self.ot_number)])
+
+        get_corte.write({'cortadora_id': [(5, 0, {})]})
+        lines = []
+        for anexo in self.cortadora_id:
+            vals = {
+                "documentos":anexo.documentos,
+                "nombre":anexo.nombre,
+                "primera_pieza": False
+            }
+            get_anexos = self.env['dtm.documentos.cortadora'].search([("nombre","=",anexo.nombre)])
+            if get_anexos:
+                get_anexos.write(vals)
+                lines.append(get_anexos.id)
+            else:
+                get_anexos.create(vals)
+                get_anexos = self.env['dtm.documentos.cortadora'].search([("nombre","=",anexo.nombre)])
+                lines.append(get_anexos.id)
+        get_corte.write({'cortadora_id': [(6, 0, lines)]})
+        lines = []
+        get_corte.write({'materiales_id': [(5, 0, {})]})
+        for lamina in self.materials_ids:
+            if re.match("Lámina",lamina.nombre):
+                get_almacen = self.env['dtm.materiales'].search([("codigo","=",lamina.materials_list.id)])
+                content = {
+                    "identificador": lamina.materials_list.id,
+                    "nombre": lamina.nombre,
+                    "medida": lamina.medida,
+                    "cantidad": lamina.materials_cuantity,
+                    "inventario": lamina.materials_inventory,
+                    "requerido": lamina.materials_required,
+                    "localizacion": get_almacen.localizacion
+                }
+
+                get_cortadora_laminas = self.env['dtm.cortadora.laminas'].search([
+                    ("identificador","=",lamina.materials_list.id),("nombre","=",lamina.nombre),
+                    ("medida","=",lamina.medida),("cantidad","=",lamina.materials_cuantity),
+                    ("inventario","=",lamina.materials_inventory),("requerido","=",lamina.materials_required),
+                    ("localizacion","=",get_almacen.localizacion)])
+
+                if get_cortadora_laminas:
+                    get_cortadora_laminas.write(content)
+                    lines.append(get_cortadora_laminas.id)
+                else:
+                    get_cortadora_laminas.create(content)
+                    get_cortadora_laminas = self.env['dtm.cortadora.laminas'].search([
+                    ("identificador","=",lamina.materials_list.id),("nombre","=",lamina.nombre),
+                    ("medida","=",lamina.medida),("cantidad","=",lamina.materials_cuantity),
+                    ("inventario","=",lamina.materials_inventory),("requerido","=",lamina.materials_required),
+                    ("localizacion","=",get_almacen.localizacion)])
+                    lines.append(get_cortadora_laminas.id)
+        get_corte.write({"materiales_id":[(6, 0,lines)]})
+
+
     def action_firma(self):
         self.firma = self.env.user.partner_id.name
         get_ot = self.env['dtm.odt'].search([("ot_number","=",self.ot_number)])
-        print("resultado",get_ot)
         get_ot.write({"firma_produccion": self.firma})
+        get_corte = self.env['dtm.materiales.laser'].search([("orden_trabajo","=",self.ot_number)])
+        get_corte.write({"liberada":"liberada"})
 
 
     def action_imprimir_formato(self): # Imprime según el formato que se esté llenando
@@ -80,6 +157,14 @@ class Documentos(models.Model):
 class Cortadora(models.Model):
     _name = "dtm.proceso.cortadora"
     _description = "Guarda los nesteos del Radán"
+
+    documentos = fields.Binary()
+    nombre = fields.Char()
+    cortado = fields.Char("Cortado")
+
+class CortadoraPrimera(models.Model):
+    _name = "dtm.proceso.primer"
+    _description = "Guarda los nesteos del Radán para primer corte"
 
     documentos = fields.Binary()
     nombre = fields.Char()

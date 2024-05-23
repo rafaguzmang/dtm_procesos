@@ -12,6 +12,11 @@
         #Menú
         # 'views/dtm_menu.xml'
 
-    ]
+    ],
+    'assets': {
+    'web.assets_backend': [
+        'dtm_procesos/static/src/css/kanban.css',
+    ],
+}
 }
 

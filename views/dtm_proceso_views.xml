@@ -28,38 +28,33 @@
             <field name="name">dtm_proceso_kanban</field>
             <field name="model">dtm.proceso</field>
             <field name="arch" type="xml">
-                <kanban default_group_by = "status">
-                    <field name="status"/>
 
+                <kanban default_group_by = "status">
 
                     <template>
                         <t t-name="kanban-box">
-                            <div class="oe_kanban_global_click">
-                                <div class="oe_kanban_details">
-
-                                    <strong class="o_kanban_record_title">
-                                        <field name="tipe_order"/> -
-                                        <field name="ot_number"/>
-                                    </strong>
-                                    <div class="o_kanban_tags_section">
-                                        <ul>
-                                            <li>
-                                                <field name="product_name"/>
-                                            </li>
-                                            <li>
-                                                Entrada: <field name="date_in"/>
-                                            </li>
-                                            <li>
-                                                Entrega <field name="date_rel"/>
-                                            </li>
-                                        </ul>
-
-                                    </div >
-                                </div>
-
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="tipe_order"/>
+                                    <field name="ot_number"/>
+                                </strong>
+                                <div class="o_kanban_tags_section">
+                                    <ul>
+                                        <li>
+                                            <field name="product_name"/>
+                                        </li>
+                                        <li>
+                                            Entrada: <field name="date_in"/>
+                                        </li>
+                                        <li>
+                                            Entrega <field name="date_rel"/>
+                                        </li>
+                                    </ul>
+                                </div >
                             </div>
                         </t>
                     </template>
+
                 </kanban>
             </field>
         </record>
@@ -155,6 +150,22 @@
                                      </form>
                                 </field>
                             </page>
+                            <page string="Primera Pieza">
+                                <field name="primera_pieza_id">
+                                  <tree>
+                                            <field name="nombre" invisible="0"></field>
+                                            <field name="cortado" />
+                                     </tree>
+                                     <form>
+                                        <group >
+                                            <field name="documentos" filename="nombre" widget="pdf_viewer"></field>
+                                            <field name="nombre" invisible="1"></field>
+                                        </group>
+                                     </form>
+                                </field>
+                                 <button type="object" name="action_liberar" string="Liberar"  icon="fa-check" class="btn btn-primary"/>
+                            </page>
+
                             <page string="MITSUBISHI">
                                 <field name="cortadora_id" >
                                      <tree>

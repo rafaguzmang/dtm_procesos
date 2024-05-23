@@ -5,3 +5,4 @@ access_dtm_proceso_rechazo,access.dtm.proceso.rechazo,model_dtm_proceso_rechazo,
 access_dtm_proceso_anexos,access.dtm.proceso.anexos,model_dtm_proceso_anexos,base.group_user,1,1,1,1
 access_dtm_proceso_cortadora,access.dtm.proceso.cortadora,model_dtm_proceso_cortadora,base.group_user,1,1,1,1
 access_dtm_proceso_tubos,access.dtm.proceso.tubos,model_dtm_proceso_tubos,base.group_user,1,1,1,1
+access_dtm_proceso_primer,access.dtm.proceso.primer,model_dtm_proceso_primer,base.group_user,1,1,1,1
