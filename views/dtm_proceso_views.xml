@@ -33,7 +33,8 @@
 
                     <template>
                         <t t-name="kanban-box">
-                            <div class="oe_kanban_details">
+                            <div class="oe_kanban_global_click">
+                                <div class="oe_kanban_details">
                                 <strong class="o_kanban_record_title">
                                     <field name="tipe_order"/>
                                     <field name="ot_number"/>
@@ -51,6 +52,7 @@
                                         </li>
                                     </ul>
                                 </div >
+                            </div>
                             </div>
                         </t>
                     </template>
