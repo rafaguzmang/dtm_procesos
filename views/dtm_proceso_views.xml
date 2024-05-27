@@ -33,37 +33,48 @@
 
                     <template>
                         <t t-name="kanban-box">
-                            <div class="oe_kanban_global_click">
-                                <div class="oe_kanban_details">
-                                    <strong class="o_kanban_record_title" style="width :100%;overflow: hidden;"  >
+                            <div class="oe_kanban_global_click" style="width :100%">
+                                <div class="oe_kanban_details" style="width :100%;float:left">
+                                    <strong class="o_kanban_record_title" style="width :100%;float:left;"  >
                                         <field name="tipe_order" style="width :10%;float:left"/>
                                         <div style="width :80%;text-align:center;float:left">
                                             <field name="name_client" />
                                         </div>
                                         <field name="ot_number" style="width :10%;float:right"/>
                                     </strong>
+<<<<<<< HEAD
                                     <div class="o_kanban_tags_section">
                                         <ul style="float:left">
                                             <li>
                                                 <field name="firma_diseño"/>
                                                 <field name="firma_ventas"/>
                                             </li>
+=======
+                                    <div class="o_kanban_tags_section"  style="float:left,width:100%">
+                                        <ul  style="float:left">
+>>>>>>> refs/remotes/origin/main
                                             <li>
                                                 <field name="product_name"/>
                                             </li>
                                             <li>
                                                 Entrada: <field name="date_in"/>
                                             </li>
-                                            <li>
+                                             <li>
                                                 Entrega <field name="date_rel"  widget="remaining_days"/>
                                             </li>
                                             <li>
+<<<<<<< HEAD
+                                                Entrega <field name="date_rel"  widget="remaining_days"/>
+                                            </li>
+                                            <li>
+=======
+>>>>>>> refs/remotes/origin/main
                                                 Notas <field name="notes"/>
                                             </li>
                                         </ul>
 
                                 </div >
-                                <div class="card-footer">
+                                <div class="card-footer" style="float:left;width:100%">
                                     <strong class="o_kanban_record_title">
                                         <field name="description"/>
                                     </strong>
