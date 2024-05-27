@@ -43,7 +43,11 @@
                                         <field name="ot_number" style="width :10%;float:right"/>
                                     </strong>
                                     <div class="o_kanban_tags_section">
-                                        <ul>
+                                        <ul style="float:left">
+                                            <li>
+                                                <field name="firma_diseño"/>
+                                                <field name="firma_ventas"/>
+                                            </li>
                                             <li>
                                                 <field name="product_name"/>
                                             </li>
@@ -57,6 +61,7 @@
                                                 Notas <field name="notes"/>
                                             </li>
                                         </ul>
+
                                 </div >
                                 <div class="card-footer">
                                     <strong class="o_kanban_record_title">
@@ -120,6 +125,10 @@
                                 <field name="color" attrs="{'invisible': [('tipe_order', '=', 'npi')]}"/>
                                 <field name="planos" widget="boolean_toggle" />
                             </group>
+                        </group>
+                        <group>
+                            <field name="firma_diseño"/>
+                            <field name="firma_ventas"/>
                         </group>
 
                         <notebook>

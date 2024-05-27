@@ -20,8 +20,6 @@ class Proceso(models.Model):
     color = fields.Char(string="COLOR",readonly=True)
     cuantity = fields.Integer(string="CANTIDAD",readonly=True)
     materials_ids = fields.Many2many("dtm.materials.line",readonly=True)
-    firma = fields.Char(string="Firma", readonly = True)
-
     planos = fields.Boolean(string="Planos",default=False,readonly=True)
     nesteos = fields.Boolean(string="Nesteos",default=False,readonly=True)
 
@@ -33,6 +31,13 @@ class Proceso(models.Model):
     tubos_id = fields.Many2many("dtm.proceso.tubos")
 
     material_cortado = fields.Boolean(default=False)
+
+    firma = fields.Char(string="Firma", readonly = True)
+    firma_compras = fields.Char(string = "Compras")
+    firma_diseño = fields.Char(string = "Diseño")
+    firma_almacen = fields.Char(string = "")
+    firma_ventas = fields.Char(string = "Ventas")
+    firma_calidad = fields.Char(string = "")
 
     #---------------------Resumen de descripción------------
 
