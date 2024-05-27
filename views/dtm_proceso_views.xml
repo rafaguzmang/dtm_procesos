@@ -51,7 +51,10 @@
                                                 Entrada: <field name="date_in"/>
                                             </li>
                                             <li>
-                                                Entrega <field name="date_rel"/>
+                                                Entrega <field name="date_rel"  widget="remaining_days"/>
+                                            </li>
+                                            <li>
+                                                Notas <field name="notes"/>
                                             </li>
                                         </ul>
                                 </div >
