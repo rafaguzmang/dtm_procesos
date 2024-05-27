@@ -42,17 +42,17 @@
                                         </div>
                                         <field name="ot_number" style="width :10%;float:right"/>
                                     </strong>
-<<<<<<< HEAD
-                                    <div class="o_kanban_tags_section">
-                                        <ul style="float:left">
-                                            <li>
-                                                <field name="firma_diseño"/>
-                                                <field name="firma_ventas"/>
-                                            </li>
-=======
                                     <div class="o_kanban_tags_section"  style="float:left,width:100%">
                                         <ul  style="float:left">
->>>>>>> refs/remotes/origin/main
+                                            <li>
+                                                <field name="firma_diseno"/>
+                                            </li>
+                                            <li >
+                                                <field name="firma_compras" style="float:left"/>
+                                                <p style="float:left">  </p>
+                                                <field name="firma_ventas" style="float:right"/>
+                                                <br></br>
+                                            </li>
                                             <li>
                                                 <field name="product_name"/>
                                             </li>
@@ -63,12 +63,6 @@
                                                 Entrega <field name="date_rel"  widget="remaining_days"/>
                                             </li>
                                             <li>
-<<<<<<< HEAD
-                                                Entrega <field name="date_rel"  widget="remaining_days"/>
-                                            </li>
-                                            <li>
-=======
->>>>>>> refs/remotes/origin/main
                                                 Notas <field name="notes"/>
                                             </li>
                                         </ul>
@@ -108,7 +102,6 @@
 
                         <group >
 
-<!--                                <field name="status" widget="many2many_tags" options="{'color_field': 'color'}"/>-->
                             <field name="status"/>
 
                         </group>
@@ -116,6 +109,7 @@
                             <group>
                                 <field name="tipe_order"/>
                                 <field name="name_client" attrs="{'required': [('tipe_order', '!=', '')]}"/>
+                                <field name="firma_diseno"/>
                             </group>
                             <group>
                                 <field name="product_name" attrs="{'required': [('tipe_order', '!=', '')]}"/>
@@ -138,8 +132,8 @@
                             </group>
                         </group>
                         <group>
-                            <field name="firma_diseño"/>
                             <field name="firma_ventas"/>
+                            <field name="firma_compras"/>
                         </group>
 
                         <notebook>

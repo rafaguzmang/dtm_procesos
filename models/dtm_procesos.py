@@ -5,6 +5,7 @@ from datetime import datetime
 class Proceso(models.Model):
     _name = "dtm.proceso"
     _description = "Modulo para indicar el status de la ODT o NPI"
+    _order = "ot_number desc"
 
     status = fields.Selection(string="Estatus",selection=[("corte","Corte"),("corterevision","Corte - Revisión FAI"),("revision","Revisión FAI"),("corterevision","Corte - Revisión FAI"),("cortedoblado","Corte - Doblado"),("doblado","Doblado"),("soldadura","Soldadura"),("lavado","Lavado"),("pintura","Pintura"),("ensamble","Ensamble"),("terminado","Terminado")])
 
@@ -23,21 +24,21 @@ class Proceso(models.Model):
     planos = fields.Boolean(string="Planos",default=False,readonly=True)
     nesteos = fields.Boolean(string="Nesteos",default=False,readonly=True)
 
-    rechazo_id = fields.Many2many("dtm.odt.rechazo")
+    rechazo_id = fields.Many2many("dtm.odt.rechazo",readonly=True)
 
-    anexos_id = fields.Many2many("dtm.proceso.anexos")
-    cortadora_id = fields.Many2many("dtm.proceso.cortadora")
-    primera_pieza_id = fields.Many2many("dtm.proceso.primer")
-    tubos_id = fields.Many2many("dtm.proceso.tubos")
+    anexos_id = fields.Many2many("dtm.proceso.anexos",readonly=True)
+    cortadora_id = fields.Many2many("dtm.proceso.cortadora",readonly=True)
+    primera_pieza_id = fields.Many2many("dtm.proceso.primer",readonly=True)
+    tubos_id = fields.Many2many("dtm.proceso.tubos",readonly=True)
 
     material_cortado = fields.Boolean(default=False)
 
     firma = fields.Char(string="Firma", readonly = True)
-    firma_compras = fields.Char(string = "Compras")
-    firma_diseño = fields.Char(string = "Diseño")
-    firma_almacen = fields.Char(string = "")
-    firma_ventas = fields.Char(string = "Ventas")
-    firma_calidad = fields.Char(string = "")
+    firma_compras = fields.Char(string = "Compras", readonly = True)
+    firma_diseno = fields.Char(string = "Diseñador", readonly = True)
+    firma_almacen = fields.Char(string = "", readonly = True)
+    firma_ventas = fields.Char(string = "Ventas", readonly = True)
+    firma_calidad = fields.Char(string = "", readonly = True)
 
     #---------------------Resumen de descripción------------
 
