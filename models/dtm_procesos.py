@@ -24,7 +24,7 @@ class Proceso(models.Model):
     planos = fields.Boolean(string="Planos",default=False,readonly=True)
     nesteos = fields.Boolean(string="Nesteos",default=False,readonly=True)
 
-    rechazo_id = fields.Many2many("dtm.odt.rechazo",readonly=True)
+    rechazo_id = fields.One2many("dtm.odt.rechazo","model_id2",readonly=False)
 
     anexos_id = fields.Many2many("dtm.proceso.anexos",readonly=True)
     cortadora_id = fields.Many2many("dtm.proceso.cortadora",readonly=True)
@@ -123,8 +123,11 @@ class Proceso(models.Model):
         self.firma = self.env.user.partner_id.name
         get_ot = self.env['dtm.odt'].search([("ot_number","=",self.ot_number)])
         get_ot.write({"firma_produccion": self.firma})
-        get_corte = self.env['dtm.materiales.laser'].search([("orden_trabajo","=",self.ot_number)])
-        get_corte.write({"liberada":"liberada"})
+        # get_corte = self.env['dtm.materiales.las.
+
+        if self.rechazo_id:
+            for rechazo in self.rechazo_id:
+                print(rechazo.model_id)
 
 
     def action_imprimir_formato(self): # Imprime según el formato que se esté llenando
