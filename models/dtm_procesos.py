@@ -24,7 +24,7 @@ class Proceso(models.Model):
     planos = fields.Boolean(string="Planos",default=False,readonly=True)
     nesteos = fields.Boolean(string="Nesteos",default=False,readonly=True)
 
-    rechazo_id = fields.One2many("dtm.odt.rechazo","model_id2",readonly=False)
+    rechazo_id = fields.Many2many("dtm.odt.rechazo",readonly=False)
 
     anexos_id = fields.Many2many("dtm.proceso.anexos",readonly=True)
     cortadora_id = fields.Many2many("dtm.proceso.cortadora",readonly=True)
