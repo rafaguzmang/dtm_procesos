@@ -39,13 +39,18 @@ class Proceso(models.Model):
     firma_almacen = fields.Char(string = "", readonly = True)
     firma_ventas = fields.Char(string = "Ventas", readonly = True)
     firma_calidad = fields.Char(string = "", readonly = True)
+   
+    firma_compras_kanba = fields.Char(string = "Compras", readonly = True)
+    firma_diseno_kanba = fields.Char(string = "Diseñador", readonly = True)
+    firma_almacen_kanba = fields.Char(string = "", readonly = True)
+    firma_ventas_kanba = fields.Char(string = "Ventas", readonly = True)
+    firma_calidad_kanba = fields.Char(string = "", readonly = True)
 
     #---------------------Resumen de descripción------------
 
     description = fields.Text(string= "DESCRIPCIÓN",placeholder="RESUMEN DE DESCRIPCIÓN")
 
     notes = fields.Text()
-
 
     def action_liberar(self):
 
@@ -118,7 +123,6 @@ class Proceso(models.Model):
                     lines.append(get_cortadora_laminas.id)
         get_corte.write({"materiales_id":[(6, 0,lines)]})
 
-
     def action_firma(self):
         self.firma = self.env.user.partner_id.name
         get_ot = self.env['dtm.odt'].search([("ot_number","=",self.ot_number)])
@@ -129,12 +133,11 @@ class Proceso(models.Model):
             for rechazo in self.rechazo_id:
                 print(rechazo.model_id)
 
-
     def action_imprimir_formato(self): # Imprime según el formato que se esté llenando
-        return self.env.ref("dtm_odt.formato_orden_de_trabajo").report_action(self)
+        return self.env.ref("dtm_procesos.formato_orden_de_trabajo").report_action(self)
 
     def action_imprimir_materiales(self): # Imprime según el formato que se esté llenando
-        return self.env.ref("dtm_odt.formato_lista_materiales").report_action(self)
+        return self.env.ref("dtm_procesos.formato_lista_materiales").report_action(self)
 
 class TestModelLine(models.Model):
     _name = "dtm.proceso.materials"
@@ -161,7 +164,6 @@ class Documentos(models.Model):
 
     documentos = fields.Binary()
     nombre = fields.Char()
-
 
 class Cortadora(models.Model):
     _name = "dtm.proceso.cortadora"
