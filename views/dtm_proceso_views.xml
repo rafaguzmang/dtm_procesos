@@ -48,10 +48,10 @@
                                                 <field name="firma_diseno"/>
                                             </li>
                                             <li class="display-row">
-                                                <field name="firma_ventas" />
-                                                <field name="firma_compras" />
-                                                <field name="firma_almacen" />
-                                                <field name="firma_calidad" />
+                                                <field name="firma_ventas_kanba" />
+                                                <field name="firma_compras_kanba" />
+                                                <field name="firma_almacen_kanba" />
+                                                <field name="firma_calidad_kanba" />
                                             </li>
                                             <li>
                                                 <field name="product_name"/>
