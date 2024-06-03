@@ -24,7 +24,7 @@ class Proceso(models.Model):
     planos = fields.Boolean(string="Planos",default=False,readonly=True)
     nesteos = fields.Boolean(string="Nesteos",default=False,readonly=True)
 
-    rechazo_id = fields.One2many("dtm.odt.rechazo","model_id2",readonly=False)
+    rechazo_id = fields.Many2many("dtm.odt.rechazo",readonly=False)
 
     anexos_id = fields.Many2many("dtm.proceso.anexos",readonly=True)
     cortadora_id = fields.Many2many("dtm.proceso.cortadora",readonly=True)
@@ -150,7 +150,7 @@ class Rechazo(models.Model):
     _name = "dtm.proceso.rechazo"
     _description = "Tabla para llenar los motivos por el cual se rechazo la ODT"
 
-    decripcion = fields.Text(string="Descripción del Rechazo")
+    descripcion = fields.Text(string="Descripción del Rechazo")
     fecha = fields.Date(string="Fecha")
     hora = fields.Char(string="Hora")
     firma = fields.Char(string="Firma")
