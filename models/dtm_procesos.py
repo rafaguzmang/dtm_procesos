@@ -129,9 +129,9 @@ class Proceso(models.Model):
         get_ot.write({"firma_produccion": self.firma})
         # get_corte = self.env['dtm.materiales.las.
 
-        if self.rechazo_id:
-            for rechazo in self.rechazo_id:
-                print(rechazo.model_id)
+        # if self.rechazo_id:
+        #     for rechazo in self.rechazo_id:
+        #         print(rechazo.model_id)
 
     def action_imprimir_formato(self): # Imprime según el formato que se esté llenando
         return self.env.ref("dtm_procesos.formato_orden_de_trabajo").report_action(self)
