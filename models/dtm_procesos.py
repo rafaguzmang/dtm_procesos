@@ -7,13 +7,19 @@ class Proceso(models.Model):
     _description = "Modulo para indicar el status de la ODT o NPI"
     _order = "ot_number desc"
 
-    status = fields.Selection(string="Estatus",selection=[("corte","Corte"),("corterevision","Corte - Revisión FAI"),("revision","Revisión FAI"),("corterevision","Corte - Revisión FAI"),("cortedoblado","Corte - Doblado"),("doblado","Doblado"),("soldadura","Soldadura"),("lavado","Lavado"),("pintura","Pintura"),("ensamble","Ensamble"),("terminado","Terminado")])
+    status = fields.Selection(string="Estatus", selection=[("aprobacion","Pendiente a aprobación"),
+                                         ("corte","Corte"),("corterevision","Corte - Revisión FAI"),
+                                         ("revision","Revisión FAI"),("corterevision","Corte - Revisión FAI"),
+                                         ("cortedoblado","Corte - Doblado"),("doblado","Doblado"),
+                                         ("soldadura","Soldadura"),("lavado","Lavado"),("pintura","Pintura"),
+                                         ("ensamble","Ensamble"),("calidad","Calidad"),("instalacion","Instalación"),
+                                         ("facturado","Facturado")])
 
     sequence = fields.Integer()
     ot_number = fields.Char(string="NÚMERO",readonly=True)
     tipe_order = fields.Char(string="TIPO",readonly=True)
     name_client = fields.Char(string="CLIENTE",readonly=True)
-    product_name = fields.Char(string="NOMBRE DEL PRODUCTO",readonly=True)
+    product_name = fields.Char(string="NOMBRE",readonly=True)
     date_in = fields.Date(string="FECHA DE ENTRADA", readonly=True)
     po_number = fields.Char(string="PO",readonly=True)
     date_rel = fields.Date(string="FECHA DE ENTREGA",readonly=True)
@@ -52,26 +58,35 @@ class Proceso(models.Model):
 
     notes = fields.Text()
 
-    def action_liberar(self):
+    #---------------------Evento para detener el proceso------------------------------------
 
+    pausado = fields.Char(string="Detenido por: ", readonly=True)
+    status_pausado = fields.Char()
+    pausa_motivo = fields.Text()
+
+    def get_view(self, view_id=None, view_type='form', **options):
+        res = super(Proceso,self).get_view(view_id, view_type,**options)
+        get_self = self.env['dtm.proceso'].search([("pausado","=","Pausado por Ventas")])
+        for get in get_self:
+            get.status = get.status_pausado
+        return res
+
+    def action_liberar(self):
         vals = {
             "orden_trabajo":self.ot_number,
             "fecha_entrada": datetime.today(),
             "nombre_orden":self.product_name,
             "tipo_orden": "OT"
         }
-
         get_corte = self.env['dtm.materiales.laser'].search([("orden_trabajo","=",self.ot_number)])
         get_corte_realizado = self.env['dtm.laser.realizados'].search([("orden_trabajo","=",self.ot_number)])
         if get_corte_realizado:
             get_corte_realizado.unlink() #Quita la orden del apartado realizado para poder incluir los siguientes archivos
-
         if get_corte:
             get_corte.write(vals)
         else:
             get_corte.create(vals)
             get_corte = self.env['dtm.materiales.laser'].search([("orden_trabajo","=",self.ot_number)])
-
         get_corte.write({'cortadora_id': [(5, 0, {})]})
         lines = []
         for anexo in self.cortadora_id:
