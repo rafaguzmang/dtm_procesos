@@ -53,7 +53,6 @@ class Proceso(models.Model):
     firma_calidad_kanba = fields.Char(string = "", readonly = True)
 
     #---------------------Resumen de descripción------------
-
     description = fields.Text(string= "DESCRIPCIÓN",placeholder="RESUMEN DE DESCRIPCIÓN")
 
     notes = fields.Text()
@@ -63,6 +62,22 @@ class Proceso(models.Model):
     pausado = fields.Char(string="Detenido por: ", readonly=True)
     status_pausado = fields.Char()
     pausa_motivo = fields.Text()
+
+    materials = fields.Integer(string="Material", compute="_compute_materials")
+
+    @api.depends("materials_ids")
+    def _compute_materials(self):
+        for record in self:
+            total = len(record.materials_ids)
+            cont = 0
+            if record.materials_ids:
+                for material in record.materials_ids:
+                    if material.materials_required == 0:
+                        cont += 1
+                record.materials = cont * 100 / total
+            else:
+                record.materials = 0
+
 
     def get_view(self, view_id=None, view_type='form', **options):
         res = super(Proceso,self).get_view(view_id, view_type,**options)

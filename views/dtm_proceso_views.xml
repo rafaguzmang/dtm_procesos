@@ -36,6 +36,9 @@
                                         <h2 style="color:#f00">
                                             <field name="pausado" />
                                         </h2>
+                                        <div class="porcentaje">
+                                            <field name="materials" widget="percentpie"/>
+                                        </div>
                                         <strong class="o_kanban_record_title display-row"  >
                                             <field name="tipe_order" />
                                             <field name="name_client" />
@@ -75,6 +78,9 @@
                                 </div>
                             </div>
                             <style>
+                                .porcentaje{
+                                    text-align: right;
+                                }
                                 .flex-container{
                                     display: flex;
                                     flex-direction: column;
