@@ -42,6 +42,7 @@ class Proceso(models.Model):
     firma = fields.Char(string="Firma", readonly = True)
     firma_compras = fields.Char(string = "Compras", readonly = True)
     firma_diseno = fields.Char(string = "Diseñador", readonly = True)
+    firma_parcial = fields.Boolean()
     firma_almacen = fields.Char(string = "", readonly = True)
     firma_ventas = fields.Char(string = "Ventas", readonly = True)
     firma_calidad = fields.Char(string = "", readonly = True)
@@ -54,6 +55,8 @@ class Proceso(models.Model):
 
     #---------------------Resumen de descripción------------
     description = fields.Text(string= "DESCRIPCIÓN",placeholder="RESUMEN DE DESCRIPCIÓN")
+
+
 
     notes = fields.Text()
 
