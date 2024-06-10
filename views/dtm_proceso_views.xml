@@ -250,21 +250,31 @@
                         <filter string="OT" name="proceso_ot" domain="[('tipe_order','=','OT')]"/>
                         <filter string="NPI" name="proceso_npi" domain="[('tipe_order','=','NPI')]"/>
                         <separator/>
+                        <filter string="Aprobación" name="proceso_terminado" domain="[('status','=','aprobacion')]"/>
                         <filter string="Corte" name="proceso_terminado" domain="[('status','=','corte')]"/>
+                        <filter string="Corte - Revisión FAI" name="proceso_ot" domain="[('status','=','corterevision')]"/>
+                        <filter string="Revisión FAI" name="proceso_npi" domain="[('status','=','revision')]"/>
+                        <filter string="Corte - Doblado" name="proceso_terminado" domain="[('status','=','cortedoblado')]"/>
                         <filter string="Doblado" name="proceso_ot" domain="[('status','=','doblado')]"/>
                         <filter string="Soldadura" name="proceso_npi" domain="[('status','=','soldadura')]"/>
                         <filter string="Lavado" name="proceso_terminado" domain="[('status','=','lavado')]"/>
                         <filter string="Pintura" name="proceso_ot" domain="[('status','=','pintura')]"/>
                         <filter string="Ensamble" name="proceso_npi" domain="[('status','=','ensamble')]"/>
-                        <filter string="Terminado" name="proceso_terminado" domain="[('status','=','terminado')]"/>
+                        <filter string="Instalacion" name="proceso_terminado" domain="[('status','=','instalacion')]"/>
+                        <filter string="Facturado" name="proceso_terminado" domain="[('status','=','facturado')]"/>
                         <separator/>
+                        <filter string="No Aprobación" name="proceso_terminado_quitar" domain="[('status','!=','aprobacion')]"/>
                         <filter string="No Corte" name="proceso_terminado_quitar" domain="[('status','!=','corte')]"/>
+                        <filter string="No Corte - Revisión FAI" name="proceso_terminado_quitar" domain="[('status','!=','corterevision')]"/>
+                        <filter string="No Revisión FAI" name="proceso_ot_quitar" domain="[('status','!=','revision')]"/>
+                        <filter string="No Corte - Doblado" name="proceso_ot_quitar" domain="[('status','!=','cortedoblado')]"/>
                         <filter string="No Doblado" name="proceso_ot_quitar" domain="[('status','!=','doblado')]"/>
                         <filter string="No Soldadura" name="proceso_npi_quitar" domain="[('status','!=','soldadura')]"/>
                         <filter string="No Lavado" name="proceso_terminado_quitar" domain="[('status','!=','lavado')]"/>
                         <filter string="No Pintura" name="proceso_ot_quitar" domain="[('status','!=','pintura')]"/>
                         <filter string="No Ensamble" name="proceso_npi_quitar" domain="[('status','!=','ensamble')]"/>
-                        <filter string="No Terminado" name="proceso_terminado_quitar" domain="[('status','!=','terminado')]"/>
+                        <filter string="No Instalacion" name="proceso_npi_quitar" domain="[('status','!=','instalacion')]"/>
+                        <filter string="No Facturado" name="proceso_terminado_quitar" domain="[('status','!=','facturado')]"/>
                    </search>
 
 
