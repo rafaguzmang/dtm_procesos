@@ -10,7 +10,7 @@
         #Views
         'views/dtm_proceso_views.xml',
         #Menú
-        # 'views/dtm_menu.xml'
+        'views/dtm_menu.xml',
          #Reports
         'reports/orden_de_trabajo.xml',
         'reports/lista_materiales.xml',

@@ -56,8 +56,6 @@ class Proceso(models.Model):
     #---------------------Resumen de descripción------------
     description = fields.Text(string= "DESCRIPCIÓN",placeholder="RESUMEN DE DESCRIPCIÓN")
 
-
-
     notes = fields.Text()
 
     #---------------------Evento para detener el proceso------------------------------------

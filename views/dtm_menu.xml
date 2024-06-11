@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+     <menuitem name="Procesos" id="menu_root_dtm_procesos">
+            <menuitem id="menu_dtm_materiales_laser"  action="dtm_materiales_laser.dtm_materiales_laser_accion" />
+            <menuitem id="menu_dtm_laser_realizados"  action="dtm_materiales_laser.dtm_laser_realizados_accion" />
+            <menuitem id="menu_dtm_procesos"  action="dtm_procesos.dtm_proceso_accion"/>
+     </menuitem>
+</odoo>
