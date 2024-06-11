@@ -297,7 +297,7 @@
 
            </record>
 
-        <menuitem id="dtm_proceso"  action="dtm_proceso_accion"/>
+<!--        <menuitem id="dtm_proceso"  action="dtm_proceso_accion"/>-->
 
 
     </data>
