@@ -27,15 +27,18 @@ class Proceso(models.Model):
     color = fields.Char(string="COLOR",readonly=True)
     cuantity = fields.Integer(string="CANTIDAD",readonly=True)
     materials_ids = fields.Many2many("dtm.materials.line",readonly=True)
+    materials_npi_ids = fields.Many2many("dtm.materials.npi",readonly=True)
     planos = fields.Boolean(string="Planos",default=False,readonly=True)
     nesteos = fields.Boolean(string="Nesteos",default=False,readonly=True)
 
     rechazo_id = fields.Many2many("dtm.odt.rechazo",readonly=False)
+    rechazo_npi_id = fields.Many2many("dtm.npi.rechazo",readonly=False)
 
     anexos_id = fields.Many2many("dtm.proceso.anexos",readonly=True)
     cortadora_id = fields.Many2many("dtm.proceso.cortadora",readonly=True)
     primera_pieza_id = fields.Many2many("dtm.proceso.primer",readonly=True)
     tubos_id = fields.Many2many("dtm.proceso.tubos",readonly=True)
+
 
     material_cortado = fields.Boolean(default=False)
 
@@ -195,6 +198,15 @@ class Documentos(models.Model):
 
     documentos = fields.Binary()
     nombre = fields.Char()
+    color = fields.Integer(string='Color', readonly = False)
+
+    def action_mas(self):
+        self.color += 1
+
+    def action_menos(self):
+        self.color -= 1
+        if self.color < 0:
+            self.color = 0
 
 class Cortadora(models.Model):
     _name = "dtm.proceso.cortadora"

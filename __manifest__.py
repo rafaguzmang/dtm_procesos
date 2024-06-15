@@ -7,6 +7,7 @@
     "depends":["dtm_odt"],
     "data":[
         'security/ir.model.access.csv',
+        'security/res_groups.xml',
         #Views
         'views/dtm_proceso_views.xml',
         #Menú
