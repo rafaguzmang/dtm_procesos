@@ -13,7 +13,7 @@ class Proceso(models.Model):
                                          ("cortedoblado","Corte - Doblado"),("doblado","Doblado"),
                                          ("soldadura","Soldadura"),("lavado","Lavado"),("pintura","Pintura"),
                                          ("ensamble","Ensamble"),("calidad","Calidad"),("instalacion","Instalación"),
-                                         ("facturado","Facturado")])
+                                         ("terminado","Terminado")])
 
     sequence = fields.Integer()
     ot_number = fields.Char(string="NÚMERO",readonly=True)
@@ -69,6 +69,11 @@ class Proceso(models.Model):
 
     materials = fields.Integer(string="Material", compute="_compute_materials")
 
+    @api.onchange("status")
+    def _action_status(self):
+        if not self.firma_compras_kanba or not self.firma_almacen_kanba or not self.firma_ventas_kanba or not self.firma:
+            self.status = "aprobacion"
+
     @api.depends("materials_ids")
     def _compute_materials(self):
         for record in self:
@@ -85,9 +90,13 @@ class Proceso(models.Model):
 
     def get_view(self, view_id=None, view_type='form', **options):
         res = super(Proceso,self).get_view(view_id, view_type,**options)
-        get_self = self.env['dtm.proceso'].search([("pausado","=","Pausado por Ventas")])
+        get_self = self.env['dtm.proceso'].search([])
         for get in get_self:
-            get.status = get.status_pausado
+            if get.status != "terminado" and get.status != "calidad" and get.status != "instalacion":
+                if not get.firma_compras_kanba or not get.firma_almacen_kanba or not get.firma_ventas_kanba or not get.firma:
+                        get.status = "aprobacion"
+
+
         return res
 
     def action_liberar(self):
