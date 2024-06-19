@@ -239,7 +239,7 @@ class Tubos(models.Model):
 
     documentos = fields.Binary()
     nombre = fields.Char()
-
+    cortado = fields.Char("Cortado")
 
 
 
