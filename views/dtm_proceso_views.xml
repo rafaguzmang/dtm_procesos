@@ -29,6 +29,8 @@
             <field name="model">dtm.proceso</field>
             <field name="arch" type="xml">
                 <kanban default_group_by = "status">
+                    <button></button>
+
                     <template>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click" >
@@ -98,12 +100,14 @@
                                     width: 10px;
                                     height: 40px;
                                     background: #e4e405;
-                                    border: 1px solid;
+                                    border: 1px solid #fff;
                                     border-radius: 4px;
                                     padding-left: 35px;
                                 }
-
                             </style>
+                             <script type="text/javascript">
+                            </script>
+
                         </t>
                     </template>
 
@@ -225,7 +229,7 @@
                                      </form>
                                 </field>
                             </page>
-                            <page string="Primera Pieza">
+                            <page string="PRIMERA PIEZA" attrs="{'invisible': [('primera_pieza_id', '=', 'False')]}">
                                 <field name="primera_pieza_id">
                                   <tree>
                                             <field name="nombre" invisible="0"></field>

@@ -92,9 +92,12 @@ class Proceso(models.Model):
         res = super(Proceso,self).get_view(view_id, view_type,**options)
         get_self = self.env['dtm.proceso'].search([])
         for get in get_self:
-            if get.status != "terminado" and get.status != "calidad" and get.status != "instalacion":
+            if get.status != "terminado" or get.status != "calidad" or get.status != "instalacion":
                 if not get.firma_compras_kanba or not get.firma_almacen_kanba or not get.firma_ventas_kanba or not get.firma:
                         get.status = "aprobacion"
+
+            if get.firma_calidad_kanba:
+                get.status = "terminado"
 
 
         return res
