@@ -4,6 +4,7 @@ from datetime import datetime
 
 class Proceso(models.Model):
     _name = "dtm.proceso"
+    _inherit = ['mail.thread']
     _description = "Modulo para indicar el status de la ODT o NPI"
     _order = "ot_number desc"
 
