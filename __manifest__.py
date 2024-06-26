@@ -4,7 +4,7 @@
     'version': '1.0',
     'author': "Rafael Guzmán",
     "description": "Modulo para el área de compras",
-    "depends":["dtm_odt",'web'],
+    "depends":['base', 'mail',"dtm_odt",'web'],
     "data":[
         'security/ir.model.access.csv',
         'security/res_groups.xml',
