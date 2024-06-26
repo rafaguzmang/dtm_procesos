@@ -4,7 +4,7 @@
     'version': '1.0',
     'author': "Rafael Guzmán",
     "description": "Modulo para el área de compras",
-    "depends":["dtm_odt"],
+    "depends":["dtm_odt",'web'],
     "data":[
         'security/ir.model.access.csv',
         'security/res_groups.xml',
@@ -12,9 +12,11 @@
         'views/dtm_proceso_views.xml',
         #Menú
         'views/dtm_menu.xml',
-         #Reports
+        #Reports
         'reports/orden_de_trabajo.xml',
         'reports/lista_materiales.xml',
+        #Script
+        # 'static/xml/assets.xml',
     ]
 }
 

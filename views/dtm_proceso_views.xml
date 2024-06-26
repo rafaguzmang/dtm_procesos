@@ -319,15 +319,8 @@
                         <filter string="No Instalacion" name="proceso_npi_quitar" domain="[('status','!=','instalacion')]"/>
                         <filter string="No Facturado" name="proceso_terminado_quitar" domain="[('status','!=','facturado')]"/>
                    </search>
-
-
                </field>
-
-
            </record>
-
 <!--        <menuitem id="dtm_proceso"  action="dtm_proceso_accion"/>-->
-
-
     </data>
 </odoo>
