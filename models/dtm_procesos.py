@@ -96,10 +96,61 @@ class Proceso(models.Model):
                 if not get.firma_compras_kanba or not get.firma_almacen_kanba or not get.firma_ventas_kanba or not get.firma:
                         get.status = "aprobacion"
 
-            if get.firma_calidad_kanba:
+            if get.status == "terminado" and not get.firma_calidad_kanba:
+                get.status = "calidad"
+
+            if get.firma_calidad_kanba and get.status != "instalacion":
                 get.status = "terminado"
 
-
+        get_facturas = self.env['dtm.ordenes.compra.facturado'].search([])
+        for factura in get_facturas:
+            for orden in factura.descripcion_id:
+                get_proceso = self.env['dtm.proceso'].search([("ot_number","=",orden.orden_trabajo)])
+                if get_proceso:
+                    get_diseno = self.env['dtm.odt'].search([("ot_number","=",get_proceso.ot_number)])
+                    get_almacen = self.env['dtm.almacen.odt'].search([("ot_number","=",get_proceso.ot_number)])
+                    get_calidad = self.env['dtm.calidad'].search([("ot_number","=",get_proceso.ot_number)])
+                    get_ventas = self.env['dtm.ventas.ot'].search([("ot_number","=",get_proceso.ot_number)])
+                    get_compras = self.env['dtm.compras.odt'].search([("ot_number","=",get_proceso.ot_number)])
+                    vals = {
+                        "status": factura.factura,
+                        "ot_number": get_proceso.ot_number,
+                        "tipe_order": get_proceso.tipe_order,
+                        "name_client": get_proceso.name_client,
+                        "product_name": get_proceso.product_name,
+                        "date_in": get_proceso.date_in,
+                        "po_number": get_proceso.po_number,
+                        "date_rel": get_proceso.date_rel,
+                        "version_ot": get_proceso.version_ot,
+                        "color": get_proceso.color,
+                        "cuantity": get_proceso.cuantity,
+                        "materials_ids": get_proceso.materials_ids,
+                        "planos": get_proceso.planos,
+                        "nesteos": get_proceso.nesteos,
+                        "rechazo_id":get_proceso.rechazo_id,
+                        "anexos_id":get_proceso.anexos_id,
+                        "cortadora_id":get_proceso.cortadora_id,
+                        "primera_pieza_id":get_proceso.primera_pieza_id,
+                        "tubos_id":get_proceso.tubos_id,
+                        "firma": get_proceso.firma,
+                        "firma_compras": get_proceso.firma_compras,
+                        "firma_diseno": get_proceso.firma_diseno,
+                        "firma_almacen": get_proceso.firma_almacen,
+                        "firma_ventas": get_proceso.firma_ventas,
+                        "description": get_proceso.description,
+                        "firma_calidad":get_proceso.firma_calidad
+                    }
+                    get_facturado = self.env['dtm.facturado.odt'].search([("ot_number","=",get_proceso.ot_number)])
+                    if not get_facturado:
+                        get_facturado.create(vals)
+                    else:
+                        get_facturado.write(vals)
+                    get_diseno.unlink()
+                    get_almacen.unlink()
+                    get_calidad.unlink()
+                    get_ventas.unlink()
+                    get_compras.unlink()
+                    get_proceso.unlink()
         return res
 
     def action_liberar(self):
@@ -243,6 +294,4 @@ class Tubos(models.Model):
     documentos = fields.Binary()
     nombre = fields.Char()
     cortado = fields.Char("Cortado")
-
-
 
