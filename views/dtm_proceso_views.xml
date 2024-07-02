@@ -105,7 +105,7 @@
                                                 Entrada: <field name="date_in"/>
                                             </li>
                                              <li>
-                                                Entrega <field name="date_rel"  widget="remaining_days"/>
+                                                Entrega <field name="date_rel"/>
                                             </li>
                                             <li>
                                                 Notas <field name="notes"/>
