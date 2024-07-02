@@ -106,7 +106,7 @@ class Proceso(models.Model):
         get_facturas = self.env['dtm.ordenes.compra.facturado'].search([])
         for factura in get_facturas:
             for orden in factura.descripcion_id:
-                get_proceso = self.env['dtm.proceso'].search([("ot_number","=",orden.orden_trabajo)])
+                get_proceso = self.env['dtm.proceso'].search([("ot_number","=",orden.orden_trabajo),("tipe_order","=","OT")])
                 if get_proceso:
                     get_diseno = self.env['dtm.odt'].search([("ot_number","=",get_proceso.ot_number)])
                     get_almacen = self.env['dtm.almacen.odt'].search([("ot_number","=",get_proceso.ot_number)])
