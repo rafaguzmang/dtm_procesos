@@ -104,13 +104,8 @@
                                             <li>
                                                 Entrada: <field name="date_in"/>
                                             </li>
-<<<<<<< HEAD
-                                             <li>
-                                                Entrega <field name="date_rel"/>
-=======
                                             <li>
-                                                Entrega <field name="date_rel" id="entrega"/>
->>>>>>> dd66d72746d00d89a3c45f77853d2a46f0f0282d
+                                                Entrega <field name="date_rel"/>
                                             </li>
                                             <li>
                                                 Notas <field name="notes"/>
