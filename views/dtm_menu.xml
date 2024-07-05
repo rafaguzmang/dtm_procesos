@@ -6,8 +6,8 @@
             <menuitem id="menu_dtm_laser_realizados"  action="dtm_materiales_laser.dtm_laser_realizados_accion" />
         </menuitem>
         <menuitem name="Tubos" id="menu_root_dtm_tubos">
-             <menuitem id="dtm_tubos_corte"  action="dtm_corte_tubos.dtm_tubos_corte_accion"/>
-        <menuitem id="dtm_tubos_realizados"  action="dtm_corte_tubos.dtm_tubos_realizados_accion"/>
+            <menuitem id="dtm_tubos_corte"  action="dtm_corte_tubos.dtm_tubos_corte_accion"/>
+            <menuitem id="dtm_tubos_realizados"  action="dtm_corte_tubos.dtm_tubos_realizados_accion"/>
         </menuitem>
             <menuitem id="menu_dtm_procesos"  action="dtm_procesos.dtm_proceso_accion"/>
             <menuitem id="dtm_facturado_odt_view"  action="dtm_facturado_odt.dtm_facturado_odt_accion"/>

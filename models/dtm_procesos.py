@@ -10,7 +10,7 @@ class Proceso(models.Model):
 
     status = fields.Selection(string="Estatus", selection=[("aprobacion","Pendiente a aprobación"),
                                          ("corte","Corte"),("corterevision","Corte - Revisión FAI"),
-                                         ("revision","Revisión FAI"),("corterevision","Corte - Revisión FAI"),
+                                         ("revision","Revisión FAI"),("corterevisionfai","Corte - Revisión FAI"),
                                          ("cortedoblado","Corte - Doblado"),("doblado","Doblado"),
                                          ("soldadura","Soldadura"),("lavado","Lavado"),("pintura","Pintura"),
                                          ("ensamble","Ensamble"),("calidad","Calidad"),("instalacion","Instalación"),

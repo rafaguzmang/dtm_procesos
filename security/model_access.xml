@@ -1,0 +1,26 @@
+<odoo>
+    <data>
+         <record id="dtm_procesos.access_dtm_proceso" model="ir.model.access">
+            <field name="group_id" ref="dtm_procesos.group_property_manager"/>
+        </record>
+        <record id="dtm_procesos_users_not" model="ir.model.access">
+            <field name="name">Procesos reglas</field>
+            <field name="model_id" ref="dtm_procesos.model_dtm_proceso"/>
+            <field name="group_id" ref="dtm_procesos.group_property_user_not"/>
+            <field name="perm_read">0</field>
+            <field name="perm_write">0</field>
+            <field name="perm_create">0</field>
+            <field name="perm_unlink">0</field>
+        </record>
+
+        <record id="dtm_procesos_users" model="ir.model.access">
+            <field name="name">Procesos reglas</field>
+            <field name="model_id" ref="dtm_procesos.model_dtm_proceso"/>
+            <field name="group_id" ref="dtm_procesos.group_property_user"/>
+            <field name="perm_read">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_create">1</field>
+            <field name="perm_unlink">0</field>
+        </record>
+    </data>
+</odoo>
