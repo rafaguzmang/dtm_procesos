@@ -20,7 +20,9 @@
             <field name="perm_read">1</field>
             <field name="perm_write">1</field>
             <field name="perm_create">1</field>
-            <field name="perm_unlink">0</field>
+            <field name="perm_unlink">1</field>
         </record>
+
+
     </data>
 </odoo>

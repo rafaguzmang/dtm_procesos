@@ -9,9 +9,7 @@ class Proceso(models.Model):
     _order = "ot_number desc"
 
     status = fields.Selection(string="Estatus", selection=[("aprobacion","Pendiente a aprobación"),
-                                         ("corte","Corte"),("corterevision","Corte - Revisión FAI"),
-                                         ("revision","Revisión FAI"),("corterevisionfai","Corte - Revisión FAI"),
-                                         ("cortedoblado","Corte - Doblado"),("doblado","Doblado"),
+                                         ("corte","Corte"),("revision","Revisión FAI"),("doblado","Doblado"),
                                          ("soldadura","Soldadura"),("lavado","Lavado"),("pintura","Pintura"),
                                          ("ensamble","Ensamble"),("calidad","Calidad"),("instalacion","Instalación"),
                                          ("terminado","Terminado")])
@@ -178,20 +176,22 @@ class Proceso(models.Model):
                 "nombre":anexo.nombre,
                 "primera_pieza": False
             }
-            get_anexos = self.env['dtm.documentos.cortadora'].search([("nombre","=",anexo.nombre)])
+            get_anexos = self.env['dtm.documentos.cortadora'].search([("nombre","=",anexo.nombre),("documento","=",anexo.documentos)],limit=1)
             if get_anexos:
+                vals['cortado']= False
+                vals['estado']=""
                 get_anexos.write(vals)
                 lines.append(get_anexos.id)
             else:
                 get_anexos.create(vals)
-                get_anexos = self.env['dtm.documentos.cortadora'].search([("nombre","=",anexo.nombre)])
+                get_anexos = self.env['dtm.documentos.cortadora'].search([("nombre","=",anexo.nombre),("documento","=",anexo.documentos)],limit=1)
                 lines.append(get_anexos.id)
         get_corte.write({'cortadora_id': [(6, 0, lines)]})
         lines = []
         get_corte.write({'materiales_id': [(5, 0, {})]})
         for lamina in self.materials_ids:
             if re.match("Lámina",lamina.nombre):
-                get_almacen = self.env['dtm.materiales'].search([("codigo","=",lamina.materials_list.id)])
+                get_almacen = self.env['dtm.materiales'].search([("codigo","=",lamina.materials_list.id)],limit=1)
                 content = {
                     "identificador": lamina.materials_list.id,
                     "nombre": lamina.nombre,
