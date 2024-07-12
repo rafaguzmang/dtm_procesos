@@ -142,8 +142,8 @@
                                     padding-left: 35px;
                                 }
                                 .o_kanban_header{
-                                    position: fixed;
-                                    margin-top: 119px;
+                                    position: sticky;
+                                    margin-top: -53px;
                                     z-index: 1;
                                     background: #f8f9fa;
                                     width: 300px;
