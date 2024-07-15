@@ -1,12 +1,14 @@
 from odoo import api,models,fields
 import re
 from datetime import datetime
+from odoo.exceptions import ValidationError, AccessError, MissingError,Warning
 
 class Proceso(models.Model):
     _name = "dtm.proceso"
     _inherit = ['mail.thread']
     _description = "Modulo para indicar el status de la ODT o NPI"
     _order = "ot_number desc"
+
 
     status = fields.Selection(string="Estatus", selection=[("aprobacion","Pendiente a aprobación"),
                                          ("corte","Corte"),("revision","Revisión FAI"),("doblado","Doblado"),
@@ -63,10 +65,37 @@ class Proceso(models.Model):
     #---------------------Evento para detener el proceso------------------------------------
 
     pausado = fields.Char(string="Detenido por: ", readonly=True)
+    pausa = fields.Boolean()
     status_pausado = fields.Char()
     pausa_motivo = fields.Text()
 
+    user_pausa = fields.Boolean(compute="_compute_user_email_match")
+
     materials = fields.Integer(string="Material", compute="_compute_materials")
+
+    def action_detener(self):
+        email = self.env.user.partner_id.email
+        if email == 'calidad@dtmindustry.com':
+            self.pausado= "Pausado por Calidad"
+        elif email == 'hugo_chacon@dtmindustry.com'or email=='ventas1@dtmindustry.com' or email=="rafaguzmang@hotmail.com":
+            self.pausado= "Pausado por Ventas"
+        self.status_pausado= self.status
+        self.pausa_motivo= self.pausa_motivo
+        self.pausa = True
+    def action_continuar(self):
+        self.pausado = ""
+        self.status_pausado = ""
+        self.pausa = False
+
+    #Obtiene el email del usuario
+    def _compute_user_email_match(self):
+        for record in self:
+            email = self.env.user.partner_id.email
+            emails = ['calidad@dtmindustry.com','hugo_chacon@dtmindustry.com','ventas1@dtmindustry.com','rafaguzmang@hotmail.com']
+            record.user_pausa = False
+            if email in emails:
+                record.user_pausa = True
+
 
     @api.onchange("status")
     def _action_status(self):
@@ -85,7 +114,6 @@ class Proceso(models.Model):
                 record.materials = cont * 100 / total
             else:
                 record.materials = 0
-
 
     def get_view(self, view_id=None, view_type='form', **options):
         res = super(Proceso,self).get_view(view_id, view_type,**options)
@@ -222,14 +250,15 @@ class Proceso(models.Model):
         get_corte.write({"materiales_id":[(6, 0,lines)]})
 
     def action_firma(self):
-        self.firma = self.env.user.partner_id.name
-        get_ot = self.env['dtm.odt'].search([("ot_number","=",self.ot_number)])
-        get_ot.write({"firma_produccion": self.firma})
-        # get_corte = self.env['dtm.materiales.las.
-
-        # if self.rechazo_id:
-        #     for rechazo in self.rechazo_id:
-        #         print(rechazo.model_id)
+        email = self.env.user.partner_id.email
+        if email == 'manufactura@dtmindustry.com':
+            self.firma = self.env.user.partner_id.name
+        if email == 'calidad@dtmindustry.com':
+            if self.status == 'calidad' and self.firma_compras_kanba and self.firma_almacen_kanba and self.firma_ventas_kanba and not self.pausa:
+                    self.firma_calidad =  self.env.user.partner_id.name,
+                    self.firma_calidad_kanba = "Calidad"
+            else:
+                raise ValidationError("OT/NPI debe de estar en status Calidad o faltan firmas")
 
     def action_imprimir_formato(self): # Imprime según el formato que se esté llenando
         return self.env.ref("dtm_procesos.formato_orden_de_trabajo").report_action(self)

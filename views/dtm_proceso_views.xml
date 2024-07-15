@@ -154,7 +154,6 @@
                             </style>
                         </t>
                     </template>
-
                 </kanban>
             </field>
         </record>
@@ -164,17 +163,27 @@
             <field name="model">dtm.proceso</field>
             <field name="arch" type="xml">
                 <form string="formulario">
+                    <style>
+                        .o_statusbar_buttons{
+                            width: 100%;
+                            justify-content: space-around;
+                        }
+
+                    </style>
                     <header>
                         <button type="object" name="action_imprimir_formato" string="ODT" attrs="{'invisible': [('tipe_order', '=', '')]}" icon="fa-print" class="btn btn-primary"/>
                         <button type="object" name="action_imprimir_materiales" string="Lista de Materiales" attrs="{'invisible': [('tipe_order', '=', '')]}" icon="fa-print" class="btn btn-primary"/>
                         <button type="object" name="action_firma" string="Firma"  icon="fa-pencil" class="btn btn-primary"/>
+                        <button type="object" name="action_detener" string="Detener"  icon="fa-hourglass" class="btn btn-danger " attrs="{'invisible': ['|',('user_pausa', '!=', True),('pausa', '=', True)]}"/>
+                        <button type="object" name="action_continuar" string="Continuar"  icon="fa-play" class="btn btn-success " attrs="{'invisible': ['|',('user_pausa', '!=', True),('pausa', '=', False)]}"/>
                     </header>
-
                     <sheet>
                             <h1 > ORDEN DE TRABAJO </h1>
                             <h2> Diseño y Transformaciones Metálicas S. de R.L. de C.V.</h2>
                         <group >
                             <field name="status" attrs="{'readonly': [('pausado', '=', 'Pausado Por Ventas')]}"/>
+                            <field name="pausa" invisible="1" />
+                            <field name="user_pausa" invisible="1" />
                         </group>
                         <group >
                             <group>
