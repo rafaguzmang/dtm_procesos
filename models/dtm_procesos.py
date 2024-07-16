@@ -136,8 +136,6 @@ class Proceso(models.Model):
                 if get_proceso:
                     get_diseno = self.env['dtm.odt'].search([("ot_number","=",get_proceso.ot_number)])
                     get_almacen = self.env['dtm.almacen.odt'].search([("ot_number","=",get_proceso.ot_number)])
-                    get_calidad = self.env['dtm.calidad'].search([("ot_number","=",get_proceso.ot_number)])
-                    get_ventas = self.env['dtm.ventas.ot'].search([("ot_number","=",get_proceso.ot_number)])
                     get_compras = self.env['dtm.compras.odt'].search([("ot_number","=",get_proceso.ot_number)])
                     vals = {
                         "status": factura.factura,
@@ -172,12 +170,40 @@ class Proceso(models.Model):
                         get_facturado.create(vals)
                     else:
                         get_facturado.write(vals)
+                        get_facturado = self.env['dtm.facturado.odt'].search([("ot_number","=",get_proceso.ot_number)])
+
+                    lines = []
+                    for materiales in get_facturado:
+                        for item in materiales.materials_list:
+                            nombre = ""
+                            medida =""
+                            cantidad = 0
+                            if item.nombre:
+                                nombre = item.nombre
+                            if item.medida:
+                                medida = item.medida
+                            if item.materials_cuantity:
+                                cantidad = item.materials_cuantity
+                            dato = f"{nombre} {medida}"
+                            vals = {
+                                "material":dato,
+                                "cantidad":cantidad
+                            }
+                            get_item = self.env['dtm.facturado.materiales'].search([("model_id","=",self._origin.id),("material","=",dato),("cantidad","=",cantidad)])
+                            if get_item:
+                                get_item.write(vals)
+                                lines.append(get_item.id)
+                            else:
+                                get_item.create(vals)
+                                get_item = self.env['dtm.facturado.materiales'].search([("model_id","=",self._origin.id),("material","=",dato),("cantidad","=",cantidad)])
+                                lines.append(get_item.id)
+                        materiales.write({'materieales_id': [(5, 0, {})]})
+                        materiales.write({'materieales_id': [(6, 0, lines)]})
                     get_diseno.unlink()
                     get_almacen.unlink()
-                    get_calidad.unlink()
-                    get_ventas.unlink()
                     get_compras.unlink()
                     get_proceso.unlink()
+                    self.env['dtm.materials.line'].browse(lines)
         return res
 
     def action_liberar(self):
