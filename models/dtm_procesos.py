@@ -97,10 +97,10 @@ class Proceso(models.Model):
                 record.user_pausa = True
 
 
-    @api.onchange("status")
-    def _action_status(self):
-        if not self.firma_compras_kanba or not self.firma_almacen_kanba or not self.firma_ventas_kanba or not self.firma:
-            self.status = "aprobacion"
+    # @api.onchange("status")
+    # def _action_status(self):
+    #     if not self.firma_compras_kanba or not self.firma_almacen_kanba or not self.firma_ventas_kanba or not self.firma:
+    #         self.status = "aprobacion"
 
     @api.depends("materials_ids")
     def _compute_materials(self):
@@ -119,9 +119,9 @@ class Proceso(models.Model):
         res = super(Proceso,self).get_view(view_id, view_type,**options)
         get_self = self.env['dtm.proceso'].search([])
         for get in get_self:
-            if get.status != "terminado" or get.status != "calidad" or get.status != "instalacion":
-                if not get.firma_compras_kanba or not get.firma_almacen_kanba or not get.firma_ventas_kanba or not get.firma:
-                        get.status = "aprobacion"
+            # if get.status != "terminado" or get.status != "calidad" or get.status != "instalacion":
+            #     if not get.firma_compras_kanba or not get.firma_almacen_kanba or not get.firma_ventas_kanba or not get.firma:
+            #             get.status = "aprobacion"
 
             if get.status == "terminado" and not get.firma_calidad_kanba:
                 get.status = "calidad"
@@ -254,7 +254,7 @@ class Proceso(models.Model):
         if email == 'manufactura@dtmindustry.com':
             self.firma = self.env.user.partner_id.name
         if email == 'calidad@dtmindustry.com':
-            if self.status == 'calidad' and self.firma_compras_kanba and self.firma_almacen_kanba and self.firma_ventas_kanba and not self.pausa:
+            if self.status == 'calidad' and not self.pausa:
                     self.firma_calidad =  self.env.user.partner_id.name,
                     self.firma_calidad_kanba = "Calidad"
             else:
