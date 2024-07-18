@@ -11,6 +11,7 @@
         'security/model_access.xml',
         #Views
         'views/dtm_proceso_views.xml',
+        'views/dtm_procesos_liberacion_view.xml',
         #Menú
         'views/dtm_menu.xml',
         #Reports

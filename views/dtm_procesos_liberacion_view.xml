@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id = "dtm_proceso_liberacion_accion" model="ir.actions.act_window">
+            <field name="name">Liberación de primera pieza / única</field>
+            <field name="res_model">dtm.proceso.liberacion</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <record id="dtm_proceso_liberacio_tree" model="ir.ui.view">
+            <field name="name">dtm_proceso_liberacion_tree</field>
+            <field name="model">dtm.proceso.liberacion</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="aprobada"/>
+                    <field name="motivo_rechazo"/>
+                    <field name="fecha_revision"/>
+                </tree>
+            </field>
+        </record>
+
+
+
+        <record id="dtm_proceso_liberacion_form" model="ir.ui.view">
+            <field name="name">dtm_proceso_liberacion_form</field>
+            <field name="model">dtm.proceso.liberacion</field>
+            <field name="arch" type="xml">
+                <form>
+                    <style>
+                        .o_input{
+                            width: 30px;
+                        }
+                        #motivo_rechazo{
+                            width:100%;
+
+                        }
+
+                        .div_rechazo{
+                            border: 1px solid rgba(0, 0, 0, .1);
+                            padding: 0px 3px;
+                        }
+
+                    </style>
+                    <script>
+                        var topic = document.getElementsByClassName('modal-title text-break');
+                        topic = topic[0];
+                        topic.innerText="LIBERACIÓN DE PRIMERA PIEZA / ÚNICA";
+                    </script>
+
+                   <group class="col-12">
+                         <group string="Funcional" class="col-6">
+                            <field name="sujecion"/>
+                            <field name="puertas"/>
+                            <field name="puertas_siguen"/>
+                            <field name="llantas"/>
+                            <field name="rodillos"/>
+                        </group>
+                        <group string="Estético" class="col-6">
+                            <field name="acabado_pintura"/>
+                            <field name="rayones"/>
+                            <field name="abolladuras"/>
+                            <field name="saldadura"/>
+                            <field name="pieza_limpia"/>
+                        </group>
+                   </group>
+                    <group class="col-12">
+                        <group string="Mecánico" class="col-6">
+                            <field name="todas_piezas"/>
+                            <field name="ensamble_indicado"/>
+                            <field name="saldadura_uniones"/>
+                            <field name="tornilleria"/>
+                        </group>
+                        <div class="col-6">
+                            <group string="Dimenciones" class="col-12">
+                            <field name="dimensiones"/>
+                            </group>
+                             <group string="Seguridad" class="col-12">
+                                <field name="filos"/>
+                                <field name="tuercas"/>
+                            </group>
+                        </div>
+                    </group>
+
+                    <div class="div_rechazo">
+                        <h4 style="border-top: 1px solid rgba(0, 0, 0, 0.1);
+                        padding-top: 5px;font-size: 0.875em;
+                        text-transform: uppercase !important;
+                        font-weight: 700 !important;
+                        color: var(--body-color);
+                        font-size: 0.875em;">Motivo del Rechazo:</h4>
+                        <field  name="motivo_rechazo"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

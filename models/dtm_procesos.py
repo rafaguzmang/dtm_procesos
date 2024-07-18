@@ -67,11 +67,20 @@ class Proceso(models.Model):
     pausado = fields.Char(string="Detenido por: ", readonly=True)
     pausa = fields.Boolean()
     status_pausado = fields.Char()
-    pausa_motivo = fields.Text()
 
     user_pausa = fields.Boolean(compute="_compute_user_email_match")
 
     materials = fields.Integer(string="Material", compute="_compute_materials")
+
+    #Calidad - Libarción de primera pieza
+    calidad_liberacion = fields.One2many("dtm.proceso.liberacion","model_id")
+
+    def name_get(self):
+        result = []
+        for record in self:
+            name = f"Orden de trabajo / {record.ot_number}"
+            result.append((record.id, name))
+        return result
 
     def action_detener(self):
         email = self.env.user.partner_id.email
@@ -350,4 +359,56 @@ class Tubos(models.Model):
     documentos = fields.Binary()
     nombre = fields.Char()
     cortado = fields.Char("Cortado")
+
+class LiberacionPrimera(models.Model):
+    _name = "dtm.proceso.liberacion"
+    _description = "Liberación de primera pieza/única"
+
+    model_id = fields.Many2one("dtm.proceso")
+    fecha_revision = fields.Date(default= datetime.today(),readonly=True)
+
+    #Funcional
+    sujecion = fields.Selection(string="Sujeción correcta de la pieza.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    puertas = fields.Selection(string="Las puertas abren y cierran con facilidad.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    puertas_siguen = fields.Selection(string="Las puertas siguen cerradas con el moviento.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    llantas = fields.Selection(string="Las llantas se mueven con facilidad.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    rodillos = fields.Selection(string="Los rodillos se mueven con facilidad en el riel",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    #Estético
+    acabado_pintura = fields.Selection(string="Acabado liso en pintura.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    rayones = fields.Selection(string="Tiene rayones.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    abolladuras = fields.Selection(string="Tiene aboyaduras.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    saldadura = fields.Selection(string="Acabado limpio de soldadura.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    pieza_limpia = fields.Selection(string="Pieza limpia.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    #Mecánico
+    todas_piezas = fields.Selection(string="Contiene todas las piezas indicadas en el plano.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    ensamble_indicado = fields.Selection(string="Cuenta con el ensamble indicado en el plano.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    saldadura_uniones = fields.Selection(string="Soldadura en todas las uniones de la pieza.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    tornilleria = fields.Selection(string="Tornillería y remache de acuerdo al plano.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+
+    #Dimensiones
+    dimensiones = fields.Selection(string="La pieza cumple con las dimensiones critícas.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    #Seguridad
+    filos = fields.Selection(string="Tiene filos.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+    tuercas = fields.Selection(string="Tuercas Apretadas.",selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+
+    aprobada = fields.Boolean(string="Pieza Aprobada:")
+    motivo_rechazo = fields.Text(string="Motivo del Rechazo:")
+
 

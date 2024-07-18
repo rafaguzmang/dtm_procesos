@@ -315,8 +315,8 @@
                              <page string="LTP 6032">
                                 <field name="tubos_id" >
                                      <tree>
-                                            <field name="nombre" invisible="0"></field>
-                                            <field name="cortado" />
+                                        <field name="nombre" invisible="0"></field>
+                                        <field name="cortado" />
                                      </tree>
                                      <form>
                                         <group >
@@ -329,8 +329,8 @@
                             <page string="NOTAS">
                                 <field name="notes"/>
                             </page>
-                             <page string="Pausado" attrs="{'invisible': [('pausado', 'not in', ['Pausado por Ventas','Pausado por Calidad'])]}">
-                                <field name="pausa_motivo"/>
+                             <page string="CALIDAD" >
+                                <field name="calidad_liberacion"/>
                             </page>
                         </notebook>
                     </sheet>
