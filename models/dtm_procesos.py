@@ -70,17 +70,12 @@ class Proceso(models.Model):
 
     user_pausa = fields.Boolean(compute="_compute_user_email_match")
 
-    materials = fields.Integer(string="Material", compute="_compute_materials")
+    materials = fields.Integer(string="Material")
 
     #Calidad - Libarción de primera pieza
     calidad_liberacion = fields.One2many("dtm.proceso.liberacion","model_id")
 
-    def name_get(self):
-        result = []
-        for record in self:
-            name = f"Orden de trabajo / {record.ot_number}"
-            result.append((record.id, name))
-        return result
+
 
     def action_detener(self):
         email = self.env.user.partner_id.email
@@ -111,27 +106,33 @@ class Proceso(models.Model):
     #     if not self.firma_compras_kanba or not self.firma_almacen_kanba or not self.firma_ventas_kanba or not self.firma:
     #         self.status = "aprobacion"
 
-    @api.depends("materials_ids")
-    def _compute_materials(self):
-        for record in self:
-            total = len(record.materials_ids)
-            cont = 0
-            if record.materials_ids:
-                for material in record.materials_ids:
-                    if material.materials_required == 0:
-                        cont += 1
-                record.materials = cont * 100 / total
-            else:
-                record.materials = 0
+    # @api.depends("materials_ids")
+    # def _compute_materials(self):
+    #     for record in self:
+    #         total = len(record.materials_ids)
+    #         cont = 0
+    #         if record.materials_ids:
+    #             for material in record.materials_ids:
+    #                 if material.materials_required == 0:
+    #                     cont += 1
+    #             record.materials = cont * 100 / total
+    #         else:
+    #             record.materials = 0
+    #     for record in self:
+    #         total = len(record.materials_npi_ids)
+    #         cont = 0
+    #         if record.materials_npi_ids:
+    #             for material in record.materials_npi_ids:
+    #                 if material.materials_required == 0:
+    #                     cont += 1
+    #             record.materials = cont * 100 / total
+    #         else:
+    #             record.materials = 0
 
     def get_view(self, view_id=None, view_type='form', **options):
         res = super(Proceso,self).get_view(view_id, view_type,**options)
         get_self = self.env['dtm.proceso'].search([])
         for get in get_self:
-            # if get.status != "terminado" or get.status != "calidad" or get.status != "instalacion":
-            #     if not get.firma_compras_kanba or not get.firma_almacen_kanba or not get.firma_ventas_kanba or not get.firma:
-            #             get.status = "aprobacion"
-
             if get.status == "terminado" and not get.firma_calidad_kanba:
                 get.status = "calidad"
 
@@ -213,6 +214,23 @@ class Proceso(models.Model):
                     get_compras.unlink()
                     get_proceso.unlink()
                     self.env['dtm.materials.line'].browse(lines)
+
+        get_materiales = self.env['dtm.proceso'].search([])
+        for record in get_materiales:
+            if record.tipe_order == "OT":
+                materiales = record.materials_ids
+            else:
+                materiales = record.materials_npi_ids
+            total = len(materiales)
+            cont = 0
+            if materiales:
+                for material in materiales:
+                    if material.materials_required == 0:
+                        cont += 1
+                record.materials = cont * 100 / total
+            else:
+                record.materials = 0
+            print(record.materials)
         return res
 
     def action_liberar(self):

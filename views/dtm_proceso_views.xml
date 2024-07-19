@@ -180,6 +180,7 @@
                     <sheet>
                             <h1 > ORDEN DE TRABAJO </h1>
                             <h2> Diseño y Transformaciones Metálicas S. de R.L. de C.V.</h2>
+                            <field name="materials" widget="percentpie"/>
                         <group >
                             <field name="status" attrs="{'readonly': [('pausado', '=', 'Pausado Por Ventas')]}"/>
                             <field name="pausa" invisible="1" />
