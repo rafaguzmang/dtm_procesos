@@ -79,7 +79,7 @@ class Proceso(models.Model):
 
     def action_detener(self):
         email = self.env.user.partner_id.email
-        if email == 'calidad@dtmindustry.com':
+        if email == 'calidad@dtmindustry.com' or email == 'calidad2@dtmindustry.com':
             self.pausado= "Pausado por Calidad"
         elif email == 'hugo_chacon@dtmindustry.com'or email=='ventas1@dtmindustry.com' or email=="rafaguzmang@hotmail.com":
             self.pausado= "Pausado por Ventas"
