@@ -84,7 +84,6 @@ class Proceso(models.Model):
         elif email == 'hugo_chacon@dtmindustry.com'or email=='ventas1@dtmindustry.com' or email=="rafaguzmang@hotmail.com":
             self.pausado= "Pausado por Ventas"
         self.status_pausado= self.status
-        self.pausa_motivo= self.pausa_motivo
         self.pausa = True
     def action_continuar(self):
         self.pausado = ""
@@ -306,7 +305,7 @@ class Proceso(models.Model):
         email = self.env.user.partner_id.email
         if email == 'manufactura@dtmindustry.com':
             self.firma = self.env.user.partner_id.name
-        if email == 'calidad@dtmindustry.com':
+        if email == 'calidad@dtmindustry.com' or email == 'calidad2@dtmindustry.com':
             if self.status == 'calidad' and not self.pausa:
                     self.firma_calidad =  self.env.user.partner_id.name,
                     self.firma_calidad_kanba = "Calidad"
