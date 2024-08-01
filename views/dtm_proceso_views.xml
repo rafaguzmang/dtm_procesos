@@ -40,34 +40,27 @@
                                         tabla[0].children[i].style = "order:1";
                                     }else if(text == 'Corte'){
                                         tabla[0].children[i].style = "order:2";
-                                    }else if(text == 'Corte'){
+                                    }else if(text == 'Revisión FAI'){
                                         tabla[0].children[i].style = "order:3";
-                                    }else if(text == 'Revisión FAI'){
-                                        tabla[0].children[i].style = "order:4";
-                                    }else if(text == 'Revisión FAI'){
-                                        tabla[0].children[i].style = "order:5";
-                                    }else if(text == 'Corte - Revisión FAI'){
-                                        tabla[0].children[i].style = "order:6";
-                                    }else if(text == 'Corte - Doblado'){
-                                        tabla[0].children[i].style = "order:7";
                                     }else if(text == 'Doblado'){
-                                        tabla[0].children[i].style = "order:8";
+                                        tabla[0].children[i].style = "order:4";
                                     }else if(text == 'Soldadura'){
-                                        tabla[0].children[i].style = "order:9";
+                                        tabla[0].children[i].style = "order:5";
                                     }else if(text == 'Lavado'){
-                                        tabla[0].children[i].style = "order:10";
+                                        tabla[0].children[i].style = "order:6";
                                     }else if(text == 'Pintura'){
-                                        tabla[0].children[i].style = "order:11";
+                                        tabla[0].children[i].style = "order:7";
                                     }else if(text == 'Ensamble'){
-                                        tabla[0].children[i].style = "order:12";
+                                        tabla[0].children[i].style = "order:8";
+                                    }else if(text == 'Servicio Externo'){
+                                        tabla[0].children[i].style = "order:9";
                                     }else if(text == 'Calidad'){
-                                        tabla[0].children[i].style = "order:13";
+                                        tabla[0].children[i].style = "order:10";
                                     }else if(text == 'Instalación'){
-                                        tabla[0].children[i].style = "order:14";
+                                        tabla[0].children[i].style = "order:11";
                                     }else if(text == 'Terminado'){
-                                        tabla[0].children[i].style = "order:15";
+                                        tabla[0].children[i].style = "order:12";
                                     }
-
                                 }
                             </script>
                             <div class="oe_kanban_global_click" >

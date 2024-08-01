@@ -14,7 +14,7 @@ class Proceso(models.Model):
     status = fields.Selection(string="Estatus", selection=[("aprobacion","Pendiente a aprobación"),
                                          ("corte","Corte"),("revision","Revisión FAI"),("doblado","Doblado"),
                                          ("soldadura","Soldadura"),("lavado","Lavado"),("pintura","Pintura"),
-                                         ("ensamble","Ensamble"),("calidad","Calidad"),("instalacion","Instalación"),
+                                         ("ensamble","Ensamble"),("externo","Servicio Externo"),("calidad","Calidad"),("instalacion","Instalación"),
                                          ("terminado","Terminado")])
 
     sequence = fields.Integer()
