@@ -169,7 +169,7 @@
                         <button type="object" name="action_firma" string="Firma"  icon="fa-pencil" class="btn btn-primary"/>
                         <button type="object" name="action_detener" string="Detener"  icon="fa-hourglass" class="btn btn-danger " attrs="{'invisible': ['|',('user_pausa', '!=', True),('pausa', '=', True)]}"/>
                         <button type="object" name="action_continuar" string="Continuar"  icon="fa-play" class="btn btn-success " attrs="{'invisible': ['|',('user_pausa', '!=', True),('pausa', '=', False)]}"/>
-                        <button type="object" name="action_retrabajo" string="Retrabajo"  icon="fa-play" class="btn btn-danger " attrs="{'invisible': ['|',('user_pausa', '!=', True)]}" />
+                        <button type="object" name="action_retrabajo" string="Retrabajo"  icon="fa-play" class="btn btn-danger " attrs="{'invisible': [('user_pausa', '!=', True)]}" />
                     </header>
                     <sheet>
                             <h1 > ORDEN DE TRABAJO </h1>
@@ -342,6 +342,8 @@
                <field name="model">dtm.proceso</field>
                <field name ="arch" type="xml">
                    <search>
+                        <field name="ot_number"/>
+
                         <filter string="OT" name="proceso_ot" domain="[('tipe_order','=','OT')]"/>
                         <filter string="NPI" name="proceso_npi" domain="[('tipe_order','=','NPI')]"/>
                         <separator/>
