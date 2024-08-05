@@ -169,6 +169,7 @@
                         <button type="object" name="action_firma" string="Firma"  icon="fa-pencil" class="btn btn-primary"/>
                         <button type="object" name="action_detener" string="Detener"  icon="fa-hourglass" class="btn btn-danger " attrs="{'invisible': ['|',('user_pausa', '!=', True),('pausa', '=', True)]}"/>
                         <button type="object" name="action_continuar" string="Continuar"  icon="fa-play" class="btn btn-success " attrs="{'invisible': ['|',('user_pausa', '!=', True),('pausa', '=', False)]}"/>
+                        <button type="object" name="action_retrabajo" string="Retrabajo"  icon="fa-play" class="btn btn-danger " attrs="{'invisible': ['|',('user_pausa', '!=', True)]}" />
                     </header>
                     <sheet>
                             <h1 > ORDEN DE TRABAJO </h1>

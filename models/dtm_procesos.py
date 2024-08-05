@@ -77,6 +77,12 @@ class Proceso(models.Model):
     calidad_liberacion = fields.One2many("dtm.proceso.liberacion","model_id")
 
 
+    def action_retrabajo(self):
+        get_odt = self.env['dtm.odt'].search([("ot_number","=",self.ot_number),("tipe_order","=",self.tipe_order)])
+        if get_odt:
+            get_odt.write({
+                "retrabajo":False
+            })
 
     def action_detener(self):
         email = self.env.user.partner_id.email
@@ -86,6 +92,7 @@ class Proceso(models.Model):
             self.pausado= "Pausado por Ventas"
         self.status_pausado= self.status
         self.pausa = True
+
     def action_continuar(self):
         self.pausado = ""
         self.status_pausado = ""
