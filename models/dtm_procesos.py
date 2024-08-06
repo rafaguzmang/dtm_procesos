@@ -138,6 +138,7 @@ class Proceso(models.Model):
 
     def get_view(self, view_id=None, view_type='form', **options):
         res = super(Proceso,self).get_view(view_id, view_type,**options)
+
         get_self = self.env['dtm.proceso'].search([])
         for get in get_self:
             if get.status == "terminado" and not get.firma_calidad_kanba:
@@ -147,7 +148,103 @@ class Proceso(models.Model):
                 get.status = "terminado"
 
         get_facturas = self.env['dtm.ordenes.compra.facturado'].search([])
-        for factura in get_facturas:
+        self.eliminacion_ot(get_facturas)
+        get_npi = self.env['dtm.proceso'].search([("tipe_order","=","NPI")])
+        self.eliminacio_npi(get_npi)
+
+        get_materiales = self.env['dtm.proceso'].search([])
+        for record in get_materiales: # Actualiza la lista de materiales de las ordenes
+            if record.tipe_order == "OT":
+                materiales = record.materials_ids
+            else:
+                materiales = record.materials_npi_ids
+            total = len(materiales)
+            cont = 0
+            if materiales:
+                for material in materiales:
+                    if material.materials_required == 0:
+                        cont += 1
+                record.materials = cont * 100 / total
+            else:
+                record.materials = 0
+        return res
+
+    def eliminacio_npi (self,get_npi):
+        for factura in get_npi:
+            if factura.status == "terminado":
+                get_diseno = self.env['dtm.npi'].search([("ot_number","=",factura.ot_number)])
+                get_almacen = self.env['dtm.almacen.odt'].search([("ot_number","=",factura.ot_number)])
+                get_compras = self.env['dtm.compras.odt'].search([("ot_number","=",factura.ot_number)])
+                vals = {
+                    "status": factura.status,
+                    "ot_number": factura.ot_number,
+                    "tipe_order": factura.tipe_order,
+                    "name_client": factura.name_client,
+                    "product_name": factura.product_name,
+                    "date_in": factura.date_in,
+                    "po_number": factura.po_number,
+                    "date_rel": factura.date_rel,
+                    "version_ot": factura.version_ot,
+                    "color": factura.color,
+                    "cuantity": factura.cuantity,
+                    "materials_ids": factura.materials_ids,
+                    "planos": factura.planos,
+                    "nesteos": factura.nesteos,
+                    "rechazo_id":factura.rechazo_id,
+                    "anexos_id":factura.anexos_id,
+                    "cortadora_id":factura.cortadora_id,
+                    "primera_pieza_id":factura.primera_pieza_id,
+                    "tubos_id":factura.tubos_id,
+                    "firma": factura.firma,
+                    "firma_compras": factura.firma_compras,
+                    "firma_diseno": factura.firma_diseno,
+                    "firma_almacen": factura.firma_almacen,
+                    "firma_ventas": factura.firma_ventas,
+                    "description": factura.description,
+                    "firma_calidad":factura.firma_calidad
+                }
+                get_facturado = self.env['dtm.facturado.npi'].search([("ot_number","=",factura.ot_number)])
+                if not get_facturado:
+                    get_facturado.create(vals)
+                else:
+                    get_facturado.write(vals)
+                    get_facturado = self.env['dtm.facturado.npi'].search([("ot_number","=",factura.ot_number)])
+
+                lines = []
+                for materiales in get_facturado:
+                    for item in materiales.materials_list:
+                        nombre = ""
+                        medida =""
+                        cantidad = 0
+                        if item.nombre:
+                            nombre = item.nombre
+                        if item.medida:
+                            medida = item.medida
+                        if item.materials_cuantity:
+                            cantidad = item.materials_cuantity
+                        dato = f"{nombre} {medida}"
+                        vals = {
+                            "material":dato,
+                            "cantidad":cantidad
+                        }
+                        get_item = self.env['dtm.materiales.npi'].search([("model_id","=",self._origin.id),("material","=",dato),("cantidad","=",cantidad)])
+                        if get_item:
+                            get_item.write(vals)
+                            lines.append(get_item.id)
+                        else:
+                            get_item.create(vals)
+                            get_item = self.env['dtm.materiales.npi'].search([("model_id","=",self._origin.id),("material","=",dato),("cantidad","=",cantidad)])
+                            lines.append(get_item.id)
+                    materiales.write({'materieales_id': [(5, 0, {})]})
+                    materiales.write({'materieales_id': [(6, 0, lines)]})
+                get_diseno.unlink()
+                get_almacen.unlink()
+                get_compras.unlink()
+                factura.unlink()
+                self.env['dtm.materials.npi'].browse(lines)
+
+    def eliminacion_ot (self,get_ordenes):
+        for factura in get_ordenes:
             for orden in factura.descripcion_id:
                 get_proceso = self.env['dtm.proceso'].search([("ot_number","=",orden.orden_trabajo),("tipe_order","=","OT")])
                 if get_proceso:
@@ -221,23 +318,6 @@ class Proceso(models.Model):
                     get_compras.unlink()
                     get_proceso.unlink()
                     self.env['dtm.materials.line'].browse(lines)
-
-        get_materiales = self.env['dtm.proceso'].search([])
-        for record in get_materiales:
-            if record.tipe_order == "OT":
-                materiales = record.materials_ids
-            else:
-                materiales = record.materials_npi_ids
-            total = len(materiales)
-            cont = 0
-            if materiales:
-                for material in materiales:
-                    if material.materials_required == 0:
-                        cont += 1
-                record.materials = cont * 100 / total
-            else:
-                record.materials = 0
-        return res
 
     def action_liberar(self):
         email = self.env.user.partner_id.email
