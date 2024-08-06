@@ -102,7 +102,7 @@ class Proceso(models.Model):
     def _compute_user_email_match(self):
         for record in self:
             email = self.env.user.partner_id.email
-            emails = ['calidad@dtmindustry.com','hugo_chacon@dtmindustry.com','ventas1@dtmindustry.com','rafaguzmang@hotmail.com']
+            emails = ['calidad@dtmindustry.com','calidad2@dtmindustry.com','hugo_chacon@dtmindustry.com','ventas1@dtmindustry.com','rafaguzmang@hotmail.com']
             record.user_pausa = False
             if email in emails:
                 record.user_pausa = True
