@@ -290,7 +290,7 @@
                                         </group>
                                      </form>
                                 </field>
-                                 <button type="object" name="action_liberar" string="Liberar"  icon="fa-check" class="btn btn-primary"/>
+                                 <button type="object" name="action_liberar" string="Liberar"  icon="fa-check" class="btn btn-primary" attrs="{'invisible': [('user_pausa', '!=', True)]}"/>
                             </page>
 
                             <page string="MITSUBISHI">
