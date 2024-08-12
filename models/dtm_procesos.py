@@ -139,7 +139,7 @@ class Proceso(models.Model):
     def get_view(self, view_id=None, view_type='form', **options):
         res = super(Proceso,self).get_view(view_id, view_type,**options)
 
-        get_self = self.env['dtm.proceso'].search([])
+        get_self = self.env['dtm.proceso'].search([]) #No permite el cambio a terminado sin firma de calidad
         for get in get_self:
             if get.status == "terminado" and not get.firma_calidad_kanba:
                 get.status = "calidad"
@@ -147,7 +147,7 @@ class Proceso(models.Model):
             if get.firma_calidad_kanba and get.status != "instalacion":
                 get.status = "terminado"
 
-        get_facturas = self.env['dtm.ordenes.compra.facturado'].search([])
+        get_facturas = self.env['dtm.ordenes.compra.facturado'].search([])#Elimina de procesos todas las ordenes de trabajo que ya tienen número de factura
         self.eliminacion_ot(get_facturas)
         get_npi = self.env['dtm.proceso'].search([("tipe_order","=","NPI")])
         self.eliminacio_npi(get_npi)
