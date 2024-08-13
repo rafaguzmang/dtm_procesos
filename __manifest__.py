@@ -19,6 +19,7 @@
         'reports/lista_materiales.xml',
         #Script
         # 'static/xml/assets.xml',
-    ]
+    ],
+    'license': 'LGPL-3',
 }
 

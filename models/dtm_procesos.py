@@ -45,21 +45,21 @@ class Proceso(models.Model):
     material_cortado = fields.Boolean(default=False)
 
     firma = fields.Char(string="Firma", readonly = True)
-    firma_compras = fields.Char(string = "Compras", readonly = True)
+    firma_compras = fields.Char(readonly = True)
     firma_diseno = fields.Char(string = "Diseñador", readonly = True)
     firma_parcial = fields.Boolean()
-    firma_almacen = fields.Char(string = "", readonly = True)
-    firma_ventas = fields.Char(string = "Ventas", readonly = True)
-    firma_calidad = fields.Char(string = "", readonly = True)
+    firma_almacen = fields.Char(readonly = True)
+    firma_ventas = fields.Char(readonly = True)
+    firma_calidad = fields.Char(readonly = True)
    
-    firma_compras_kanba = fields.Char(string = "Compras", readonly = True)
-    firma_diseno_kanba = fields.Char(string = "Diseñador", readonly = True)
-    firma_almacen_kanba = fields.Char(string = "", readonly = True)
-    firma_ventas_kanba = fields.Char(string = "Ventas", readonly = True)
-    firma_calidad_kanba = fields.Char(string = "", readonly = True)
+    firma_compras_kanba = fields.Char( readonly = True)
+    firma_diseno_kanba = fields.Char(readonly = True)
+    firma_almacen_kanba = fields.Char(readonly = True)
+    firma_ventas_kanba = fields.Char(readonly = True)
+    firma_calidad_kanba = fields.Char(readonly = True)
 
     #---------------------Resumen de descripción------------
-    description = fields.Text(string= "DESCRIPCIÓN",placeholder="RESUMEN DE DESCRIPCIÓN")
+    description = fields.Text(string= "DESCRIPCIÓN")
 
     notes = fields.Text()
 
