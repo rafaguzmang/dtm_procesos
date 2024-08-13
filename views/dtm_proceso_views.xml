@@ -164,12 +164,12 @@
 
                     </style>
                     <header>
-                        <button type="object" name="action_imprimir_formato" string="ODT" attrs="{'invisible': [('tipe_order', '=', '')]}" icon="fa-print" class="btn btn-primary"/>
-                        <button type="object" name="action_imprimir_materiales" string="Lista de Materiales" attrs="{'invisible': [('tipe_order', '=', '')]}" icon="fa-print" class="btn btn-primary"/>
-                        <button type="object" name="action_firma" string="Firma"  icon="fa-pencil" class="btn btn-primary"/>
-                        <button type="object" name="action_detener" string="Detener"  icon="fa-hourglass" class="btn btn-danger " attrs="{'invisible': ['|',('user_pausa', '!=', True),('pausa', '=', True)]}"/>
-                        <button type="object" name="action_continuar" string="Continuar"  icon="fa-play" class="btn btn-success " attrs="{'invisible': ['|',('user_pausa', '!=', True),('pausa', '=', False)]}"/>
-                        <button type="object" name="action_retrabajo" string="Retrabajo"  icon="fa-play" class="btn btn-danger " attrs="{'invisible': [('user_pausa', '!=', True)]}" />
+                        <button type="object" name="action_imprimir_formato" string="ODT" attrs="{'invisible': [('tipe_order', '=', '')]}" icon="fa-print" title="print" class="btn btn-primary"/>
+                        <button type="object" name="action_imprimir_materiales" string="Lista de Materiales" attrs="{'invisible': [('tipe_order', '=', '')]}" icon="fa-print" title="print" class="btn btn-primary"/>
+                        <button type="object" name="action_firma" string="Firma"  icon="fa-pencil" title="pencil" class="btn btn-primary"/>
+                        <button type="object" name="action_detener" string="Detener"  icon="fa-hourglass" title="hourglass" class="btn btn-danger " attrs="{'invisible': ['|',('user_pausa', '!=', True),('pausa', '=', True)]}"/>
+                        <button type="object" name="action_continuar" string="Continuar"  icon="fa-play" title="play" class="btn btn-success " attrs="{'invisible': ['|',('user_pausa', '!=', True),('pausa', '=', False)]}"/>
+                        <button type="object" name="action_retrabajo" string="Retrabajo"  icon="fa-play" title="play" class="btn btn-danger " attrs="{'invisible': [('user_pausa', '!=', True)]}" />
                     </header>
                     <sheet>
                             <h1 > ORDEN DE TRABAJO </h1>
@@ -266,8 +266,8 @@
                                      <tree>
                                             <field name="nombre" invisible="0"></field>
                                             <field name="color" widget="color_picker" />
-                                            <button type="object" name="action_mas" string=""  icon="fa-plus" class="btn btn-primary"/>
-                                            <button type="object" name="action_menos" string=""  icon="fa-minus" class="btn btn-primary"/>
+                                            <button type="object" name="action_mas" string=""  icon="fa-plus" class="btn btn-primary" title="mas"/>
+                                            <button type="object" name="action_menos" string=""  icon="fa-minus" class="btn btn-primary" title="menos"/>
                                      </tree>
                                      <form>
                                         <group >
@@ -290,7 +290,7 @@
                                         </group>
                                      </form>
                                 </field>
-                                 <button type="object" name="action_liberar" string="Liberar"  icon="fa-check" class="btn btn-primary" attrs="{'invisible': [('user_pausa', '!=', True)]}"/>
+                                 <button type="object" name="action_liberar" string="Liberar"  icon="fa-check" title="check" class="btn btn-primary" attrs="{'invisible': [('user_pausa', '!=', True)]}"/>
                             </page>
 
                             <page string="MITSUBISHI">
