@@ -11,7 +11,7 @@ class Proceso(models.Model):
     _order = "ot_number desc"
 
 
-    status = fields.Selection(string="Estatus", selection=[("aprobacion","Pendiente a aprobación"),
+    status = fields.Selection(string="Estatus", selection=[("aprobacion","Nesteo"),
                                          ("corte","Corte"),("revision","Revisión FAI"),("doblado","Doblado"),
                                          ("soldadura","Soldadura"),("lavado","Lavado"),("pintura","Pintura"),
                                          ("ensamble","Ensamble"),("externo","Servicio Externo"),("calidad","Calidad"),("instalacion","Instalación"),
@@ -147,10 +147,10 @@ class Proceso(models.Model):
             if get.firma_calidad_kanba and get.status != "instalacion":
                 get.status = "terminado"
 
-        get_facturas = self.env['dtm.ordenes.compra.facturado'].search([])#Elimina de procesos todas las ordenes de trabajo que ya tienen número de factura
-        self.eliminacion_ot(get_facturas)
-        get_npi = self.env['dtm.proceso'].search([("tipe_order","=","NPI")])
-        self.eliminacio_npi(get_npi)
+        # get_facturas = self.env['dtm.ordenes.compra.facturado'].search([])#Elimina de procesos todas las ordenes de trabajo que ya tienen número de factura
+        # self.eliminacion_ot(get_facturas)
+        # get_npi = self.env['dtm.proceso'].search([("tipe_order","=","NPI")])
+        # self.eliminacio_npi(get_npi)
 
         get_materiales = self.env['dtm.proceso'].search([])
         for record in get_materiales: # Actualiza la lista de materiales de las ordenes

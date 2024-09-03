@@ -219,17 +219,6 @@
                                 </group>
                             </page>
 
-                            <page string="MATERIALES" attrs="{'invisible': [('tipe_order', '=', 'NPI')]}">
-                                    <field name="materials_ids" >
-                                        <tree editable="bottom">
-                                            <field name="nombre"/>
-                                            <field name="medida"/>
-                                            <field name="materials_cuantity"/>
-                                            <field name="materials_inventory"/>
-                                            <field name="materials_required"/>
-                                        </tree>
-                                    </field>
-                            </page>
                             <page string="MATERIALES" attrs="{'invisible': [('tipe_order', '=', 'OT')]}" >
                                     <field name="materials_npi_ids" >
                                         <tree editable="bottom">
@@ -343,6 +332,8 @@
                <field name ="arch" type="xml">
                    <search>
                         <field name="ot_number"/>
+                        <field name="po_number"/>
+                        <field name="name_client"/>
 
                         <filter string="OT" name="proceso_ot" domain="[('tipe_order','=','OT')]"/>
                         <filter string="NPI" name="proceso_npi" domain="[('tipe_order','=','NPI')]"/>
@@ -357,7 +348,7 @@
                         <filter string="Ensamble" name="proceso_npi" domain="[('status','=','ensamble')]"/>
                         <filter string="Calidad" name="proceso_npi" domain="[('status','=','calidad')]"/>
                         <filter string="Instalacion" name="proceso_terminado" domain="[('status','=','instalacion')]"/>
-                        <filter string="Terminado" name="proceso_terminado" domain="[('status','=','Terminado')]"/>
+                        <filter string="Terminado" name="proceso_terminado" domain="[('status','=','terminado')]"/>
                         <separator/>
                         <filter string="No Aprobación" name="proceso_terminado_quitar" domain="[('status','!=','aprobacion')]"/>
                         <filter string="No Corte" name="proceso_terminado_quitar" domain="[('status','!=','corte')]"/>
