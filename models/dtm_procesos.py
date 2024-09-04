@@ -297,11 +297,12 @@ class Proceso(models.Model):
                     lines.append(get_facturado_material.id)
                 get_facturado.write({'materieales_id': [(6, 0, lines)]})
                 #-------------------------------------------------------------------------------------------------------------------------------
-                self.env['dtm.odt'].search([('ot_number','=',int(orden))]).unlink()
-                self.env['dtm.almacen.odt'].search([('ot_number','=',int(orden))]).unlink()
-                self.env['dtm.compras.odt'].search([('ot_number','=',int(orden))]).unlink()
-                self.env['dtm.proceso'].search([('ot_number','=',int(orden))]).unlink()
-                self.env['dtm.compras.realizado'].search([('orden_trabajo','=',int(orden))]).unlink()
+                if get_facturado:
+                    self.env['dtm.odt'].search([('ot_number','=',int(orden))]).unlink()
+                    self.env['dtm.almacen.odt'].search([('ot_number','=',int(orden))]).unlink()
+                    self.env['dtm.compras.odt'].search([('ot_number','=',int(orden))]).unlink()
+                    self.env['dtm.proceso'].search([('ot_number','=',int(orden))]).unlink()
+                    self.env['dtm.compras.realizado'].search([('orden_trabajo','=',int(orden))]).unlink()
 
 
 
