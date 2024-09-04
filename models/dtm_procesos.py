@@ -108,34 +108,6 @@ class Proceso(models.Model):
                 record.user_pausa = True
 
 
-    # @api.onchange("status")
-    # def _action_status(self):
-    #     if not self.firma_compras_kanba or not self.firma_almacen_kanba or not self.firma_ventas_kanba or not self.firma:
-    #         self.status = "aprobacion"
-
-    # @api.depends("materials_ids")
-    # def _compute_materials(self):
-    #     for record in self:
-    #         total = len(record.materials_ids)
-    #         cont = 0
-    #         if record.materials_ids:
-    #             for material in record.materials_ids:
-    #                 if material.materials_required == 0:
-    #                     cont += 1
-    #             record.materials = cont * 100 / total
-    #         else:
-    #             record.materials = 0
-    #     for record in self:
-    #         total = len(record.materials_npi_ids)
-    #         cont = 0
-    #         if record.materials_npi_ids:
-    #             for material in record.materials_npi_ids:
-    #                 if material.materials_required == 0:
-    #                     cont += 1
-    #             record.materials = cont * 100 / total
-    #         else:
-    #             record.materials = 0
-
     def get_view(self, view_id=None, view_type='form', **options):
         res = super(Proceso,self).get_view(view_id, view_type,**options)
 
@@ -386,6 +358,7 @@ class Proceso(models.Model):
             if self.status == 'calidad' and not self.pausa:
                     self.firma_calidad =  self.env.user.partner_id.name,
                     self.firma_calidad_kanba = "Calidad"
+                    self.status = 'terminado'
             else:
                 raise ValidationError("OT/NPI debe de estar en status Calidad o faltan firmas")
 
