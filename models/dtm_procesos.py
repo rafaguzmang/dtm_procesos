@@ -147,10 +147,10 @@ class Proceso(models.Model):
             if get.firma_calidad_kanba and get.status != "instalacion":
                 get.status = "terminado"
 
-        # get_facturas = self.env['dtm.ordenes.compra.facturado'].search([])#Elimina de procesos todas las ordenes de trabajo que ya tienen número de factura
-        # self.eliminacion_ot(get_facturas)
-        # get_npi = self.env['dtm.proceso'].search([("tipe_order","=","NPI")])
-        # self.eliminacio_npi(get_npi)
+        get_facturas = self.env['dtm.ordenes.compra.facturado'].search([]).mapped('orden_compra')#Elimina de procesos todas las ordenes de trabajo que ya tienen número de factura
+        self.eliminacion_ot(get_facturas)
+        get_npi = self.env['dtm.proceso'].search([("tipe_order","=","NPI")])
+        self.eliminacio_npi(get_npi)
 
         get_materiales = self.env['dtm.proceso'].search([])
         for record in get_materiales: # Actualiza la lista de materiales de las ordenes
@@ -244,15 +244,12 @@ class Proceso(models.Model):
                 self.env['dtm.materials.npi'].browse(lines)
 
     def eliminacion_ot (self,get_ordenes):
-        for factura in get_ordenes:
-            for orden in factura.descripcion_id:
-                get_proceso = self.env['dtm.proceso'].search([("ot_number","=",orden.orden_trabajo),("tipe_order","=","OT")])
-                if get_proceso:
-                    get_diseno = self.env['dtm.odt'].search([("ot_number","=",get_proceso.ot_number)])
-                    get_almacen = self.env['dtm.almacen.odt'].search([("ot_number","=",get_proceso.ot_number)])
-                    get_compras = self.env['dtm.compras.odt'].search([("ot_number","=",get_proceso.ot_number)])
-                    vals = {
-                        "status": factura.factura,
+        for po in get_ordenes:
+            ordenes = self.env['dtm.proceso'].search([("po_number","=",po),("status","=","terminado")]).mapped('ot_number')
+            for orden in ordenes:
+                get_proceso = self.env['dtm.proceso'].search([("ot_number","=",int(orden)),("tipe_order","=","OT")])
+                vals = {
+                        "status": self.env['dtm.ordenes.compra.facturado'].search([("orden_compra","=",get_proceso.po_number)], limit=1).factura,
                         "ot_number": get_proceso.ot_number,
                         "tipe_order": get_proceso.tipe_order,
                         "name_client": get_proceso.name_client,
@@ -263,7 +260,7 @@ class Proceso(models.Model):
                         "version_ot": get_proceso.version_ot,
                         "color": get_proceso.color,
                         "cuantity": get_proceso.cuantity,
-                        "materials_ids": get_proceso.materials_ids,
+                        # "materials_ids": get_proceso.materials_ids,
                         "planos": get_proceso.planos,
                         "nesteos": get_proceso.nesteos,
                         "rechazo_id":get_proceso.rechazo_id,
@@ -279,45 +276,29 @@ class Proceso(models.Model):
                         "description": get_proceso.description,
                         "firma_calidad":get_proceso.firma_calidad
                     }
-                    get_facturado = self.env['dtm.facturado.odt'].search([("ot_number","=",get_proceso.ot_number)])
-                    if not get_facturado:
-                        get_facturado.create(vals)
-                    else:
-                        get_facturado.write(vals)
-                        get_facturado = self.env['dtm.facturado.odt'].search([("ot_number","=",get_proceso.ot_number)])
+                get_facturado = self.env['dtm.facturado.odt'].search([("ot_number","=",get_proceso.ot_number)])
+                get_facturado.write(vals) if get_facturado else get_facturado.create(vals)
+                get_facturado = self.env['dtm.facturado.odt'].search([("ot_number","=",get_proceso.ot_number)])
+                get_facturado.write({'materieales_id': [(5, 0, {})]})
+                lines = []
+                for item in get_proceso.materials_ids:#Se agrega o se actualiza material de la tabla dtm.facturado.materiales y se obtienen los id para casarlos con la orden correspondiente
+                    valmat = {
+                        "material":f"{item.nombre} {item.medida}",
+                        "cantidad":item.materials_cuantity,
+                    }
+                    get_facturado_material = self.env['dtm.facturado.materiales'].search([("material","=",f"{item.nombre} {item.medida}"),("cantidad","=",item.materials_cuantity)])
+                    get_facturado_material.write(valmat) if get_facturado_material else get_facturado_material.create(valmat)
+                    get_facturado_material = self.env['dtm.facturado.materiales'].search([("material","=",f"{item.nombre} {item.medida}"),("cantidad","=",item.materials_cuantity)])
+                    lines.append(get_facturado_material.id)
+                get_facturado.write({'materieales_id': [(6, 0, lines)]})
+                #-------------------------------------------------------------------------------------------------------------------------------
+                self.env['dtm.odt'].search([('ot_number','=',int(orden))]).unlink()
+                self.env['dtm.almacen.odt'].search([('ot_number','=',int(orden))]).unlink()
+                self.env['dtm.compras.odt'].search([('ot_number','=',int(orden))]).unlink()
+                self.env['dtm.proceso'].search([('ot_number','=',int(orden))]).unlink()
+                self.env['dtm.compras.realizado'].search([('orden_trabajo','=',int(orden))]).unlink()
 
-                    lines = []
-                    for materiales in get_facturado:
-                        for item in materiales.materials_list:
-                            nombre = ""
-                            medida =""
-                            cantidad = 0
-                            if item.nombre:
-                                nombre = item.nombre
-                            if item.medida:
-                                medida = item.medida
-                            if item.materials_cuantity:
-                                cantidad = item.materials_cuantity
-                            dato = f"{nombre} {medida}"
-                            vals = {
-                                "material":dato,
-                                "cantidad":cantidad
-                            }
-                            get_item = self.env['dtm.facturado.materiales'].search([("model_id","=",self._origin.id),("material","=",dato),("cantidad","=",cantidad)])
-                            if get_item:
-                                get_item.write(vals)
-                                lines.append(get_item.id)
-                            else:
-                                get_item.create(vals)
-                                get_item = self.env['dtm.facturado.materiales'].search([("model_id","=",self._origin.id),("material","=",dato),("cantidad","=",cantidad)])
-                                lines.append(get_item.id)
-                        materiales.write({'materieales_id': [(5, 0, {})]})
-                        materiales.write({'materieales_id': [(6, 0, lines)]})
-                    get_diseno.unlink()
-                    get_almacen.unlink()
-                    get_compras.unlink()
-                    get_proceso.unlink()
-                    self.env['dtm.materials.line'].browse(lines)
+
 
     def action_liberar(self):
         email = self.env.user.partner_id.email
