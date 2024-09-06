@@ -347,6 +347,8 @@ class Proceso(models.Model):
                         ("localizacion","=",get_almacen.localizacion)])
                         lines.append(get_cortadora_laminas.id)
             get_corte.write({"materiales_id":[(6, 0,lines)]})
+
+
         else:
             raise ValidationError("Esta orden sigue en corte de Primera pieza")
 
@@ -354,11 +356,46 @@ class Proceso(models.Model):
         email = self.env.user.partner_id.email
         if email == 'manufactura@dtmindustry.com':
             self.firma = self.env.user.partner_id.name
-        if email == 'calidad@dtmindustry.com' or email == 'calidad2@dtmindustry.com':
+        if email in ['calidad@dtmindustry.com','calidad2@dtmindustry.com',"rafaguzmang@hotmail.com"]:
             if self.status == 'calidad' and not self.pausa:
                     self.firma_calidad =  self.env.user.partner_id.name,
                     self.firma_calidad_kanba = "Calidad"
                     self.status = 'terminado'
+                    get_desc = self.env['dtm.ordenes.compra'].search([("orden_compra","=",self.po_number)])#Revisa si todas las ordenes de esta cotización ya están realizadas y de ser así las marca en color verde
+                    list_items = get_desc.descripcion_id.mapped('orden_trabajo')
+                    list_orm = set([self.env['dtm.proceso'].search([("ot_number","=",str(item))]).status for item in list_items])
+                    len(list_orm) == 1 and get_desc.write({"terminado": True})
+                    if get_desc.exportacion:
+                        vals = {
+                            "no_cotizacion":get_desc.no_cotizacion,
+                            "proveedor":get_desc.proveedor,
+                            "cliente":get_desc.cliente_prov,
+                            "order_compra":get_desc.orden_compra,
+                            "fecha_entrada":get_desc.fecha_entrada,
+                            "fecha_salida":get_desc.fecha_salida,
+                            "precio_total":get_desc.precio_total,
+                            "currency":get_desc.currency,
+                            "odt_ids":get_desc.descripcion_id,
+                        }
+                        get_compra_import = self.env['dtm.exportaciones'].search([("no_cotizacion","=",get_desc.no_cotizacion)])#Busca que la compra exista y de no ser así la crea
+                        get_compra_import.write(vals) if get_compra_import else get_compra_import.create(vals)
+                        get_compra_import = self.env['dtm.exportaciones'].search([("no_cotizacion","=",get_desc.no_cotizacion)])#Busca que la compra exista y de no ser así la crea
+                        get_compra_import.write({'planos_id': [(5, 0, {})]})
+                        lines = []
+                        for trabajo in list_items:
+                            get_planos = self.env['dtm.proceso'].search([("ot_number","=",trabajo),("tipe_order","=","OT")])
+                            if get_planos:
+                                for planos in get_planos.anexos_id:
+                                    datos = {
+                                        "nombre":planos.nombre,
+                                        "archivo":planos.documentos,
+                                        "orden":trabajo
+                                    }
+                                    get_copra_ots = self.env['dtm.exportaciones.planos'].search([("nombre","=",planos.nombre),("orden","=",trabajo)])
+                                    get_copra_ots.write(datos) if get_copra_ots else get_copra_ots.create(datos)
+                                    get_copra_ots = self.env['dtm.exportaciones.planos'].search([("nombre","=",planos.nombre),("orden","=",trabajo)])
+                                    lines.append(get_copra_ots[0].id)
+                        get_compra_import.write({'planos_id': [(6, 0, lines)]})
             else:
                 raise ValidationError("OT/NPI debe de estar en status Calidad o faltan firmas")
 
