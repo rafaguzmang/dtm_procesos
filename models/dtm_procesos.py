@@ -107,7 +107,6 @@ class Proceso(models.Model):
             if email in emails:
                 record.user_pausa = True
 
-
     def get_view(self, view_id=None, view_type='form', **options):
         res = super(Proceso,self).get_view(view_id, view_type,**options)
 
@@ -270,8 +269,6 @@ class Proceso(models.Model):
                     self.env['dtm.compras.odt'].search([('ot_number','=',int(orden))]).unlink()
                     self.env['dtm.proceso'].search([('ot_number','=',int(orden))]).unlink()
                     self.env['dtm.compras.realizado'].search([('orden_trabajo','=',int(orden))]).unlink()
-
-
 
     def action_liberar(self):
         email = self.env.user.partner_id.email
