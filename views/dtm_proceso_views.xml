@@ -218,17 +218,27 @@
                                     <field name="description"/>
                                 </group>
                             </page>
-
                             <page string="MATERIALES" attrs="{'invisible': [('tipe_order', '=', 'OT')]}" >
-                                    <field name="materials_npi_ids" >
-                                        <tree editable="bottom">
-                                            <field name="nombre"/>
-                                            <field name="medida"/>
-                                            <field name="materials_cuantity"/>
-                                            <field name="materials_inventory"/>
-                                            <field name="materials_required"/>
-                                        </tree>
-                                    </field>
+                                <field name="materials_npi_ids" >
+                                    <tree editable="bottom">
+                                        <field name="nombre"/>
+                                        <field name="medida"/>
+                                        <field name="materials_cuantity"/>
+                                        <field name="materials_inventory"/>
+                                        <field name="materials_required"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="MATERIALES" attrs="{'invisible': [('tipe_order', '=', 'NPI')]}" >
+                                <field name="materials_ids" >
+                                    <tree editable="bottom">
+                                        <field name="nombre"/>
+                                        <field name="medida"/>
+                                        <field name="materials_cuantity"/>
+                                        <field name="materials_inventory"/>
+                                        <field name="materials_required"/>
+                                    </tree>
+                                </field>
                             </page>
                             <page string="RECHAZO" attrs="{'invisible': [('tipe_order', '=', 'NPI')]}">
                                 <field name="rechazo_id" >
@@ -296,7 +306,7 @@
                                      </form>
                                 </field>
                             </page>
-                             <page string="LTP 6032">
+                            <page string="LTP 6032">
                                 <field name="tubos_id" >
                                      <tree>
                                         <field name="nombre" invisible="0"></field>
