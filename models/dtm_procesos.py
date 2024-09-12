@@ -215,13 +215,13 @@ class Proceso(models.Model):
                 self.env['dtm.materials.npi'].browse(lines)
 
     def eliminacion_ot (self,get_ordenes):
-        "6504-1" in get_ordenes and print("1) 6504-1")
+        "6327-630" in get_ordenes and print("1) 6327-630")
         for po in get_ordenes:
-            "6504-1" == po and print("2) 6504-1")
+            "6327-630" == po and print("2) 6327-630")
             ordenes = self.env['dtm.proceso'].search([("po_number","=",po),("status","=","terminado")]).mapped('ot_number')
-            "6504-1" == po and print(ordenes)
+            "6327-630" == po and print(ordenes)
             for orden in ordenes:
-                "6504-1" == po and print(orden)
+                "6327-630" == po and print(orden)
                 get_proceso = self.env['dtm.proceso'].search([("po_number","=",int(orden)),("tipe_order","=","OT")])
                 vals = {
                         "status": self.env['dtm.ordenes.compra.facturado'].search([("orden_compra","=",get_proceso.po_number)], limit=1).factura,
@@ -261,7 +261,7 @@ class Proceso(models.Model):
                         "material":f"{item.nombre} {item.medida}",
                         "cantidad":item.materials_cuantity,
                     }
-                    "6504-1" == po and print(item)
+                    "6327-630" == po and print(item)
                     get_facturado_material = self.env['dtm.facturado.materiales'].search([("material","=",f"{item.nombre} {item.medida}"),("cantidad","=",item.materials_cuantity)])
                     get_facturado_material.write(valmat) if get_facturado_material else get_facturado_material.create(valmat)
                     get_facturado_material = self.env['dtm.facturado.materiales'].search([("material","=",f"{item.nombre} {item.medida}"),("cantidad","=",item.materials_cuantity)])
