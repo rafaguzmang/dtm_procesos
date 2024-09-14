@@ -1,9 +1,8 @@
-from odoo import api,models,fields
+from odoo import api,models,fields,http
 import re
 from datetime import datetime
 from odoo.exceptions import ValidationError, AccessError, MissingError,Warning
-
-
+import json
 class Proceso(models.Model):
     _name = "dtm.proceso"
     _inherit = ['mail.thread']
@@ -77,6 +76,17 @@ class Proceso(models.Model):
     calidad_liberacion = fields.One2many("dtm.proceso.liberacion","model_id")
 
 
+    @api.model
+    def search(self, args, offset=0, limit=None, order=None, count=False, url_ordenes=None):
+        # Obtener el parámetro 'ordenes' del contexto
+        params = self.env.context.get('params', {})
+        ordenes = params.get('ordenes', '')
+        if ordenes:
+            list_ordenes = ordenes.split(" ")
+            args += [('ot_number', 'in',list_ordenes)]
+        records = super(Proceso, self).search(args, offset=offset, limit=limit, order=order, count=count)
+        return records
+
     def action_retrabajo(self):
         get_odt = self.env['dtm.odt'].search([("ot_number","=",self.ot_number),("tipe_order","=",self.tipe_order)])
         if get_odt:
@@ -107,9 +117,9 @@ class Proceso(models.Model):
             if email in emails:
                 record.user_pausa = True
 
+
     def get_view(self, view_id=None, view_type='form', **options):
         res = super(Proceso,self).get_view(view_id, view_type,**options)
-
         get_self = self.env['dtm.proceso'].search([]) #No permite el cambio a terminado sin firma de calidad
         for get in get_self:
             if get.status == "terminado" and not get.firma_calidad_kanba:
