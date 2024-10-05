@@ -8,6 +8,8 @@ class Proceso(models.Model):
     _inherit = ['mail.thread']
     _description = "Modulo para indicar el status de la ODT o NPI"
     _order = "ot_number desc"
+    _rec_name = "ot_number"
+
 
 
     status = fields.Selection(string="Estatus", selection=[("aprobacion","Nesteo"),
@@ -28,7 +30,7 @@ class Proceso(models.Model):
     color = fields.Char(string="COLOR",readonly=True)
     cuantity = fields.Integer(string="CANTIDAD",readonly=True)
     materials_ids = fields.Many2many("dtm.materials.line",readonly=True)
-    materials_npi_ids = fields.Many2many("dtm.materials.npi",readonly=True)
+    # materials_npi_ids = fields.Many2many("dtm.materials.npi",readonly=True)
     planos = fields.Boolean(string="Planos",default=False,readonly=True)
     nesteos = fields.Boolean(string="Nesteos",default=False,readonly=True)
 
@@ -130,15 +132,72 @@ class Proceso(models.Model):
 
         get_facturas = self.env['dtm.ordenes.compra.facturado'].search([]).mapped('orden_compra')#Elimina de procesos todas las ordenes de trabajo que ya tienen número de factura
         self.eliminacion_ot(get_facturas)
+<<<<<<< HEAD
+=======
+        get_npi = self.env['dtm.proceso'].search([("tipe_order","=",'NPI'),("status","=","terminado")])
+        if get_npi:
+            for npi in get_npi:
+                get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',npi.ot_number)])
+                vals = {
+                    "status":npi.status,
+                    "ot_number":npi.ot_number,
+                    "tipe_order":npi.tipe_order,
+                    "name_client":npi.name_client,
+                    "product_name":npi.product_name,
+                    "date_in":npi.date_in,
+                    "po_number":npi.po_number,
+                    "date_rel":npi.date_rel,
+                    "version_ot":npi.version_ot,
+                    "color":npi.color,
+                    "cuantity":npi.cuantity,
+                    "firma":npi.firma,
+                    "firma_compras":npi.firma_compras,
+                    "firma_diseno":npi.firma_diseno,
+                    "firma_almacen":npi.firma_almacen,
+                    "firma_ventas":npi.firma_ventas,
+                    "firma_calidad":npi.firma_calidad,
+                    "description":npi.description,
+                    "rechazo_id":npi.rechazo_id,
+                    "anexos_id":npi.anexos_id,
+                }
+                get_fact.write(vals) if get_fact else get_fact.create(vals)
+                get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',npi.ot_number)])
+                lista = []
+                get_fact.write({'materieales_id': [(5, 0, {})]})
+                for material in npi.materials_ids:
+                    # print(material.nombre,material.medida)
+                    vals = {
+                        "npi_id":get_fact.id,
+                        "material":f"{material.id} - {material.nombre} {material.medida}",
+                        "cantidad":material.materials_cuantity
+                    }
+                    get_material = self.env['dtm.facturado.materiales'].search([("npi_id","=",get_fact.id),("material","=",f"{material.id} - {material.nombre} {material.medida}")])
+                    get_material.write(vals) if get_material else get_material.create(vals)
+                    get_material = self.env['dtm.facturado.materiales'].search([("npi_id","=",get_fact.id),("material","=",f"{material.id} - {material.nombre} {material.medida}")])
+                    lista.append(get_material.id)
+                get_fact.write({'materieales_id': [(6, 0, lista)]})
+                if get_fact:
+                    npi.unlink()
+
+
+
+>>>>>>> 567258bb2557127ff959af8daa0341d693af4d27
 
 # ------------------------------------------------------------------------------------------------------
         #Actualiza el material de las ordenes
         get_materiales = self.env['dtm.proceso'].search([])
         for record in get_materiales: # Actualiza la lista de materiales de las ordenes
+<<<<<<< HEAD
             if record.tipe_order == self.ot_number:
                 materiales = record.materials_ids
             else:
                 materiales = record.materials_npi_ids
+=======
+            # if record.tipe_order == "OT":
+            materiales = record.materials_ids
+            # else:
+            #     materiales = record.materials_npi_ids
+>>>>>>> 567258bb2557127ff959af8daa0341d693af4d27
             total = len(materiales)
             cont = 0
             if materiales:
@@ -150,8 +209,11 @@ class Proceso(models.Model):
                 record.materials = 0
         return res
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 567258bb2557127ff959af8daa0341d693af4d27
     def eliminacion_ot (self,get_ordenes):
         for po in get_ordenes:
             ordenes = self.env['dtm.proceso'].search([("po_number","=",po),("status","=","terminado")]).mapped('ot_number')
@@ -260,7 +322,6 @@ class Proceso(models.Model):
                         "requerido": lamina.materials_required,
                         "localizacion": get_almacen.localizacion
                     }
-
                     get_cortadora_laminas = self.env['dtm.cortadora.laminas'].search([
                         ("identificador","=",lamina.materials_list.id),("nombre","=",lamina.nombre),
                         ("medida","=",lamina.medida),("cantidad","=",lamina.materials_cuantity),
@@ -279,8 +340,6 @@ class Proceso(models.Model):
                         ("localizacion","=",get_almacen.localizacion)])
                         lines.append(get_cortadora_laminas.id)
             get_corte.write({"materiales_id":[(6, 0,lines)]})
-
-
         else:
             raise ValidationError("Esta orden sigue en corte de Primera pieza")
 

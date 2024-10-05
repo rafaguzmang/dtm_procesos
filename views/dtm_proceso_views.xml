@@ -4,8 +4,8 @@
         <record id = "dtm_proceso_accion" model="ir.actions.act_window">
             <field name="name">Procesos</field>
             <field name="res_model">dtm.proceso</field>
-            <field name="view_mode">tree,kanban,form</field>
-            <field name="view_id" ref="dtm_proceso_tree"/>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_id" ref="dtm_proceso_kanban"/>
             <field name="search_view_id" ref="dtm_proceso_search"/>
             <field name="domain">[]</field> <!-- Aquí no aplicamos dominio por defecto -->
         </record>
@@ -220,19 +220,7 @@
                                     <field name="description"/>
                                 </group>
                             </page>
-                            <page string="MATERIALES" attrs="{'invisible': [('tipe_order', '=', 'OT')]}" >
-                                <field name="materials_npi_ids" >
-                                    <tree editable="bottom">
-                                        <field name="materials_list"/>
-                                        <field name="nombre"/>
-                                        <field name="medida"/>
-                                        <field name="materials_cuantity"/>
-                                        <field name="materials_inventory"/>
-                                        <field name="materials_required"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="MATERIALES" attrs="{'invisible': [('tipe_order', '=', 'NPI')]}" >
+                            <page string="MATERIALES"  >
                                 <field name="materials_ids" >
                                     <tree editable="bottom">
                                         <field name="materials_list"/>
@@ -244,18 +232,8 @@
                                     </tree>
                                 </field>
                             </page>
-                            <page string="RECHAZO" attrs="{'invisible': [('tipe_order', '=', 'NPI')]}">
+                            <page string="RECHAZO">
                                 <field name="rechazo_id" >
-                                    <tree editable="bottom" >
-                                        <field name="descripcion"/>
-                                        <field name="fecha"/>
-                                        <field name="hora"/>
-                                        <field name="firma"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="RECHAZO" attrs="{'invisible': [('tipe_order', '=', 'OT')]}">
-                                <field name="rechazo_npi_id" >
                                     <tree editable="bottom" >
                                         <field name="descripcion"/>
                                         <field name="fecha"/>
