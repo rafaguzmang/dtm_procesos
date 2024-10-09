@@ -132,8 +132,6 @@ class Proceso(models.Model):
 
         get_facturas = self.env['dtm.ordenes.compra.facturado'].search([]).mapped('orden_compra')#Elimina de procesos todas las ordenes de trabajo que ya tienen número de factura
         self.eliminacion_ot(get_facturas)
-<<<<<<< HEAD
-=======
         get_npi = self.env['dtm.proceso'].search([("tipe_order","=",'NPI'),("status","=","terminado")])
         if get_npi:
             for npi in get_npi:
@@ -179,25 +177,13 @@ class Proceso(models.Model):
                 if get_fact:
                     npi.unlink()
 
-
-
->>>>>>> 567258bb2557127ff959af8daa0341d693af4d27
-
 # ------------------------------------------------------------------------------------------------------
         #Actualiza el material de las ordenes
         get_materiales = self.env['dtm.proceso'].search([])
         for record in get_materiales: # Actualiza la lista de materiales de las ordenes
-<<<<<<< HEAD
-            if record.tipe_order == self.ot_number:
-                materiales = record.materials_ids
-            else:
-                materiales = record.materials_npi_ids
-=======
-            # if record.tipe_order == "OT":
+
             materiales = record.materials_ids
-            # else:
-            #     materiales = record.materials_npi_ids
->>>>>>> 567258bb2557127ff959af8daa0341d693af4d27
+
             total = len(materiales)
             cont = 0
             if materiales:
@@ -209,11 +195,6 @@ class Proceso(models.Model):
                 record.materials = 0
         return res
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 567258bb2557127ff959af8daa0341d693af4d27
     def eliminacion_ot (self,get_ordenes):
         for po in get_ordenes:
             ordenes = self.env['dtm.proceso'].search([("po_number","=",po),("status","=","terminado")]).mapped('ot_number')
