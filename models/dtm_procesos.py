@@ -23,9 +23,9 @@ class Proceso(models.Model):
     tipe_order = fields.Char(string="TIPO",readonly=True)
     name_client = fields.Char(string="CLIENTE",readonly=True)
     product_name = fields.Char(string="NOMBRE",readonly=True)
-    date_in = fields.Date(string="FECHA DE ENTRADA", readonly=True)
+    date_in = fields.Date(string="ENTRADA", readonly=True)
     po_number = fields.Char(string="PO",readonly=True)
-    date_rel = fields.Date(string="FECHA DE ENTREGA",readonly=True)
+    date_rel = fields.Date(string="ENTREGA",readonly=True)
     version_ot = fields.Integer(string="VERSIÓN OT",readonly=True)
     color = fields.Char(string="COLOR",readonly=True)
     cuantity = fields.Integer(string="CANTIDAD",readonly=True)
@@ -80,6 +80,8 @@ class Proceso(models.Model):
     #Campo para guardar archivos de certificación
     anexos_certificacion = fields.Many2many("ir.attachment",string="Archivos")
 
+    def action_pasive(self):
+        pass
 
     @api.model
     def search(self, args, offset=0, limit=None, order=None, count=False, url_ordenes=None):
