@@ -77,6 +77,9 @@ class Proceso(models.Model):
     #Calidad - Libarción de primera pieza
     calidad_liberacion = fields.One2many("dtm.proceso.liberacion","model_id")
 
+    #Campo para guardar archivos de certificación
+    anexos_certificacion = fields.Many2many("ir.attachment",string="Archivos")
+
 
     @api.model
     def search(self, args, offset=0, limit=None, order=None, count=False, url_ordenes=None):
@@ -118,7 +121,6 @@ class Proceso(models.Model):
             record.user_pausa = False
             if email in emails:
                 record.user_pausa = True
-
 
     def get_view(self, view_id=None, view_type='form', **options):
         res = super(Proceso,self).get_view(view_id, view_type,**options)

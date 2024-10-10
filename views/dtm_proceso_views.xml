@@ -308,6 +308,9 @@
                              <page string="CALIDAD" >
                                 <field name="calidad_liberacion"/>
                             </page>
+                            <page string="CERTIFICACIONES" >
+                                <field name="anexos_certificacion" widget="many2many_binary"/>
+                            </page>
                         </notebook>
                     </sheet>
                     <div class="oe_chatter">
