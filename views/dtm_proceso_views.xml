@@ -128,6 +128,7 @@
                                     border-radius: 5px;
                                     border: 1px solid rgba(113, 100, 156, 0.6);
                                     margin: 1.5px 0 1.5px 0;
+                                    box-shadow: 3px 2px 5px 3px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
                                 }
                                 .display-row{
                                     display: flex;
