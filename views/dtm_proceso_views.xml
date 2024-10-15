@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+
         <record id = "dtm_proceso_accion" model="ir.actions.act_window">
             <field name="name">Procesos</field>
             <field name="res_model">dtm.proceso</field>
@@ -36,6 +37,10 @@
                              <script>
                                 var tabla = document.getElementsByClassName('o_kanban_renderer');
                                 var colums = tabla[0].children.length;
+
+
+                                var date = '';
+                                var date2 = '';
                                 for(let i=0;i&lt;colums;i++){
                                     var text = tabla[0].children[i].children[0].children[0].children[0].innerText;
                                     if(text == 'Pendiente a aprobación'){
@@ -63,7 +68,29 @@
                                     }else if(text == 'Terminado'){
                                         tabla[0].children[i].style = "order:12";
                                     }
+                                    var columna = tabla[0].children[i];
+                                    column = columna.children.length-2;
+                                    for(let it=1;it&lt;=column;it++){
+                                        if (columna.children[it].querySelectorAll('ul')[0]){
+                                            date = columna.children[it].querySelectorAll('ul')[0].children[4].children[0].innerText;
+                                        }
+                                        if (columna.children[it+1].querySelectorAll('ul')[0]){
+                                            date2 = columna.children[it+1].querySelectorAll('ul')[0].children[4].children[0].innerText;
+                                        }
+                                        var listdate = date.split('/');
+                                        var listdate2 = date2.split('/');
+
+                                        console.log(column + ": " +it+ ": "+new Date(listdate[2],listdate[1],listdate[0]) + " " + new Date(listdate2[2],listdate2[1],listdate2[0]));
+                                        if(new Date(listdate[2],listdate[1],listdate[0]) > new Date(listdate2[2],listdate2[1],listdate2[0])){
+                                            console.log("pasa");
+                                            columna.insertBefore(columna.children[it + 1], columna.children[it]);
+                                            it = 1;
+                                        }
+                                    }
+
                                 }
+
+
                             </script>
                             <div class="oe_kanban_global_click" >
                                 <div class="oe_kanban_details ">
@@ -115,68 +142,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <style>
-                                .porcentaje{
-                                    text-align: right;
-                                }
-                                .flex-container {
-                                    display: flex;
-                                    flex-direction: column;
-                                    align-items: revert;
-                                }
-                                .o_kanban_renderer .o_kanban_record > div{
-                                    border-radius: 5px;
-                                    border: 1px solid rgba(113, 100, 156, 0.6);
-                                    margin: 1.5px 0 1.5px 0;
-                                    box-shadow: 3px 2px 5px 3px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-                                }
-                                .display-row{
-                                    display: flex;
-                                    justify-content: space-between;
-                                }
-                                .parcial{
-                                    float: left;
-                                    width: 10px;
-                                    height: 40px;
-                                    background: #e4e405;
-                                    border: 1px solid #fff;
-                                    border-radius: 4px;
-                                    padding-left: 35px;
-                                }
-                                .o_kanban_header{
-                                    position: sticky;
-                                    margin-top: -53px;
-                                    z-index: 1;
-                                    background: #f8f9fa;
-                                    width: 300px;
-                                }
-                                .o_kanban_group {
-                                    margin-top: 55px;
-                                }
-                                .card-footer:last-child {
-                                    border-radius: 5px;
-                                }
-                                .card-footer {
-                                    padding: 1rem 1rem;
-                                    background-color: rgb(127 155 230 / 30%);
-                                    border-top: 1px solid rgba(0, 0, 0, 0.125);
-                                }
-                                .porcentaje {
-                                    text-align: right;
-                                    display: flex;
-                                    justify-content: space-between;
-                                    align-items: center;
-                                }
-                                .cliente    {
-                                    display: flex;
-                                    flex-wrap: wrap;
-                                    font-size: clamp(5px, 56.5vw, 25px);
-                                    white-space: nowrap;
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
-                                    width: 75%;
-                                }
-                            </style>
+
                         </t>
                     </template>
                 </kanban>
