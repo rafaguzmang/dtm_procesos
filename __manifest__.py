@@ -12,6 +12,7 @@
         #Views
         'views/dtm_proceso_views.xml',
         'views/dtm_procesos_liberacion_view.xml',
+
         #Menú
         'views/dtm_menu.xml',
         #Reports
@@ -21,5 +22,9 @@
         # 'static/xml/assets.xml',
     ],
     'license': 'LGPL-3',
+    'assets': {
+        'web.assets_backend': [
+            'dtm_procesos/static/src/css/styles.css',
+            ],
+    },
 }
-
