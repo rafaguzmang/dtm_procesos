@@ -136,50 +136,7 @@ class Proceso(models.Model):
 
         get_facturas = self.env['dtm.ordenes.compra.facturado'].search([]).mapped('orden_compra')#Elimina de procesos todas las ordenes de trabajo que ya tienen número de factura
         self.eliminacion_ot(get_facturas)
-        get_npi = self.env['dtm.proceso'].search([("tipe_order","=",'NPI'),("status","=","terminado")])
-        if get_npi:
-            for npi in get_npi:
-                get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',npi.ot_number)])
-                vals = {
-                    "status":npi.status,
-                    "ot_number":npi.ot_number,
-                    "tipe_order":npi.tipe_order,
-                    "name_client":npi.name_client,
-                    "product_name":npi.product_name,
-                    "date_in":npi.date_in,
-                    "po_number":npi.po_number,
-                    "date_rel":npi.date_rel,
-                    "version_ot":npi.version_ot,
-                    "color":npi.color,
-                    "cuantity":npi.cuantity,
-                    "firma":npi.firma,
-                    "firma_compras":npi.firma_compras,
-                    "firma_diseno":npi.firma_diseno,
-                    "firma_almacen":npi.firma_almacen,
-                    "firma_ventas":npi.firma_ventas,
-                    "firma_calidad":npi.firma_calidad,
-                    "description":npi.description,
-                    "rechazo_id":npi.rechazo_id,
-                    "anexos_id":npi.anexos_id,
-                }
-                get_fact.write(vals) if get_fact else get_fact.create(vals)
-                get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',npi.ot_number)])
-                lista = []
-                get_fact.write({'materieales_id': [(5, 0, {})]})
-                for material in npi.materials_ids:
-                    # print(material.nombre,material.medida)
-                    vals = {
-                        "npi_id":get_fact.id,
-                        "material":f"{material.id} - {material.nombre} {material.medida}",
-                        "cantidad":material.materials_cuantity
-                    }
-                    get_material = self.env['dtm.facturado.materiales'].search([("npi_id","=",get_fact.id),("material","=",f"{material.id} - {material.nombre} {material.medida}")])
-                    get_material.write(vals) if get_material else get_material.create(vals)
-                    get_material = self.env['dtm.facturado.materiales'].search([("npi_id","=",get_fact.id),("material","=",f"{material.id} - {material.nombre} {material.medida}")])
-                    lista.append(get_material.id)
-                get_fact.write({'materieales_id': [(6, 0, lista)]})
-                if get_fact:
-                    npi.unlink()
+
 
 # ------------------------------------------------------------------------------------------------------
         #Actualiza el material de las ordenes
@@ -334,6 +291,7 @@ class Proceso(models.Model):
             self.firma = self.env.user.partner_id.name
         if email in ['calidad@dtmindustry.com','calidad2@dtmindustry.com',"rafaguzmang@hotmail.com"]:
             if self.status == 'calidad' and not self.pausa:
+                if self.tipe_order == 'OT':
                     self.firma_calidad =  self.env.user.partner_id.name,
                     self.firma_calidad_kanba = "Calidad"
                     self.status = 'terminado'
@@ -372,6 +330,64 @@ class Proceso(models.Model):
                                     get_copra_ots = self.env['dtm.exportaciones.planos'].search([("nombre","=",planos.nombre),("orden","=",trabajo)])
                                     lines.append(get_copra_ots[0].id)
                         get_compra_import.write({'planos_id': [(6, 0, lines)]})
+                else:
+                    get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
+                    vals = {
+                        "status":self.status,
+                        "ot_number":self.ot_number,
+                        "tipe_order":self.tipe_order,
+                        "name_client":self.name_client,
+                        "product_name":self.product_name,
+                        "date_in":self.date_in,
+                        "po_number":self.po_number,
+                        "date_rel":self.date_rel,
+                        "version_ot":self.version_ot,
+                        "color":self.color,
+                        "cuantity":self.cuantity,
+                        "firma":self.firma,
+                        "firma_compras":self.firma_compras,
+                        "firma_diseno":self.firma_diseno,
+                        "firma_almacen":self.firma_almacen,
+                        "firma_ventas":self.firma_ventas,
+                        "firma_calidad":self.firma_calidad,
+                        "description":self.description,
+                        "rechazo_id":self.rechazo_id,
+                        "anexos_id":self.anexos_id,
+                    }
+                    get_fact.write(vals) if get_fact else get_fact.create(vals)
+                    get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number)])
+                    lista = []
+                    get_fact.write({'materieales_id': [(5, 0, {})]})
+                    for material in self.materials_ids:
+                        # print(material.nombre,material.medida)
+                        vals = {
+                            "npi_id":get_fact.id,
+                            "material":f"{material.id} - {material.nombre} {material.medida}",
+                            "cantidad":material.materials_cuantity
+                        }
+                        get_material = self.env['dtm.facturado.materiales'].search([("npi_id","=",get_fact.id),("material","=",f"{material.id} - {material.nombre} {material.medida}")])
+                        get_material.write(vals) if get_material else get_material.create(vals)
+                        get_material = self.env['dtm.facturado.materiales'].search([("npi_id","=",get_fact.id),("material","=",f"{material.id} - {material.nombre} {material.medida}")])
+                        lista.append(get_material.id)
+                    get_fact.write({'materieales_id': [(6, 0, lista)]})
+                    if get_fact:
+                        self.unlink()
+
+                get_clamina = self.env['dtm.laser.realizados'].search([("orden_trabajo","=",self.ot_number),("tipo_orden","=",self.tipe_order)])
+                get_ctubos = self.env['dtm.tubos.realizados'].search([("orden_trabajo","=",self.ot_number),("tipo_orden","=",self.tipe_order)])
+                lista = []
+                lista.extend(get_clamina.materiales_id.mapped('identificador'))
+                lista.extend(get_ctubos.materiales_id.mapped('identificador'))
+                for material in self.materials_ids:
+                    if material.materials_list.id not in lista:
+                        print(material.materials_list.id)
+                        get_inventario = self.env['dtm.diseno.almacen'].search([('id','=',material.materials_list.id)])
+                        get_inventario and get_inventario.write({
+                            'cantidad':get_inventario.cantidad-1 if get_inventario.cantidad > 0 else 0,
+                            'apartado':get_inventario.apartado-1 if get_inventario.apartado > 0 else 0,
+                            'disponible':get_inventario.disponible-1 if get_inventario.disponible > 0 else 0
+                        })
+
             else:
                 raise ValidationError("OT/NPI debe de estar en status Calidad o faltan firmas")
 
