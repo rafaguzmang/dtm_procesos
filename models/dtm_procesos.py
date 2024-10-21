@@ -377,7 +377,6 @@ class Proceso(models.Model):
                 lista.extend(get_ctubos.materiales_id.mapped('identificador'))
                 for material in self.materials_ids:
                     if material.materials_list.id not in lista:
-                        print(material.materials_list.id)
                         get_inventario = self.env['dtm.diseno.almacen'].search([('id','=',material.materials_list.id)])
                         get_inventario and get_inventario.write({
                             'cantidad':get_inventario.cantidad-1 if get_inventario.cantidad > 0 else 0,

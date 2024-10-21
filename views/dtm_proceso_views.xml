@@ -70,17 +70,19 @@
                                     }
                                     var columna = tabla[0].children[i];
                                     column = columna.children.length-2;
+<!--                                    console.log(columna,column);-->
                                     for(let it=1;it&lt;=column;it++){
                                         if (columna.children[it].querySelectorAll('ul')[0]){
-                                            date = columna.children[it].querySelectorAll('ul')[0].children[4].children[0].innerText;
+                                            date = columna.children[it].querySelectorAll('ul')[0].children[3].children[1].innerText
                                         }
                                         if (columna.children[it+1].querySelectorAll('ul')[0]){
-                                            date2 = columna.children[it+1].querySelectorAll('ul')[0].children[4].children[0].innerText;
+                                            date2 = columna.children[it+1].querySelectorAll('ul')[0].children[3].children[1].innerText
                                         }
                                         var listdate = date.split('/');
                                         var listdate2 = date2.split('/');
-
-                                        console.log(column + ": " +it+ ": "+new Date(listdate[2],listdate[1],listdate[0]) + " " + new Date(listdate2[2],listdate2[1],listdate2[0]));
+<!--                                        console.log("Fecha: "+date +" "+date2);-->
+<!--                                        console.log(listdate,listdate2);-->
+<!--                                        console.log(column + ": " +it+ ": "+new Date(listdate[2]-listdate[1]-listdate[0]) + " " + new Date(listdate2[2]-listdate2[1]-listdate2[0]));-->
                                         if(new Date(listdate[2],listdate[1],listdate[0]) > new Date(listdate2[2],listdate2[1],listdate2[0])){
                                             console.log("pasa");
                                             columna.insertBefore(columna.children[it + 1], columna.children[it]);
@@ -118,12 +120,6 @@
                                                 <i class="fa fa-user" style="padding-right: 5px;"></i>
                                                 <field name="firma_diseno"/>
                                             </li>
-<!--                                            <li class="display-row">-->
-<!--                                                <field name="firma_ventas_kanba" />-->
-<!--                                                <field name="firma_compras_kanba" />-->
-<!--                                                <field name="firma_almacen_kanba" />-->
-<!--                                                <field name="firma_calidad_kanba" />-->
-<!--                                            </li>                                            -->
                                             <li>
                                                 <i class="fa fa-arrow-circle-down"></i>
                                                 Entrada: <field name="date_in"/>
