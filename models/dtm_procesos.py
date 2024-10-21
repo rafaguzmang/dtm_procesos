@@ -42,7 +42,6 @@ class Proceso(models.Model):
     primera_pieza_id = fields.Many2many("dtm.proceso.primer",readonly=True)
     tubos_id = fields.Many2many("dtm.proceso.tubos",readonly=True)
 
-
     material_cortado = fields.Boolean(default=False)
 
     firma = fields.Char(string="Firma", readonly = True)
@@ -114,7 +113,6 @@ class Proceso(models.Model):
         self.pausado = ""
         self.status_pausado = ""
         self.pausa = False
-
     #Obtiene el email del usuario
     def _compute_user_email_match(self):
         for record in self:
@@ -295,6 +293,9 @@ class Proceso(models.Model):
                     self.firma_calidad =  self.env.user.partner_id.name,
                     self.firma_calidad_kanba = "Calidad"
                     self.status = 'terminado'
+                    # Busca la orden de trabajo en el modulo de Ventas y pone el atributo en verdadero del campo status
+                    get_terminado = self.env['dtm.ordenes.compra'].search([("orden_compra","=",self.po_number)]).descripcion_id.search([("orden_trabajo",'=',self.ot_number)])
+                    get_terminado and get_terminado.write({'parcial':True})
                     get_desc = self.env['dtm.ordenes.compra'].search([("orden_compra","=",self.po_number)])#Revisa si todas las ordenes de esta cotización ya están realizadas y de ser así las marca en color verde
                     list_items = get_desc.descripcion_id.mapped('orden_trabajo')
                     list_orm = set([self.env['dtm.proceso'].search([("ot_number","=",str(item))]).status for item in list_items])
@@ -330,6 +331,17 @@ class Proceso(models.Model):
                                     get_copra_ots = self.env['dtm.exportaciones.planos'].search([("nombre","=",planos.nombre),("orden","=",trabajo)])
                                     lines.append(get_copra_ots[0].id)
                         get_compra_import.write({'planos_id': [(6, 0, lines)]})
+
+                    #Ponde doble palomita a las ordenes que ya están en status de terminado
+                    get_orden_compra = self.env['dtm.ordenes.compra'].search([("orden_compra", "=", self.po_number)])
+                    cadena = [item.replace('✔','✔✔|')if item.find(str(self.ot_number)) != -1 else item for item in get_orden_compra.ot_asignadas.split('| |')]
+                    cadena = " ".join(cadena)
+                    cadena = cadena.replace("||","|")
+                    cadena = cadena.replace("✔ ","✔| |")
+
+                    self.env['dtm.ordenes.compra'].search([("orden_compra", "=", self.po_number)]).write({
+                        "ot_asignadas":cadena,
+                    })
                 else:
                     get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
                     vals = {
@@ -372,7 +384,7 @@ class Proceso(models.Model):
                     get_fact.write({'materieales_id': [(6, 0, lista)]})
                     if get_fact:
                         self.unlink()
-
+                # Descuenta material que no sea haya descontado del la cortadora laser o de tubos
                 get_clamina = self.env['dtm.laser.realizados'].search([("orden_trabajo","=",self.ot_number),("tipo_orden","=",self.tipe_order)])
                 get_ctubos = self.env['dtm.tubos.realizados'].search([("orden_trabajo","=",self.ot_number),("tipo_orden","=",self.tipe_order)])
                 lista = []
