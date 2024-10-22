@@ -336,9 +336,12 @@ class Proceso(models.Model):
                     get_orden_compra = self.env['dtm.ordenes.compra'].search([("orden_compra", "=", self.po_number)])
                     cadena = [item.replace('✔','✔✔|')if item.find(str(self.ot_number)) != -1 else item for item in get_orden_compra.ot_asignadas.split('| |')]
                     cadena = " ".join(cadena)
+                    #Limpia el string para mantener el formato
                     cadena = cadena.replace("||","|")
                     cadena = cadena.replace("✔ ","✔| |")
-
+                    cadena = cadena.replace("✔✔|✔✔|","✔✔|")
+                    cadena = cadena.replace("✔✔| 𝓐","✔✔| |𝓐")
+                    cadena = cadena.replace("✔✔| 𝓛","✔✔| |𝓛")
                     self.env['dtm.ordenes.compra'].search([("orden_compra", "=", self.po_number)]).write({
                         "ot_asignadas":cadena,
                     })
