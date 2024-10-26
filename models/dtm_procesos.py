@@ -385,19 +385,19 @@ class Proceso(models.Model):
                     if get_fact:
                         self.unlink()
                 # Descuenta material que no sea haya descontado del la cortadora laser o de tubos
-                get_clamina = self.env['dtm.laser.realizados'].search([("orden_trabajo","=",self.ot_number),("tipo_orden","=",self.tipe_order)])
-                get_ctubos = self.env['dtm.tubos.realizados'].search([("orden_trabajo","=",self.ot_number),("tipo_orden","=",self.tipe_order)])
-                lista = []
-                lista.extend(get_clamina.materiales_id.mapped('identificador'))
-                lista.extend(get_ctubos.materiales_id.mapped('identificador'))
-                for material in self.materials_ids:
-                    if material.materials_list.id not in lista:
-                        get_inventario = self.env['dtm.diseno.almacen'].search([('id','=',material.materials_list.id)])
-                        get_inventario and get_inventario.write({
-                            'cantidad':get_inventario.cantidad-1 if get_inventario.cantidad > 0 else 0,
-                            'apartado':get_inventario.apartado-1 if get_inventario.apartado > 0 else 0,
-                            'disponible':get_inventario.disponible-1 if get_inventario.disponible > 0 else 0
-                        })
+                # get_clamina = self.env['dtm.laser.realizados'].search([("orden_trabajo","=",self.ot_number),("tipo_orden","=",self.tipe_order)])
+                # get_ctubos = self.env['dtm.tubos.realizados'].search([("orden_trabajo","=",self.ot_number),("tipo_orden","=",self.tipe_order)])
+                # lista = []
+                # lista.extend(get_clamina.materiales_id.mapped('identificador'))
+                # lista.extend(get_ctubos.materiales_id.mapped('identificador'))
+                # for material in self.materials_ids:
+                #     if material.materials_list.id not in lista:
+                #         get_inventario = self.env['dtm.diseno.almacen'].search([('id','=',material.materials_list.id)])
+                #         get_inventario and get_inventario.write({
+                #             'cantidad':get_inventario.cantidad-1 if get_inventario.cantidad > 0 else 0,
+                #             'apartado':get_inventario.apartado-1 if get_inventario.apartado > 0 else 0,
+                #             'disponible':get_inventario.disponible-1 if get_inventario.disponible > 0 else 0
+                #         })
 
             else:
                 raise ValidationError("OT/NPI debe de estar en status Calidad o faltan firmas")
