@@ -88,7 +88,7 @@ class Proceso(models.Model):
         params = self.env.context.get('params', {})
         ordenes = params.get('ordenes', '')
         if ordenes:
-            list_ordenes = ordenes.split(" ")
+            list_ordenes = str(ordenes).split(" ")
             args += [('ot_number', 'in',list_ordenes)]
         records = super(Proceso, self).search(args, offset=offset, limit=limit, order=order, count=count)
         return records
