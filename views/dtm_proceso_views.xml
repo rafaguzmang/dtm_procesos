@@ -84,7 +84,7 @@
 <!--                                        console.log(listdate,listdate2);-->
 <!--                                        console.log(column + ": " +it+ ": "+new Date(listdate[2]-listdate[1]-listdate[0]) + " " + new Date(listdate2[2]-listdate2[1]-listdate2[0]));-->
                                         if(new Date(listdate[2],listdate[1],listdate[0]) > new Date(listdate2[2],listdate2[1],listdate2[0])){
-                                            console.log("pasa");
+<!--                                            console.log("pasa");-->
                                             columna.insertBefore(columna.children[it + 1], columna.children[it]);
                                             it = 1;
                                         }

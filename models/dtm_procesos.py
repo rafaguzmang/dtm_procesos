@@ -88,7 +88,7 @@ class Proceso(models.Model):
         params = self.env.context.get('params', {})
         ordenes = params.get('ordenes', '')
         if ordenes:
-            list_ordenes = ordenes.split(" ")
+            list_ordenes = str(ordenes).split(" ")
             args += [('ot_number', 'in',list_ordenes)]
         records = super(Proceso, self).search(args, offset=offset, limit=limit, order=order, count=count)
         return records
@@ -156,11 +156,11 @@ class Proceso(models.Model):
 
     def eliminacion_ot (self,get_ordenes):
         for po in get_ordenes:
+            print(po)
             ordenes = self.env['dtm.proceso'].search([("po_number","=",po),("status","=","terminado")]).mapped('ot_number')
-            po == '8040' and print(ordenes)
+            print(ordenes)
             for orden in ordenes:
                 get_proceso = self.env['dtm.proceso'].search([("ot_number","=",int(orden))])
-                po == '8040' and print(get_proceso,orden)
                 vals = {
                         "status": self.env['dtm.ordenes.compra.facturado'].search([("orden_compra","=",get_proceso.po_number)], limit=1).factura,
                         "ot_number": get_proceso.ot_number,
