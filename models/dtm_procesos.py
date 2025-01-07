@@ -34,7 +34,7 @@ class Proceso(models.Model):
     planos = fields.Boolean(string="Planos",default=False,readonly=True)
     nesteos = fields.Boolean(string="Nesteos",default=False,readonly=True)
 
-    rechazo_id = fields.Many2many("dtm.odt.rechazo",readonly=False)
+    rechazo_id = fields.One2many("dtm.proceso.rechazo",'model_id',readonly=False)
     rechazo_npi_id = fields.Many2many("dtm.npi.rechazo",readonly=False)
 
     anexos_id = fields.Many2many("dtm.proceso.anexos",readonly=True)
@@ -280,6 +280,36 @@ class Proceso(models.Model):
         else:
             raise ValidationError("Esta orden sigue en corte de Primera pieza")
 
+    # Función para registrar los rechasos en el modulo de calidad
+    def rechazo_action(self):
+        get_calidad = self.env['dtm.calidad.rechazo'].search([('po_number','=',self.po_number)]).mapped('id')
+
+        print(get_calidad)
+        print(self.rechazo_id)
+
+        for exist in self.rechazo_id:
+            if exist.serial_no in get_calidad:
+                self.env['dtm.calidad.rechazo'].write({
+                    'po_number':self.po_number,
+                    'part_no':self.product_name,
+                    'no_of_pieces_rejected':exist.no_of_pieces_rejected,
+                    'reason':exist.reason,
+                    'inspector':exist.inspector,
+                    'date':exist.date,
+                })
+            else:
+                # self.env.cr.execute(f"SELECT setval('dtm_calidad_rechazo_id_seq', {exist.serial_no}, false);")
+                self.env['dtm.calidad.rechazo'].create({
+                    'job_no':self.ot_number,
+                    'po_number':self.po_number,
+                    'part_no':self.product_name,
+                    'no_of_pieces_rejected':exist.no_of_pieces_rejected,
+                    'reason':exist.reason,
+                    'inspector':exist.inspector,
+                    'date':exist.date,
+                })
+
+
     def action_firma(self):
         email = self.env.user.partner_id.email
         if email == 'manufactura@dtmindustry.com':
@@ -422,10 +452,18 @@ class Rechazo(models.Model):
     _name = "dtm.proceso.rechazo"
     _description = "Tabla para llenar los motivos por el cual se rechazo la ODT"
 
-    descripcion = fields.Text(string="Descripción del Rechazo")
-    fecha = fields.Date(string="Fecha")
-    hora = fields.Char(string="Hora")
-    firma = fields.Char(string="Firma")
+    def serial_number(self):
+        get_calidad = self.env['dtm.calidad.rechazo'].search([],order='id desc', limit=1)
+        return get_calidad.id + 1 if get_calidad else 1
+
+    model_id = fields.Many2one('dtm.proceso')
+    serial_no = fields.Char(string='SERIAL NO',default=serial_number,readonly=True)
+    no_of_pieces_rejected = fields.Integer(string='NO. OF PIECES REJECTED')
+    reason = fields.Text(string='REASON')
+    inspector = fields.Selection(string='INSPECTOR',selection=[('leonardo','Leonardo Ramírez Ruiz')],default='leonardo')
+    date = fields.Date(string='DATE',default=datetime.now(),readonly=True)
+
+
 
 class Documentos(models.Model):
     _name = "dtm.proceso.anexos"
