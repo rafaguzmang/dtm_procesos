@@ -169,8 +169,6 @@
                             justify-content: flex-end;
                             width: 100%;
                         {
-}
-
                     </style>
                     <header>
                         <button type="object" name="action_imprimir_formato" string="ODT" attrs="{'invisible': [('tipe_order', '=', '')]}" icon="fa-print" title="print" class="btn btn-primary"/>
@@ -258,13 +256,32 @@
                             </page>
                             <page string="RECHAZO">
                                 <field name="rechazo_id" >
-                                    <tree editable="bottom" >
-                                        <field name="descripcion"/>
-                                        <field name="fecha"/>
-                                        <field name="hora"/>
-                                        <field name="firma"/>
+                                    <tree>
+                                        <field name="serial_no"/>
+                                        <field name="no_of_pieces_rejected" options='{"type": "number"}'/>
+                                        <field name="inspector"/>
                                     </tree>
+                                    <form>
+                                        <div style="display:flex;justify-content:space-around;margin-bottom:20px">
+                                            <field name="serial_no" style="font-size:15px"/>
+                                            <field name="date"/>
+                                        </div>
+                                        <group class="col-12" style="margin-bottom:10px">
+                                            <group class="col-6">
+                                                <field name="inspector"/>
+                                            </group>
+                                            <group>
+                                                <field name="no_of_pieces_rejected" options='{"type": "number"}'/>
+                                            </group>
+                                        </group>
+                                        <group>
+                                            <field name="reason"/>
+                                        </group>
+                                    </form>
                                 </field>
+                                <div style="width:100%;text-align: right;">
+                                    <button type="object" name="rechazo_action" icon="fa-thumbs-down" string="Rechazo" class="btn btn-primary"/>
+                                </div>
                             </page>
                             <page string="PLANOS">
                                 <field name="anexos_id" >
