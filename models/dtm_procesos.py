@@ -176,7 +176,7 @@ class Proceso(models.Model):
                         # "materials_ids": get_proceso.materials_ids,
                         "planos": get_proceso.planos,
                         "nesteos": get_proceso.nesteos,
-                        "rechazo_id":get_proceso.rechazo_id,
+                        # "rechazo_id":get_proceso.rechazo_id,
                         "anexos_id":get_proceso.anexos_id,
                         "cortadora_id":get_proceso.cortadora_id,
                         "primera_pieza_id":get_proceso.primera_pieza_id,
