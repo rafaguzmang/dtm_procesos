@@ -260,14 +260,14 @@
                                             <field name="serial_no" style="font-size:15px"/>
                                             <field name="date"/>
                                         </div>
-                                        <group class="col-12" style="margin-bottom:10px">
-                                            <group class="col-6">
+                                        <div class="col-6">
+                                            <group >
                                                 <field name="inspector"/>
-                                            </group>
-                                            <group>
                                                 <field name="no_of_pieces_rejected" options='{"type": "number"}'/>
+                                                <field name="revicion"/>
                                             </group>
-                                        </group>
+                                        </div>
+
                                         <group>
                                             <field name="reason"/>
                                         </group>

@@ -462,6 +462,7 @@ class Rechazo(models.Model):
     reason = fields.Text(string='REASON')
     inspector = fields.Selection(string='INSPECTOR',selection=[('leonardo','Leonardo Ramírez Ruiz')],default='leonardo')
     date = fields.Date(string='DATE',default=datetime.now(),readonly=True)
+    revicion = fields.Selection(string='Revición',selection=[('muestreo','Muestreo'),('cien','100%')],default='cien')
 
 
 
