@@ -192,13 +192,12 @@
                             <button name="action_pasive" type="object" string="tipo" class="oe_stat_button" icon="fa-certificate">
                                 <field name="firma_ventas"  string="" widget="statinfo"/>
                             </button>
+                            <button name="action_pasive" type="object" string="Proceso" class="oe_stat_button" icon="fa-calendar">
+                                <field name="create_date"  string="Producción" widget="statinfo"/>
+                            </button>
                             <button name="action_pasive" type="object" string="tipo" class="oe_stat_button" icon="fa-pencil">
                                 <field name="firma_diseno"  string="" widget="statinfo"/>
                             </button>
-<!--                            <button name="action_pasive" type="object" string="Anexos" class="oe_stat_button" icon="fa-clipboard">-->
-<!--                                <field name="tipe_order"  string="" widget="statinfo"/>-->
-<!--                            </button>-->
-
                              <button name="action_pasive" type="object" string="Anexos" class="oe_stat_button" icon="fa-calendar">
                                 <field name="date_in"  string="" widget="statinfo"/>
                             </button>
