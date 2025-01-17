@@ -554,6 +554,12 @@ class LiberacionPrimera(models.Model):
     tuercas = fields.Selection(string="Tuercas Apretadas.",selection=[("si","SI"),
                                          ("no","NO"),("na","NA")],default="na")
 
+    #Adicional
+    etiqueta_mexico = fields.Selection(string='La etiqueta "Hecho en México" esta visible en los 4 lados.', selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na" )
+    empaque = fields.Selection(string='La etiqueta',selection=[("si","SI"),
+                                         ("no","NO"),("na","NA")],default="na")
+
     aprobada = fields.Boolean(string="Pieza Aprobada:")
     motivo_rechazo = fields.Text(string="Motivo del Rechazo:")
 

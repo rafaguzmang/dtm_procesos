@@ -44,7 +44,7 @@
                     <script>
                         var topic = document.getElementsByClassName('modal-title text-break');
                         topic = topic[0];
-                        topic.innerText="LIBERACIÓN DE PRIMERA PIEZA / ÚNICA";
+                        topic.innerText="CHECK LIST DE LIBERACIÓN DE PIEZAS FINALES";
                     </script>
 
                    <group class="col-12">
@@ -55,13 +55,21 @@
                             <field name="llantas"/>
                             <field name="rodillos"/>
                         </group>
-                        <group string="Estético" class="col-6">
-                            <field name="acabado_pintura"/>
-                            <field name="rayones"/>
-                            <field name="abolladuras"/>
-                            <field name="saldadura"/>
-                            <field name="pieza_limpia"/>
-                        </group>
+                       <div class="col-6">
+                            <group string="Estético" class="col-12">
+                                <field name="acabado_pintura"/>
+                                <field name="rayones"/>
+                                <field name="abolladuras"/>
+                                <field name="saldadura"/>
+                                <field name="pieza_limpia"/>
+                            </group>
+                            <group string="Adicional">
+                                <field name="etiqueta_mexico"/>
+                                <field name="empaque"/>
+                            </group>
+
+                       </div>
+
                    </group>
                     <group class="col-12">
                         <group string="Mecánico" class="col-6">
@@ -72,7 +80,7 @@
                         </group>
                         <div class="col-6">
                             <group string="Dimenciones" class="col-12">
-                            <field name="dimensiones"/>
+                                <field name="dimensiones"/>
                             </group>
                              <group string="Seguridad" class="col-12">
                                 <field name="filos"/>
