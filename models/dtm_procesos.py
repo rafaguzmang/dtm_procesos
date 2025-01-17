@@ -557,7 +557,7 @@ class LiberacionPrimera(models.Model):
     #Adicional
     etiqueta_mexico = fields.Selection(string='La etiqueta "Hecho en México" esta visible en los 4 lados.', selection=[("si","SI"),
                                          ("no","NO"),("na","NA")],default="na" )
-    empaque = fields.Selection(string='La etiqueta',selection=[("si","SI"),
+    empaque = fields.Selection(string='El empaque cubre de golpes y rayones toda la pieza.',selection=[("si","SI"),
                                          ("no","NO"),("na","NA")],default="na")
 
     aprobada = fields.Boolean(string="Pieza Aprobada:")
