@@ -187,7 +187,8 @@ class Proceso(models.Model):
                         "firma_almacen": get_proceso.firma_almacen,
                         "firma_ventas": get_proceso.firma_ventas,
                         "description": get_proceso.description,
-                        "firma_calidad":get_proceso.firma_calidad
+                        "firma_calidad":get_proceso.firma_calidad,
+                        "calidad_liberacion":get_proceso.calidad_liberacion,
                     }
                 get_facturado = self.env['dtm.facturado.odt'].search([("ot_number","=",get_proceso.ot_number)])
                 get_facturado.write(vals) if get_facturado else get_facturado.create(vals)
@@ -287,8 +288,8 @@ class Proceso(models.Model):
     def rechazo_action(self):
         get_calidad = self.env['dtm.calidad.rechazo'].search([('po_number','=',self.po_number)]).mapped('id')
 
-        print(get_calidad)
-        print(self.rechazo_id)
+        # print(get_calidad)
+        # print(self.rechazo_id)
 
         for exist in self.rechazo_id:
             if exist.serial_no in get_calidad:
@@ -398,6 +399,7 @@ class Proceso(models.Model):
                         "description":self.description,
                         "rechazo_id":self.rechazo_id,
                         "anexos_id":self.anexos_id,
+                        "calidad_liberacion":self.calidad_liberacion,
                     }
                     get_fact.write(vals) if get_fact else get_fact.create(vals)
                     get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number)])
