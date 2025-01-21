@@ -93,12 +93,19 @@ class Proceso(models.Model):
         records = super(Proceso, self).search(args, offset=offset, limit=limit, order=order, count=count)
         return records
 
-    def action_retrabajo(self):
-        get_odt = self.env['dtm.odt'].search([("ot_number","=",self.ot_number),("tipe_order","=",self.tipe_order)])
-        if get_odt:
+    def action_devolver(self):
+        if self.notes:
+            get_odt = self.env['dtm.odt'].search([("ot_number","=",self.ot_number),("tipe_order","=",self.tipe_order)])
+            print(get_odt)
             get_odt.write({
-                "retrabajo":False
+                'version_ot':get_odt.version_ot+1,
+                'notes':f"{get_odt.notes}\n\n Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" if get_odt.notes else f"Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" ,
             })
+            self.unlink()
+        else:
+            raise ValidationError('Favor de especificar en la pestaña de "NOTAS" motivo del rechazo')
+
+
 
     def action_detener(self):
         email = self.env.user.partner_id.email
@@ -117,7 +124,8 @@ class Proceso(models.Model):
     def _compute_user_email_match(self):
         for record in self:
             email = self.env.user.partner_id.email
-            emails = ['calidad@dtmindustry.com','calidad2@dtmindustry.com','hugo_chacon@dtmindustry.com','ventas1@dtmindustry.com','rafaguzmang@hotmail.com']
+            emails = ['calidad@dtmindustry.com','calidad2@dtmindustry.com','hugo_chacon@dtmindustry.com',
+                      'ventas1@dtmindustry.com','rafaguzmang@hotmail.com','manufactura@dtmindustry.com','ingenieria1@dtmindustry.com']
             record.user_pausa = False
             if email in emails:
                 record.user_pausa = True
