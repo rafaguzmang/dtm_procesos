@@ -312,6 +312,7 @@ class Proceso(models.Model):
             else:
                 # self.env.cr.execute(f"SELECT setval('dtm_calidad_rechazo_id_seq', {exist.serial_no}, false);")
                 self.env['dtm.calidad.rechazo'].create({
+                    'consecutivo':exist.serial_no,
                     'job_no':self.ot_number,
                     'po_number':self.po_number,
                     'part_no':self.product_name,
@@ -466,11 +467,11 @@ class Rechazo(models.Model):
     _description = "Tabla para llenar los motivos por el cual se rechazo la ODT"
 
     def serial_number(self):
-        get_calidad = self.env['dtm.calidad.rechazo'].search([],order='id desc', limit=1)
-        return get_calidad.id + 1 if get_calidad else 1
+        get_calidad = self.env['dtm.proceso.rechazo'].search([],order='serial_no desc', limit=1)
+        return get_calidad.serial_no + 1 if get_calidad else 1
 
     model_id = fields.Many2one('dtm.proceso')
-    serial_no = fields.Char(string='SERIAL NO',default=serial_number,readonly=True)
+    serial_no = fields.Integer(string='SERIAL NO',default=serial_number,readonly=True)
     no_of_pieces_rejected = fields.Integer(string='NO. OF PIECES REJECTED')
     reason = fields.Text(string='REASON')
     inspector = fields.Selection(string='INSPECTOR',selection=[('leonardo','Leonardo Ramírez Ruiz')],default='leonardo')
