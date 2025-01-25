@@ -144,8 +144,6 @@ class Proceso(models.Model):
         self.eliminacion_ot(get_facturas)
 
 
-# ------------------------------------------------------------------------------------------------------
-        #Actualiza el material de las ordenes
         get_materiales = self.env['dtm.proceso'].search([])
         for record in get_materiales: # Actualiza la lista de materiales de las ordenes
 
@@ -164,11 +162,9 @@ class Proceso(models.Model):
 
     def eliminacion_ot (self,get_ordenes):
         for po in get_ordenes:
-            print(po)
             ordenes = self.env['dtm.proceso'].search([("po_number","=",po),("status","=","terminado")]).mapped('ot_number')
-            print(ordenes)
             for orden in ordenes:
-                get_proceso = self.env['dtm.proceso'].search([("ot_number","=",int(orden))])
+                get_proceso = self.env['dtm.proceso'].search([("ot_number","=",int(orden)),("tipe_order","=","OT")])
                 vals = {
                         "status": self.env['dtm.ordenes.compra.facturado'].search([("orden_compra","=",get_proceso.po_number)], limit=1).factura,
                         "ot_number": get_proceso.ot_number,
@@ -184,7 +180,7 @@ class Proceso(models.Model):
                         # "materials_ids": get_proceso.materials_ids,
                         "planos": get_proceso.planos,
                         "nesteos": get_proceso.nesteos,
-                        # "rechazo_id":get_proceso.rechazo_id,
+                        "rechazo_id":get_proceso.rechazo_id,
                         "anexos_id":get_proceso.anexos_id,
                         "cortadora_id":get_proceso.cortadora_id,
                         "primera_pieza_id":get_proceso.primera_pieza_id,
@@ -229,7 +225,7 @@ class Proceso(models.Model):
                 "orden_trabajo":self.ot_number,
                 "fecha_entrada": datetime.today(),
                 "nombre_orden":self.product_name,
-                "tipo_orden": self.tipe_order,
+                "tipo_orden": "OT",
                 "primera_pieza": False
             }
             get_corte = self.env['dtm.materiales.laser'].search([("orden_trabajo","=",self.ot_number)])
@@ -358,7 +354,7 @@ class Proceso(models.Model):
                         get_compra_import.write({'planos_id': [(5, 0, {})]})
                         lines = []
                         for trabajo in list_items:
-                            get_planos = self.env['dtm.proceso'].search([("ot_number","=",trabajo),("tipe_order","=",self.tipe_order)])
+                            get_planos = self.env['dtm.proceso'].search([("ot_number","=",trabajo),("tipe_order","=","OT")])
                             if get_planos:
                                 for planos in get_planos.anexos_id:
                                     datos = {
