@@ -325,63 +325,12 @@ class Proceso(models.Model):
             self.firma = self.env.user.partner_id.name
         if email in ['calidad@dtmindustry.com','calidad2@dtmindustry.com',"rafaguzmang@hotmail.com"]:
             if self.status == 'calidad' and not self.pausa:
+                # Si es una OT la manda a terminado
                 if self.tipe_order == 'OT':
                     self.firma_calidad =  self.env.user.partner_id.name,
                     self.firma_calidad_kanba = "Calidad"
                     self.status = 'terminado'
-                    # Busca la orden de trabajo en el modulo de Ventas y pone el atributo en verdadero del campo status
-                    get_terminado = self.env['dtm.ordenes.compra'].search([("orden_compra","=",self.po_number)]).descripcion_id.search([("orden_trabajo",'=',self.ot_number)])
-                    get_terminado and get_terminado.write({'parcial':True})
-                    get_desc = self.env['dtm.ordenes.compra'].search([("orden_compra","=",self.po_number)])#Revisa si todas las ordenes de esta cotización ya están realizadas y de ser así las marca en color verde
-                    list_items = get_desc.descripcion_id.mapped('orden_trabajo')
-                    list_orm = set([self.env['dtm.proceso'].search([("ot_number","=",str(item))]).status for item in list_items])
-                    len(list_orm) == 1 and get_desc.write({"terminado": True})
-                    if get_desc.exportacion:
-                        vals = {
-                            "no_cotizacion":get_desc.no_cotizacion,
-                            "proveedor":get_desc.proveedor,
-                            "cliente":get_desc.cliente_prov,
-                            "order_compra":get_desc.orden_compra,
-                            "fecha_entrada":get_desc.fecha_entrada,
-                            "fecha_salida":get_desc.fecha_salida,
-                            "precio_total":get_desc.precio_total,
-                            "currency":get_desc.currency,
-                            "odt_ids":get_desc.descripcion_id,
-                        }
-                        get_compra_import = self.env['dtm.exportaciones'].search([("no_cotizacion","=",get_desc.no_cotizacion)])#Busca que la compra exista y de no ser así la crea
-                        get_compra_import.write(vals) if get_compra_import else get_compra_import.create(vals)
-                        get_compra_import = self.env['dtm.exportaciones'].search([("no_cotizacion","=",get_desc.no_cotizacion)])#Busca que la compra exista y de no ser así la crea
-                        get_compra_import.write({'planos_id': [(5, 0, {})]})
-                        lines = []
-                        for trabajo in list_items:
-                            get_planos = self.env['dtm.proceso'].search([("ot_number","=",trabajo),("tipe_order","=","OT")])
-                            if get_planos:
-                                for planos in get_planos.anexos_id:
-                                    datos = {
-                                        "nombre":planos.nombre,
-                                        "archivo":planos.documentos,
-                                        "orden":trabajo
-                                    }
-                                    get_copra_ots = self.env['dtm.exportaciones.planos'].search([("nombre","=",planos.nombre),("orden","=",trabajo)])
-                                    get_copra_ots.write(datos) if get_copra_ots else get_copra_ots.create(datos)
-                                    get_copra_ots = self.env['dtm.exportaciones.planos'].search([("nombre","=",planos.nombre),("orden","=",trabajo)])
-                                    lines.append(get_copra_ots[0].id)
-                        get_compra_import.write({'planos_id': [(6, 0, lines)]})
-
-                    #Ponde doble palomita a las ordenes que ya están en status de terminado
-                    get_orden_compra = self.env['dtm.ordenes.compra'].search([("orden_compra", "=", self.po_number)])
-                    cadena = [item.replace('✔','✔✔|')if item.find(str(self.ot_number)) != -1 else item for item in get_orden_compra.ot_asignadas.split('| |')]
-                    cadena = " ".join(cadena)
-                    #Limpia el string para mantener el formato
-                    cadena = cadena.replace("||","|")
-                    cadena = cadena.replace("✔ ","✔| |")
-                    cadena = cadena.replace("✔✔|✔✔|","✔✔|")
-                    cadena = cadena.replace("✔✔| 𝓐","✔✔| |𝓐")
-                    cadena = cadena.replace("✔✔| 𝓛","✔✔| |𝓛")
-                    self.env['dtm.ordenes.compra'].search([("orden_compra", "=", self.po_number)]).write({
-                        "ot_asignadas":cadena,
-                    })
-                else:
+                else: #Si es un NPI lo manda a facturado
                     get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
                     vals = {
                         "status":self.status,
@@ -422,23 +371,6 @@ class Proceso(models.Model):
                         get_material = self.env['dtm.facturado.materiales'].search([("npi_id","=",get_fact.id),("material","=",f"{material.id} - {material.nombre} {material.medida}")])
                         lista.append(get_material.id)
                     get_fact.write({'materieales_id': [(6, 0, lista)]})
-                    if get_fact:
-                        self.unlink()
-                # Descuenta material que no sea haya descontado del la cortadora laser o de tubos
-                # get_clamina = self.env['dtm.laser.realizados'].search([("orden_trabajo","=",self.ot_number),("tipo_orden","=",self.tipe_order)])
-                # get_ctubos = self.env['dtm.tubos.realizados'].search([("orden_trabajo","=",self.ot_number),("tipo_orden","=",self.tipe_order)])
-                # lista = []
-                # lista.extend(get_clamina.materiales_id.mapped('identificador'))
-                # lista.extend(get_ctubos.materiales_id.mapped('identificador'))
-                # for material in self.materials_ids:
-                #     if material.materials_list.id not in lista:
-                #         get_inventario = self.env['dtm.diseno.almacen'].search([('id','=',material.materials_list.id)])
-                #         get_inventario and get_inventario.write({
-                #             'cantidad':get_inventario.cantidad-1 if get_inventario.cantidad > 0 else 0,
-                #             'apartado':get_inventario.apartado-1 if get_inventario.apartado > 0 else 0,
-                #             'disponible':get_inventario.disponible-1 if get_inventario.disponible > 0 else 0
-                #         })
-
             else:
                 raise ValidationError("OT/NPI debe de estar en status Calidad o faltan firmas")
 
