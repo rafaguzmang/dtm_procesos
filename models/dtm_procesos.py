@@ -14,7 +14,7 @@ class Proceso(models.Model):
 
     status = fields.Selection(string="Estatus", selection=[("aprobacion","Nesteo"),
                                          ("corte","Corte"),("revision","Revisión FAI"),("doblado","Doblado"),
-                                         ("soldadura","Soldadura"),("lavado","Lavado"),("pintura","Pintura"),
+                                         ("soldadura","Soldadura"),("maquinado","Maquinado"),("pintura","Pintura"),
                                          ("ensamble","Ensamble"),("externo","Servicio Externo"),("calidad","Calidad"),("instalacion","Instalación"),
                                          ("terminado","Terminado")])
 
