@@ -53,7 +53,7 @@
                                         tabla[0].children[i].style = "order:4";
                                     }else if(text == 'Soldadura'){
                                         tabla[0].children[i].style = "order:5";
-                                    }else if(text == 'Lavado'){
+                                    }else if(text == 'Maquinado'){
                                         tabla[0].children[i].style = "order:6";
                                     }else if(text == 'Pintura'){
                                         tabla[0].children[i].style = "order:7";
@@ -387,7 +387,7 @@
                         <filter string="Revisión FAI" name="proceso_npi" domain="[('status','=','revision')]"/>
                         <filter string="Doblado" name="proceso_ot" domain="[('status','=','doblado')]"/>
                         <filter string="Soldadura" name="proceso_npi" domain="[('status','=','soldadura')]"/>
-                        <filter string="Lavado" name="proceso_terminado" domain="[('status','=','lavado')]"/>
+                        <filter string="Maquinado" name="proceso_terminado" domain="[('status','=','maquinado')]"/>
                         <filter string="Pintura" name="proceso_ot" domain="[('status','=','pintura')]"/>
                         <filter string="Ensamble" name="proceso_npi" domain="[('status','=','ensamble')]"/>
                         <filter string="Calidad" name="proceso_npi" domain="[('status','=','calidad')]"/>
@@ -399,7 +399,7 @@
                         <filter string="No Revisión FAI" name="proceso_ot_quitar" domain="[('status','!=','revision')]"/>
                         <filter string="No Doblado" name="proceso_ot_quitar" domain="[('status','!=','doblado')]"/>
                         <filter string="No Soldadura" name="proceso_npi_quitar" domain="[('status','!=','soldadura')]"/>
-                        <filter string="No Lavado" name="proceso_terminado_quitar" domain="[('status','!=','lavado')]"/>
+                        <filter string="No Maquinado" name="proceso_terminado_quitar" domain="[('status','!=','maquinado')]"/>
                         <filter string="No Pintura" name="proceso_ot_quitar" domain="[('status','!=','pintura')]"/>
                         <filter string="No Ensamble" name="proceso_npi_quitar" domain="[('status','!=','ensamble')]"/>
                         <filter string="No Calidad" name="proceso_npi_quitar" domain="[('status','!=','calidad')]"/>
