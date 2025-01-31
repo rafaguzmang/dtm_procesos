@@ -333,6 +333,7 @@ class Proceso(models.Model):
                     self.status = 'terminado'
                 else: #Si es un NPI lo manda a facturado
                     get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
+                    print(self.ot_number,self.tipe_order)
                     vals = {
                         "status":self.status,
                         "ot_number":self.ot_number,
@@ -371,7 +372,16 @@ class Proceso(models.Model):
                         get_material.write(vals) if get_material else get_material.create(vals)
                         get_material = self.env['dtm.facturado.materiales'].search([("npi_id","=",get_fact.id),("material","=",f"{material.id} - {material.nombre} {material.medida}")])
                         lista.append(get_material.id)
-                    get_fact.write({'materieales_id': [(6, 0, lista)]})
+                    if get_fact:
+                        get_fact.write({'materieales_id': [(6, 0, lista)]})
+                        get_diseno = self.env['dtm.odt'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
+                        print(get_diseno.materials_ids)
+                        get_diseno.materials_ids.unlink()
+                        get_diseno.unlink()
+                        get_compras = self.env['dtm.compras.realizado'].search([('orden_trabajo','like',self.ot_number)])
+                        get_compras.unlink()
+                        get_self = self.env['dtm.proceso'].search([('ot_number','=',self.ot_number)])
+                        get_self.unlink()
             else:
                 raise ValidationError("OT/NPI debe de estar en status Calidad o faltan firmas")
 
