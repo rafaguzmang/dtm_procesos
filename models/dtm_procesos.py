@@ -290,15 +290,17 @@ class Proceso(models.Model):
             raise ValidationError("Esta orden sigue en corte de Primera pieza")
 
     # Función para registrar los rechasos en el modulo de calidad
-    def rechazo_action(self):
-        get_calidad = self.env['dtm.calidad.rechazo'].search([('po_number','=',self.po_number)]).mapped('id')
+    def action_rechazo(self):
+        get_calidad = self.env['dtm.calidad.rechazo'].search([('job_no','=',self.ot_number)]).mapped('consecutivo')
 
-        # print(get_calidad)
-        # print(self.rechazo_id)
+        print(get_calidad)
+        print(self.rechazo_id)
 
         for exist in self.rechazo_id:
+            print(exist.serial_no)
             if exist.serial_no in get_calidad:
-                self.env['dtm.calidad.rechazo'].write({
+                print(exist.serial_no)
+                self.env['dtm.calidad.rechazo'].search([('consecutivo','=',exist.serial_no)]).write({
                     'po_number':self.po_number,
                     'part_no':self.product_name,
                     'no_of_pieces_rejected':exist.no_of_pieces_rejected,
@@ -375,7 +377,6 @@ class Proceso(models.Model):
                     if get_fact:
                         get_fact.write({'materieales_id': [(6, 0, lista)]})
                         get_diseno = self.env['dtm.odt'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
-                        print(get_diseno.materials_ids)
                         get_diseno.materials_ids.unlink()
                         get_diseno.unlink()
                         get_compras = self.env['dtm.compras.realizado'].search([('orden_trabajo','like',self.ot_number)])
