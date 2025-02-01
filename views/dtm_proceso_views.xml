@@ -285,7 +285,7 @@
                                     </form>
                                 </field>
                                 <div style="width:100%;text-align: right;">
-                                    <button type="object" name="rechazo_action" icon="fa-thumbs-down" string="Rechazo" class="btn btn-primary"/>
+                                    <button type="object" name="action_rechazo" icon="fa-thumbs-down" string="Rechazo" class="btn btn-primary"/>
                                 </div>
                             </page>
                             <page string="PLANOS">
