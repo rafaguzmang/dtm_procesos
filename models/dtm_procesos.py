@@ -33,6 +33,7 @@ class Proceso(models.Model):
     # materials_npi_ids = fields.Many2many("dtm.materials.npi",readonly=True)
     planos = fields.Boolean(string="Planos",default=False,readonly=True)
     nesteos = fields.Boolean(string="Nesteos",default=False,readonly=True)
+    date_terminado = fields.Date(string="Finalización")
 
     rechazo_id = fields.One2many("dtm.proceso.rechazo",'model_id',readonly=False)
     rechazo_npi_id = fields.Many2many("dtm.npi.rechazo",readonly=False)
@@ -193,6 +194,7 @@ class Proceso(models.Model):
                         "description": get_proceso.description,
                         "firma_calidad":get_proceso.firma_calidad,
                         "calidad_liberacion":get_proceso.calidad_liberacion,
+                        "date_terminado":self.date_terminado,
                     }
                 get_facturado = self.env['dtm.facturado.odt'].search([("ot_number","=",get_proceso.ot_number)])
                 get_facturado.write(vals) if get_facturado else get_facturado.create(vals)
@@ -212,7 +214,6 @@ class Proceso(models.Model):
                 #-------------------------------------------------------------------------------------------------------------------------------
                 if get_facturado:
                     self.env['dtm.odt'].search([('ot_number','=',int(orden))]).unlink()
-                    self.env['dtm.almacen.odt'].search([('ot_number','=',int(orden))]).unlink()
                     self.env['dtm.compras.odt'].search([('ot_number','=',int(orden))]).unlink()
                     self.env['dtm.proceso'].search([('ot_number','=',int(orden))]).unlink()
                     self.env['dtm.compras.realizado'].search([('orden_trabajo','=',int(orden))]).unlink()
@@ -294,7 +295,10 @@ class Proceso(models.Model):
 
         for exist in self.rechazo_id:
             if exist.serial_no in get_calidad:
+<<<<<<< HEAD
                 print(exist.date,exist)
+=======
+>>>>>>> 0ad3df84b411f4a0469c5c6d7f59f7dbf668e401
                 self.env['dtm.calidad.rechazo'].search([('consecutivo','=',exist.serial_no)]).write({
                     'po_number':self.po_number,
                     'part_no':self.product_name,
@@ -321,6 +325,8 @@ class Proceso(models.Model):
         email = self.env.user.partner_id.email
         if email == 'manufactura@dtmindustry.com':
             self.firma = self.env.user.partner_id.name
+            if self.status == 'calidad':
+                self.date_terminado = datetime.now();
         if email in ['calidad@dtmindustry.com','calidad2@dtmindustry.com',"rafaguzmang@hotmail.com"]:
             if self.status == 'calidad' and not self.pausa:
                 # Si es una OT la manda a terminado
@@ -330,7 +336,6 @@ class Proceso(models.Model):
                     self.status = 'terminado'
                 else: #Si es un NPI lo manda a facturado
                     get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
-                    print(self.ot_number,self.tipe_order)
                     vals = {
                         "status":self.status,
                         "ot_number":self.ot_number,
@@ -353,6 +358,7 @@ class Proceso(models.Model):
                         "rechazo_id":self.rechazo_id,
                         "anexos_id":self.anexos_id,
                         "calidad_liberacion":self.calidad_liberacion,
+                        "date_terminado":self.date_terminado,
                     }
                     get_fact.write(vals) if get_fact else get_fact.create(vals)
                     get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number)])
