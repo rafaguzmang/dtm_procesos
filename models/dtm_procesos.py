@@ -33,7 +33,7 @@ class Proceso(models.Model):
     # materials_npi_ids = fields.Many2many("dtm.materials.npi",readonly=True)
     planos = fields.Boolean(string="Planos",default=False,readonly=True)
     nesteos = fields.Boolean(string="Nesteos",default=False,readonly=True)
-    date_terminado = fields.Date(string="Finalización")
+    date_terminado = fields.Date(string="Finalización",readonly=True)
 
     rechazo_id = fields.One2many("dtm.proceso.rechazo",'model_id',readonly=False)
     rechazo_npi_id = fields.Many2many("dtm.npi.rechazo",readonly=False)
