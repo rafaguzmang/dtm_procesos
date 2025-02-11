@@ -292,20 +292,16 @@ class Proceso(models.Model):
     def action_rechazo(self):
         get_calidad = self.env['dtm.calidad.rechazo'].search([('job_no','=',self.ot_number)]).mapped('consecutivo')
 
-        print(get_calidad)
-        print(self.rechazo_id)
-
         for exist in self.rechazo_id:
-            print(exist.serial_no)
             if exist.serial_no in get_calidad:
-                print(exist.serial_no)
+                print(exist.date,exist)
                 self.env['dtm.calidad.rechazo'].search([('consecutivo','=',exist.serial_no)]).write({
                     'po_number':self.po_number,
                     'part_no':self.product_name,
                     'no_of_pieces_rejected':exist.no_of_pieces_rejected,
                     'reason':exist.reason,
                     'inspector':exist.inspector,
-                    'date':exist.date,
+                    'date':exist.create_date,
                 })
             else:
                 # self.env.cr.execute(f"SELECT setval('dtm_calidad_rechazo_id_seq', {exist.serial_no}, false);")
@@ -317,7 +313,7 @@ class Proceso(models.Model):
                     'no_of_pieces_rejected':exist.no_of_pieces_rejected,
                     'reason':exist.reason,
                     'inspector':exist.inspector,
-                    'date':exist.date,
+                    'date':exist.create_date,
                 })
 
 
