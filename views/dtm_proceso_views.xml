@@ -165,6 +165,7 @@
                         {
                     </style>
                     <header>
+                        date_disign_finish
                         <button type="object" name="action_imprimir_formato" string="ODT" attrs="{'invisible': [('tipe_order', '=', '')]}" icon="fa-print" title="print" class="btn btn-primary"/>
                         <button type="object" name="action_imprimir_materiales" string="Lista de Materiales" attrs="{'invisible': [('tipe_order', '=', '')]}" icon="fa-print" title="print" class="btn btn-primary"/>
                         <button type="object" name="action_firma" string="Firma"  icon="fa-pencil" title="pencil" class="btn btn-primary"/>
@@ -240,6 +241,7 @@
                                     <tree editable="bottom" decoration-success="entregado"
                                         decoration-info="comprado and not entregado"
                                         decoration-bf="comprado or entregado" >
+
                                         <field name="materials_list" attrs="{'readonly': [('comprado', '=', True)]}"/>
                                         <field name="notas"/>
                                         <field name="materials_cuantity" options='{"type": "number"} ' attrs="{'readonly': [('comprado', '=', True)]}" />
