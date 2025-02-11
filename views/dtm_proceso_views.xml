@@ -216,6 +216,7 @@
                             </group>
                              <group>
                                 <field name="status" attrs="{'readonly': [('pausado', '=', 'Pausado Por Ventas')]}"/>
+                                <field name="date_terminado"/>
                                 <field name="cuantity" options='{"type": "number"}'/>
                                 <field name="color" />
                                 <field name="pausado" style="color:#f00" attrs="{'invisible': [('pausado', 'not in', ['Pausado por Ventas','Pausado por Calidad'])]}"/>
