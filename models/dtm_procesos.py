@@ -295,10 +295,7 @@ class Proceso(models.Model):
 
         for exist in self.rechazo_id:
             if exist.serial_no in get_calidad:
-<<<<<<< HEAD
-                print(exist.date,exist)
-=======
->>>>>>> 0ad3df84b411f4a0469c5c6d7f59f7dbf668e401
+
                 self.env['dtm.calidad.rechazo'].search([('consecutivo','=',exist.serial_no)]).write({
                     'po_number':self.po_number,
                     'part_no':self.product_name,
