@@ -97,11 +97,15 @@ class Proceso(models.Model):
     def action_devolver(self):
         if self.notes:
             get_odt = self.env['dtm.odt'].search([("ot_number","=",self.ot_number),("tipe_order","=",self.tipe_order)])
-            print(get_odt)
+            day = int(get_odt.date_disign_finish.strftime('%j'))+1 if get_odt.date_disign_finish else datetime.now().strftime('%j') + 1
+            year = int(get_odt.date_disign_finish.strftime('%Y')) if get_odt.date_disign_finish else datetime.now().strftime('%Y')
+            fecha = datetime.strptime(f"{year}-{day}", "%Y-%j").date()
             get_odt.write({
                 'version_ot':get_odt.version_ot+1,
                 'notes':f"{get_odt.notes}\n\n Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" if get_odt.notes else f"Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" ,
+                'date_disign_finish':fecha
             })
+
             self.unlink()
         else:
             raise ValidationError('Favor de especificar en la pestaña de "NOTAS" motivo del rechazo')
