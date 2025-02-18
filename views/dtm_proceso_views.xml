@@ -7,8 +7,6 @@
             <field name="res_model">dtm.proceso</field>
             <field name="view_mode">kanban,tree,form</field>
             <field name="view_id" ref="dtm_proceso_kanban"/>
-            <field name="search_view_id" ref="dtm_proceso_search"/>
-            <field name="domain">[]</field> <!-- Aquí no aplicamos dominio por defecto -->
         </record>
 
         <record id="dtm_proceso_tree" model="ir.ui.view">
@@ -25,7 +23,6 @@
                 </tree>
             </field>
         </record>
-
 
         <record id="dtm_proceso_kanban" model="ir.ui.view">
             <field name="name">dtm_proceso_kanban</field>
