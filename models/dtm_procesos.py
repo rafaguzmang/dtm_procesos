@@ -105,7 +105,6 @@ class Proceso(models.Model):
                 'notes':f"{get_odt.notes}\n\n Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" if get_odt.notes else f"Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" ,
                 'date_disign_finish':fecha
             })
-
             self.unlink()
         else:
             raise ValidationError('Favor de especificar en la pestaña de "NOTAS" motivo del rechazo')
@@ -144,10 +143,6 @@ class Proceso(models.Model):
 
             if get.firma_calidad_kanba and get.status != "instalacion":
                 get.status = "terminado"
-
-        get_facturas = self.env['dtm.ordenes.compra.facturado'].search([]).mapped('orden_compra')#Elimina de procesos todas las ordenes de trabajo que ya tienen número de factura
-        self.eliminacion_ot(get_facturas)
-
 
         get_materiales = self.env['dtm.proceso'].search([])
         for record in get_materiales: # Actualiza la lista de materiales de las ordenes
@@ -335,7 +330,7 @@ class Proceso(models.Model):
                     self.firma_calidad =  self.env.user.partner_id.name,
                     self.firma_calidad_kanba = "Calidad"
                     self.status = 'terminado'
-                else: #Si es un NPI lo manda a facturado
+                elif self.tipe_order == 'NPI': #Si es un NPI lo manda a facturado
                     get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
                     vals = {
                         "status":self.status,
