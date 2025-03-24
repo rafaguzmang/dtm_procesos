@@ -10,8 +10,6 @@ class Proceso(models.Model):
     _order = "ot_number desc"
     _rec_name = "ot_number"
 
-
-
     status = fields.Selection(string="Estatus", selection=[("aprobacion","Nesteo"),
                                          ("corte","Corte"),("revision","Revisión FAI"),("doblado","Doblado"),
                                          ("soldadura","Soldadura"),("maquinado","Maquinado"),("pintura","Pintura"),
@@ -134,15 +132,28 @@ class Proceso(models.Model):
             if email in emails:
                 record.user_pausa = True
 
+    @api.onchange('status')
+    def _onchange_status(self):
+        if self.status in ["terminado","instalacion"] and not self.firma_calidad:
+            raise ValidationError("Falta firma de calidad")
+
+
+
+        # if self.firma_calidad and self.status != "instalacion":
+        #     self.status = "terminado"
+        # else:
+        #     raise ValidationError("Esta orden ya fue firmada por calidad")
+
+
     def get_view(self, view_id=None, view_type='form', **options):
         res = super(Proceso,self).get_view(view_id, view_type,**options)
-        get_self = self.env['dtm.proceso'].search([]) #No permite el cambio a terminado sin firma de calidad
-        for get in get_self:
-            if get.status == "terminado" and not get.firma_calidad_kanba:
-                get.status = "calidad"
-
-            if get.firma_calidad_kanba and get.status != "instalacion":
-                get.status = "terminado"
+        # get_self = self.env['dtm.proceso'].search([]) #No permite el cambio a terminado sin firma de calidad
+        # for get in get_self:
+        #     if get.status == "terminado" and not get.firma_calidad_kanba:
+        #         get.status = "calidad"
+        #
+        #     if get.firma_calidad_kanba and get.status != "instalacion":
+        #         get.status = "terminado"
 
         get_materiales = self.env['dtm.proceso'].search([])
         for record in get_materiales: # Actualiza la lista de materiales de las ordenes
@@ -411,7 +422,7 @@ class Rechazo(models.Model):
     serial_no = fields.Integer(string='SERIAL NO',default=serial_number,readonly=True)
     no_of_pieces_rejected = fields.Integer(string='NO. OF PIECES REJECTED')
     reason = fields.Text(string='REASON')
-    inspector = fields.Selection(string='INSPECTOR',selection=[('leonardo','Leonardo Ramírez Ruiz')],default='leonardo')
+    inspector = fields.Selection(string='INSPECTOR',selection=[('leonardo','Leonardo Ramírez Ruiz'),('priscilla','Priscilla Chávez Díaz')],default='leonardo')
     date = fields.Date(string='DATE',default=datetime.now(),readonly=True)
     revicion = fields.Selection(string='Revición',selection=[('muestreo','Muestreo'),('cien','100%')],default='cien')
 
