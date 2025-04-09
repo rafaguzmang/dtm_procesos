@@ -34,7 +34,6 @@ class Proceso(models.Model):
     date_terminado = fields.Date(string="Finalización",readonly=True)
 
     rechazo_id = fields.One2many("dtm.proceso.rechazo",'model_id',readonly=False)
-    rechazo_npi_id = fields.Many2many("dtm.npi.rechazo",readonly=False)
 
     anexos_id = fields.Many2many("dtm.proceso.anexos",readonly=True)
     cortadora_id = fields.Many2many("dtm.proceso.cortadora",readonly=True)
@@ -94,16 +93,67 @@ class Proceso(models.Model):
 
     def action_devolver(self):
         if self.notes:
+            # Obtiene el número de orden y el tipo de orden que se va a devolver del modulo diseño
             get_odt = self.env['dtm.odt'].search([("ot_number","=",self.ot_number),("tipe_order","=",self.tipe_order)])
-            day = int(get_odt.date_disign_finish.strftime('%j'))+1 if get_odt.date_disign_finish else datetime.now().strftime('%j') + 1
-            year = int(get_odt.date_disign_finish.strftime('%Y')) if get_odt.date_disign_finish else datetime.now().strftime('%Y')
+            # ----------------------Se obtiene la fecha---------------------------
+            day = int(get_odt.date_disign_finish.strftime('%j'))+1 if get_odt.date_disign_finish else int(datetime.now().strftime('%j')) + 1
+            year = int(get_odt.date_disign_finish.strftime('%Y')) if get_odt.date_disign_finish else int(datetime.now().strftime('%Y'))
             fecha = datetime.strptime(f"{year}-{day}", "%Y-%j").date()
-            get_odt.write({
+            #--------------------------------------------------------------------------
+            # Cambia los parametros de la orden devuelta en el modulo de diseño
+
+            self.env['dtm.odt.revisiones'].search([('ot_number','=',self.ot_number), ('tipe_order', '=', self.tipe_order)],limit=1).create({
+                "ot_number":self.ot_number,
+                "tipe_order":self.tipe_order,
+                "name_client":self.name_client,
+                "product_name":self.product_name,
+                "date_in":self.date_in,
+                "po_number":self.po_number,
+                "date_rel":self.date_rel,
+                "version_ot":self.version_ot,
+                "color":self.color,
+                "cuantity":self.cuantity,
+                "disenador":self.firma_diseno,
+                "firma":self.firma,
+                "firma_ventas":self.firma_ventas,
+                "planos":self.planos,
+                "nesteos":self.nesteos,
+                "status":self.status,
+                "description":self.description,
+                #--------------------------
+            })
+            dtm_odt = self.env['dtm.odt'].search([('ot_number','=',self.ot_number), ('tipe_order', '=', self.tipe_order)],limit=1)
+            self.env['dtm.odt.revisiones'].search([('ot_number', '=', self.ot_number), ('tipe_order', '=', self.tipe_order)], limit=1).write(
+                {
+                    'anexos_id':[(6, 0, dtm_odt.mapped('anexos_id').ids)],
+                    # 'materials_ids':[(6, 0, dtm_odt.mapped('materials_ids').ids)],
+                    'anexos_ventas_id':[(6, 0, dtm_odt.mapped('anexos_ventas_id').ids)],
+                    'cortadora_id':[(6, 0, dtm_odt.mapped('cortadora_id').ids)],
+                    'tubos_id':[(6, 0, dtm_odt.mapped('tubos_id').ids)],
+                    # 'archivos_id':[(6, 0, dtm_odt.mapped('archivos_id').ids)],
+                    # 'maquinados_id':[(6, 0, dtm_odt.mapped('maquinados_id').ids)],
+                    'primera_pieza_id':[(6, 0, dtm_odt.mapped('primera_pieza_id').ids)],
+                    # 'ligas_tubos_id':[(6, 0, dtm_odt.mapped('ligas_tubos_id').ids)],
+                    'orden_compra_pdf':[(6, 0, dtm_odt.mapped('orden_compra_pdf').ids)],
+                    'ligas_id':[(6, 0, dtm_odt.mapped('ligas_id').ids)],
+                    'ligas_tubos_id':[(6, 0, dtm_odt.mapped('ligas_tubos_id').ids)],
+                })
+            dtm_odt.write({
+                'anexos_id': [(5, 0, {})],
+                'cortadora_id': [(5, 0, {})],
+                'tubos_id': [(5, 0, {})],
+                'ligas_id': [(5, 0, {})],
+                'primera_pieza_id': [(5, 0, {})],
+                'anexos_ventas_id':[(5, 0, {})],
+                'ligas_tubos_id':[(5, 0, {})],
+
                 'version_ot':get_odt.version_ot+1,
                 'notes':f"{get_odt.notes}\n\n Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" if get_odt.notes else f"Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" ,
-                'date_disign_finish':fecha
+                'date_disign_finish':fecha,
+
             })
             self.unlink()
+
         else:
             raise ValidationError('Favor de especificar en la pestaña de "NOTAS" motivo del rechazo')
 
@@ -225,7 +275,6 @@ class Proceso(models.Model):
                 #-------------------------------------------------------------------------------------------------------------------------------
                 if get_facturado:
                     self.env['dtm.odt'].search([('ot_number','=',int(orden))]).unlink()
-                    self.env['dtm.compras.odt'].search([('ot_number','=',int(orden))]).unlink()
                     self.env['dtm.proceso'].search([('ot_number','=',int(orden))]).unlink()
                     self.env['dtm.compras.realizado'].search([('orden_trabajo','=',int(orden))]).unlink()
 
