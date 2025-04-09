@@ -337,44 +337,7 @@ class Proceso(models.Model):
         if email in ['calidad@dtmindustry.com','calidad2@dtmindustry.com',"rafaguzmang@hotmail.com"]:
             if self.status == 'calidad' and not self.pausa:
                 # Si es una OT la manda a terminado
-<<<<<<< HEAD
-                if self.tipe_order == 'OT':
-                    self.firma_calidad =  self.env.user.partner_id.name,
-                    self.firma_calidad_kanba = "Calidad"
-                    self.status = 'terminado'
-                elif self.tipe_order in ['NPI','ODT-I']: #Si es un NPI lo manda a facturado
-                    get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
-                    vals = {
-                        "status":self.status,
-                        "ot_number":self.ot_number,
-                        "tipe_order":self.tipe_order,
-                        "name_client":self.name_client,
-                        "product_name":self.product_name,
-                        "date_in":self.date_in,
-                        "po_number":self.po_number,
-                        "date_rel":self.date_rel,
-                        "version_ot":self.version_ot,
-                        "color":self.color,
-                        "cuantity":self.cuantity,
-                        "firma":self.firma,
-                        "firma_compras":self.firma_compras,
-                        "firma_diseno":self.firma_diseno,
-                        "firma_almacen":self.firma_almacen,
-                        "firma_ventas":self.firma_ventas,
-                        "firma_calidad":self.firma_calidad,
-                        "description":self.description,
-                        "rechazo_id":self.rechazo_id,
-                        "anexos_id":self.anexos_id,
-                        "calidad_liberacion":self.calidad_liberacion,
-                        "date_terminado":self.date_terminado,
-                    }
-                    get_fact.write(vals) if get_fact else get_fact.create(vals)
-                    get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number)])
-                    lista = []
-                    get_fact.write({'materieales_id': [(5, 0, {})]})
-                    for material in self.materials_ids:
-                        # print(material.nombre,material.medida)
-=======
+
                 if self.date_terminado:
                     if self.tipe_order == 'OT':
                         self.firma_calidad =  self.env.user.partner_id.name,
@@ -382,7 +345,6 @@ class Proceso(models.Model):
                         self.status = 'terminado'
                     elif self.tipe_order == 'NPI': #Si es un NPI lo manda a facturado
                         get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
->>>>>>> 1ed11541662f946c6550de1a823197d12c4ab150
                         vals = {
                             "status":self.status,
                             "ot_number":self.ot_number,
