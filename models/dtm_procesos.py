@@ -34,7 +34,6 @@ class Proceso(models.Model):
     date_terminado = fields.Date(string="Finalización",readonly=True)
 
     rechazo_id = fields.One2many("dtm.proceso.rechazo",'model_id',readonly=False)
-    rechazo_npi_id = fields.Many2many("dtm.npi.rechazo",readonly=False)
 
     anexos_id = fields.Many2many("dtm.proceso.anexos",readonly=True)
     cortadora_id = fields.Many2many("dtm.proceso.cortadora",readonly=True)
@@ -95,8 +94,8 @@ class Proceso(models.Model):
     def action_devolver(self):
         if self.notes:
             get_odt = self.env['dtm.odt'].search([("ot_number","=",self.ot_number),("tipe_order","=",self.tipe_order)])
-            day = int(get_odt.date_disign_finish.strftime('%j'))+1 if get_odt.date_disign_finish else int(datetime.now().strftime('%j')) + 1
-            year = int(get_odt.date_disign_finish.strftime('%Y')) if get_odt.date_disign_finish else int(datetime.now().strftime('%Y'))
+            day = int(get_odt.date_disign_finish.strftime('%j'))+1 if get_odt.date_disign_finish else datetime.now().strftime('%j') + 1
+            year = int(get_odt.date_disign_finish.strftime('%Y')) if get_odt.date_disign_finish else datetime.now().strftime('%Y')
             fecha = datetime.strptime(f"{year}-{day}", "%Y-%j").date()
             get_odt.write({
                 'version_ot':get_odt.version_ot+1,
@@ -157,9 +156,10 @@ class Proceso(models.Model):
 
         get_materiales = self.env['dtm.proceso'].search([])
         for record in get_materiales: # Actualiza la lista de materiales de las ordenes
-
+            # if record.tipe_order == "OT":
             materiales = record.materials_ids
-
+            # else:
+            #     materiales = record.materials_npi_ids
             total = len(materiales)
             cont = 0
             if materiales:
@@ -305,14 +305,13 @@ class Proceso(models.Model):
 
         for exist in self.rechazo_id:
             if exist.serial_no in get_calidad:
-
                 self.env['dtm.calidad.rechazo'].search([('consecutivo','=',exist.serial_no)]).write({
                     'po_number':self.po_number,
                     'part_no':self.product_name,
                     'no_of_pieces_rejected':exist.no_of_pieces_rejected,
                     'reason':exist.reason,
                     'inspector':exist.inspector,
-                    'date':exist.create_date,
+                    'date':exist.date,
                 })
             else:
                 # self.env.cr.execute(f"SELECT setval('dtm_calidad_rechazo_id_seq', {exist.serial_no}, false);")
@@ -324,7 +323,7 @@ class Proceso(models.Model):
                     'no_of_pieces_rejected':exist.no_of_pieces_rejected,
                     'reason':exist.reason,
                     'inspector':exist.inspector,
-                    'date':exist.create_date,
+                    'date':exist.date,
                 })
 
 
@@ -337,7 +336,6 @@ class Proceso(models.Model):
         if email in ['calidad@dtmindustry.com','calidad2@dtmindustry.com',"rafaguzmang@hotmail.com"]:
             if self.status == 'calidad' and not self.pausa:
                 # Si es una OT la manda a terminado
-
                 if self.date_terminado:
                     if self.tipe_order == 'OT':
                         self.firma_calidad =  self.env.user.partner_id.name,
