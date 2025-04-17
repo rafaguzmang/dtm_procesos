@@ -13,7 +13,8 @@
             <menuitem id="dtm_facturado_odt_view"  action="dtm_facturado_odt.dtm_facturado_odt_accion"/>
             <menuitem id="dtm_facturado_npi_view"  action="dtm_facturado_odt.dtm_facturado_npi_accion"/>
         </menuitem>
-            <menuitem id="menu_dtm_procesos"  action="dtm_procesos.dtm_proceso_accion"/>
+        <menuitem id="menu_dtm_procesos"  action="dtm_procesos.dtm_proceso_accion"/>
+        <menuitem id="dtm_procesos_indicadores_menu" action="dtm_procesos.dtm_procesos_indicadores_accion"/>
 
      </menuitem>
 </odoo>
