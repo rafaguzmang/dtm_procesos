@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id = "dtm_procesos_indicadores_accion" model="ir.actions.act_window">
+            <field name="name">Indicadores</field>
+            <field name="res_model">dtm.procesos.indicadores</field>
+            <field name="view_mode">tree,graph</field>
+        </record>
+
+        <record id="dtm_procesos_indicadores_graph" model="ir.ui.view">
+            <field name="name">dtm_procesos_indicadores_graph</field>
+            <field name="model">dtm.procesos.indicadores</field>
+            <field name="arch" type="xml">
+                <graph string="Procesos" type="bar">
+                    <field name="mes" type="row" interval="month"/>
+                    <field name="ordenes" type="measure"/>
+                    <field name="porcentaje" type="measure" widget="percentage"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="dtm_procesos_indicadores_tree" model="ir.ui.view">
+            <field name="name">dtm_procesos_indicadores_tree</field>
+            <field name="model">dtm.procesos.indicadores</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="no_month"/>
+                    <field name="mes"/>
+                    <field name="ordenes"/>
+                    <field name="en_tiempo"/>
+                    <field name="tarde"/>
+                    <field name="porcentaje"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

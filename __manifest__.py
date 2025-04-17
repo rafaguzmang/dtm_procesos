@@ -12,6 +12,7 @@
         #Views
         'views/dtm_proceso_views.xml',
         'views/dtm_procesos_liberacion_view.xml',
+        'views/dtm_procesos_indicadores_view.xml',
 
         #Menú
         'views/dtm_menu.xml',
