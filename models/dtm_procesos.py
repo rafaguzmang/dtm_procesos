@@ -94,8 +94,8 @@ class Proceso(models.Model):
     def action_devolver(self):
         if self.notes:
             get_odt = self.env['dtm.odt'].search([("ot_number","=",self.ot_number),("tipe_order","=",self.tipe_order)])
-            day = int(get_odt.date_disign_finish.strftime('%j'))+1 if get_odt.date_disign_finish else datetime.now().strftime('%j') + 1
-            year = int(get_odt.date_disign_finish.strftime('%Y')) if get_odt.date_disign_finish else datetime.now().strftime('%Y')
+            day = int(get_odt.date_disign_finish.strftime('%j'))+1 if get_odt.date_disign_finish else int(datetime.now().strftime('%j')) + 1
+            year = int(get_odt.date_disign_finish.strftime('%Y')) if get_odt.date_disign_finish else int(datetime.now().strftime('%Y'))
             fecha = datetime.strptime(f"{year}-{day}", "%Y-%j").date()
             get_odt.write({
                 'version_ot':get_odt.version_ot+1,
@@ -341,7 +341,7 @@ class Proceso(models.Model):
                         self.firma_calidad =  self.env.user.partner_id.name,
                         self.firma_calidad_kanba = "Calidad"
                         self.status = 'terminado'
-                    elif self.tipe_order == 'NPI': #Si es un NPI lo manda a facturado
+                    elif self.tipe_order in ['NPI','ODT-I']: #Si es un NPI lo manda a facturado
                         get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
                         vals = {
                             "status":self.status,
