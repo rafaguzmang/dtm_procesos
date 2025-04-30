@@ -150,13 +150,15 @@ class Proceso(models.Model):
                 'version_ot':get_odt.version_ot+1,
                 'notes':f"{get_odt.notes}\n\n Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" if get_odt.notes else f"Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" ,
                 'date_disign_finish':fecha,
+                "firma": False,
+                "firma_ventas": False,
+                "manufactura":False
 
             })
             self.unlink()
 
         else:
             raise ValidationError('Favor de especificar en la pestaña de "NOTAS" motivo del rechazo')
-
 
 
     def action_detener(self):
