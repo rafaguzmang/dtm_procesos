@@ -1,0 +1,33 @@
+<template xml:space="preserve">
+    <t t-name="dtm_procesos.indicador" owl="1">
+          <div class="container mt-4" >
+            <h3>Ventas</h3>
+            <table class="table  table-striped">
+              <thead class="table-primary">
+                <tr>
+                    <th>Mes</th>
+                    <th>Ordenes</th>
+                    <th>En tiempo</th>
+                    <th>Con Retardo</th>
+                    <th>%</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <t t-foreach="state.items" t-as="item" t-key="item.id">
+                    <tr>
+                        <td><t t-esc="item.mes"/></td>
+                        <td><t t-esc="item.ordenes"/></td>
+                        <td><t t-esc="item.en_tiempo"/></td>
+                        <td><t t-esc="item.tarde"/></td>
+                        <td><t t-esc="item.porcentaje"/></td>
+                    </tr>
+                  </t>
+              </tbody>
+            </table>
+            <h3 class="mt-4">Indicadores</h3>
+            <canvas t-ref="grafico" width="400" height="200"></canvas>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0"></script>
+    </t>
+</template>

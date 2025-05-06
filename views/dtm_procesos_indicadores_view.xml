@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <record id = "dtm_procesos_indicadores_accion" model="ir.actions.act_window">
-            <field name="name">Indicadores</field>
+            <field name="name">Indicadores old</field>
             <field name="res_model">dtm.procesos.indicadores</field>
             <field name="view_mode">tree,graph</field>
         </record>
@@ -24,7 +24,6 @@
             <field name="model">dtm.procesos.indicadores</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="no_month"/>
                     <field name="mes"/>
                     <field name="ordenes"/>
                     <field name="en_tiempo"/>

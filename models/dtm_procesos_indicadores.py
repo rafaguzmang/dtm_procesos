@@ -3,11 +3,11 @@ from datetime import datetime
 
 class Indicadores(models.Model):
     _name = 'dtm.procesos.indicadores'
-    _description = 'Modulo para llevar los indicadores de producción'
+    _description = 'Modulo para llevar los xml de producción'
     # _rec_name = 'mes'
 
     no_month = fields.Integer()
-    mes = fields.Date(string='Mes')
+    mes = fields.Char(string='Mes')
     ordenes = fields.Integer(string="Ordenes")
     en_tiempo = fields.Integer(string="En tiempo")
     tarde = fields.Integer(string="Con Retardo")
@@ -35,19 +35,18 @@ class Indicadores(models.Model):
                         else:
                             tarde += 1
 
-                        mes = cotizacion[0]
-
+                        mes = cotizacion[0].strftime("%B").capitalize()
 
                 # Si el mes existe lo actualiza si no lo crea
                 get_this = self.env['dtm.procesos.indicadores'].search([('no_month', '=', month)])
                 if get_this:
                     get_this.write({
                         'no_month':month,
-                        'mes':mes,
+                        'mes':mes if mes != 0 else datetime.today().strftime("%B").capitalize()  ,
                         'ordenes':len(get_proceso),
                         'en_tiempo':tiempo,
                         'tarde':tarde,
-                        'porcentaje':(tiempo*100)/len(get_proceso),
+                        'porcentaje':(tiempo*100)/max(len(get_proceso),1),
                     })
                 else:
                     get_this.create({
@@ -56,6 +55,6 @@ class Indicadores(models.Model):
                         'ordenes':len(get_proceso),
                         'en_tiempo':tiempo,
                         'tarde':tarde,
-                        'porcentaje':(tiempo*100)/len(get_proceso),
+                        'porcentaje':(tiempo*100)/max(len(get_proceso),1),
                     })
         return res
