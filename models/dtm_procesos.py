@@ -147,11 +147,12 @@ class Proceso(models.Model):
                 'anexos_ventas_id':[(5, 0, {})],
                 'ligas_tubos_id':[(5, 0, {})],
 
-                'version_ot':get_odt.version_ot+1,
+                'version_ot':get_odt.version_ot + 1,
                 'notes':f"{get_odt.notes}\n\n Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" if get_odt.notes else f"Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" ,
                 'date_disign_finish':fecha,
                 "firma": False,
                 "firma_ventas": False,
+                "firma_ingenieria":False,
                 "manufactura":False
 
             })

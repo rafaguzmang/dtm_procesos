@@ -123,8 +123,8 @@ export class Indicador extends Component {
                             annotations: {
                                 line1: {
                                     type: 'line',
-                                    yMin: 60,  // 60% en escala de 0 a 100
-                                    yMax: 60,  // 60% en escala de 0 a 100
+                                    yMin: 80,  // 60% en escala de 0 a 100
+                                    yMax: 80,  // 60% en escala de 0 a 100
                                     borderColor: 'rgba(0,255,0,0.4)',
                                     borderWidth: 2,
                                     label: {
