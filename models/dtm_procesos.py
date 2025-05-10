@@ -427,12 +427,15 @@ class Proceso(models.Model):
             if self.status == 'calidad' and not self.pausa:
                 # Si es una OT la manda a terminado
                 if self.date_terminado:
-                    if self.tipe_order == 'OT':
+                    if self.tipe_order == 'OT': #Si es un OT se manda a facturado odt si tiene factura
                         self.firma_calidad =  self.env.user.partner_id.name,
                         self.firma_calidad_kanba = "Calidad"
                         self.status = 'terminado'
-                    elif self.tipe_order == 'NPI': #Si es un NPI lo manda a facturado
-                        get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
+                    elif self.tipe_order in ['NPI','RT']: #Si es un NPI lo manda a facturado
+                        if self.tipe_order == 'NPI':
+                            get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
+                        elif self.tipe_order == 'RT':
+                            get_fact = self.env['dtm.facturado.retrabajo'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
                         vals = {
                             "status":self.status,
                             "ot_number":self.ot_number,
@@ -458,7 +461,14 @@ class Proceso(models.Model):
                             "date_terminado":self.date_terminado,
                         }
                         get_fact.write(vals) if get_fact else get_fact.create(vals)
-                        get_fact = self.env['dtm.facturado.npi'].search([('ot_number','=',self.ot_number)])
+
+                        if self.tipe_order == 'NPI':
+                            get_fact = self.env['dtm.facturado.npi'].search(
+                                [('ot_number', '=', self.ot_number), ('tipe_order', '=', self.tipe_order)])
+                        elif self.tipe_order == 'RT':
+                            get_fact = self.env['dtm.facturado.retrabajo'].search(
+                                [('ot_number', '=', self.ot_number), ('tipe_order', '=', self.tipe_order)])
+
                         lista = []
                         get_fact.write({'materieales_id': [(5, 0, {})]})
                         for material in self.materials_ids:

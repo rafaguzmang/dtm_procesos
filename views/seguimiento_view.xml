@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="dtm_procesos_seguimiento_action" model="ir.actions.client">
+        <field name="name">Seguimiento</field>
+        <field name="tag">dtm_procesos.seguimiento</field>
+    </record>
+
+<!--    <menuitem id="dtm_procesos_seguimientoes_menu" action ="dtm_procesos_seguimiento_action"/>-->
+
+</odoo>
