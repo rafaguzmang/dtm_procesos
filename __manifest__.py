@@ -14,6 +14,7 @@
         'views/dtm_procesos_liberacion_view.xml',
         # 'views/dtm_procesos_indicadores_view.xml',
         'views/indicador_view.xml',
+        'views/seguimiento_view.xml',
 
         #Menú
         'views/dtm_menu.xml',
@@ -26,8 +27,10 @@
     'assets': {
         'web.assets_backend': [
             'dtm_procesos/static/src/css/styles.css',
+            'dtm_procesos/static/src/xml/indicador.xml',
             'dtm_procesos/static/src/js/indicador.js',
-            'dtm_procesos/static/src/xml/indicador.xml'
+            'dtm_procesos/static/src/xml/seguimiento.xml',
+            'dtm_procesos/static/src/js/seguimiento.js',
             ],
     },
     'license': 'LGPL-3',

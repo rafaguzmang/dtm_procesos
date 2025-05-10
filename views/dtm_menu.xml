@@ -12,10 +12,13 @@
         <menuitem name="Terminado" id="menu_root_dtm_ordenes">
             <menuitem id="dtm_facturado_odt_view"  action="dtm_facturado_odt.dtm_facturado_odt_accion"/>
             <menuitem id="dtm_facturado_npi_view"  action="dtm_facturado_odt.dtm_facturado_npi_accion"/>
+            <menuitem id="dtm_facturado_retrabajo_view"  action="dtm_facturado_odt.dtm_facturado_retrabajo_accion"/>
         </menuitem>
         <menuitem id="menu_dtm_procesos"  action="dtm_procesos.dtm_proceso_accion"/>
 <!--        <menuitem id="dtm_procesos_indicadores_old_menu" action="dtm_procesos.dtm_procesos_indicadores_accion"/>-->
         <menuitem id="dtm_procesos_indicadores_menu" action ="dtm_procesos_indicador_action"/>
+        <menuitem id="dtm_procesos_seguimientoes_menu" action ="dtm_procesos_seguimiento_action"/>
+
 
      </menuitem>
 </odoo>

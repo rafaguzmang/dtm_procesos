@@ -1,0 +1,55 @@
+<template xml:space="preserve">
+    <t t-name="dtm_procesos.seguimiento" owl="1">
+        <div class="container-fluid tabla-ordenes p-3  " style="padding: 0;margin: 0;">
+            <div class="container-fluid header-container" >
+                <div class="container-fluid position-relative d-flex vals-container">
+                    <!-- header -->
+                    <div class=" container-fluid p-3 bg-primary text-white container-tittle" style="width: 100%;padding: 0;">
+                        <p class="h2" >Manufactura</p>
+                        <div class="d-flex justify-content-between" style="width: 12%">
+                          <p class="h5">Proyectos Activos</p>
+                          <p class="h5">total</p>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+             <!-- Tabla -->
+    <div class="container-fluid container-table ">
+      <table class="table" style="border-radius: 5px;">
+          <thead class="h6">
+            <tr class="table-secondary">
+              <th style="width: 2%;">Orden</th>
+              <th style="width: 2%;">Tipo</th>
+              <th style="width: 10%;">Diseño</th>
+              <th style="width: 2%;">Días</th>
+              <th style="width: 6%;">Entrega</th>
+              <th style="width: 20%;">Cliente</th>
+              <th style="width: 30%;">Producto</th>
+              <th style="width: 5%;">Status</th>
+            </tr>
+          </thead>
+          <tbody class="h6">
+<!--            @for(item of tabla; track item.ot_number){-->
+              <tr>
+                <td>Datos</td>
+                <td>Datos</td>
+                <td>Datos</td>
+                <td>Datos</td>
+                <td>Datos</td>
+                <td>Datos</td>
+                <td>Datos</td>
+                <td>Datos</td>
+
+              </tr>
+<!--            }-->
+          </tbody>
+      </table>
+    </div>
+
+        </div>
+    </t>
+</template>
