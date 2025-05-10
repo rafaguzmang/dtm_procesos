@@ -223,7 +223,6 @@ class Proceso(models.Model):
                             tarde += 1
 
                         mes = cotizacion[0].strftime("%B").capitalize()
-
                 # Si el mes existe lo actualiza si no lo crea
                 get_this = self.env['dtm.procesos.indicadores'].search([('no_month', '=', month)])
                 if get_this:
@@ -358,7 +357,7 @@ class Proceso(models.Model):
             get_corte.write({'materiales_id': [(5, 0, {})]})
             for lamina in self.materials_ids:
                 if re.match("Lámina",lamina.nombre):
-                    get_almacen = self.env['dtm.materiales'].search([("codigo","=",lamina.materials_list.id)],limit=1)
+                    get_almacen = self.env['dtm.materiales'].search([("id","=",lamina.materials_list.id)],limit=1)
                     content = {
                         "identificador": lamina.materials_list.id,
                         "nombre": lamina.nombre,
@@ -366,13 +365,13 @@ class Proceso(models.Model):
                         "cantidad": lamina.materials_cuantity,
                         "inventario": lamina.materials_inventory,
                         "requerido": lamina.materials_required,
-                        "localizacion": get_almacen.localizacion
+                        # "localizacion": get_almacen.localizacion
                     }
                     get_cortadora_laminas = self.env['dtm.cortadora.laminas'].search([
                         ("identificador","=",lamina.materials_list.id),("nombre","=",lamina.nombre),
                         ("medida","=",lamina.medida),("cantidad","=",lamina.materials_cuantity),
                         ("inventario","=",lamina.materials_inventory),("requerido","=",lamina.materials_required),
-                        ("localizacion","=",get_almacen.localizacion)])
+                        ("localizacion","=","")])
 
                     if get_cortadora_laminas:
                         get_cortadora_laminas.write(content)

@@ -17,7 +17,7 @@ export class Indicador extends Component {
 
       onMounted(async () => {
         // Espera un poco para asegurar que los scripts externos hayan cargado
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 500));
 
         // Asegura que el plugin esté disponible y lo registra
         if (window['chartjs-plugin-annotation']) {
@@ -101,15 +101,15 @@ export class Indicador extends Component {
 //            console.log(this.state.items);
             const labels = this.state.items.map(item => item.mes);
             const data = this.state.items.map(item => item.porcentaje);
-//            console.log(labels);
-//            console.log(data);
+            console.log(labels);
+            console.log(data);
 //            Grafica
             new Chart(ctx, {
                 type: "bar", // o "line", "pie", etc.
                 data: {
                       labels: labels,
                       datasets: [{
-                          label: "Cotizaciones por mes",
+                          label: "Ordenes de Trabajo",
                           data: data,
                           backgroundColor: "rgba(75, 192, 192, 0.2)",
                           borderColor: "rgba(75, 192, 192, 1)",
