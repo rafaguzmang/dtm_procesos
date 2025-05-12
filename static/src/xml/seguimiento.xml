@@ -4,21 +4,18 @@
             <div class="container-fluid header-container" >
                 <div class="container-fluid position-relative d-flex vals-container">
                     <!-- header -->
-                    <div class=" container-fluid p-3 bg-primary text-white container-tittle" style="width: 100%;padding: 0;">
-                        <p class="h2" >Manufactura</p>
+                    <div class=" container-fluid p-3 bg-primary text-white container-tittle " style="width: 100%;padding: 0;">
+                        <p class="h1 text-white" >Manufactura</p>
                         <div class="d-flex justify-content-between" style="width: 12%">
-                          <p class="h5">Proyectos Activos</p>
-                          <p class="h5">total</p>
+                          <p class="h3 text-white">Proyectos Activos</p>
+                          <p class="h3 text-white"><t t-esc="state.total"/></p>
                         </div>
                     </div>
-
-
                 </div>
-
             </div>
 
              <!-- Tabla -->
-    <div class="container-fluid container-table ">
+            <div class="container-fluid container-table ">
       <table class="table" style="border-radius: 5px;">
           <thead class="h6">
             <tr class="table-secondary">
@@ -33,19 +30,18 @@
             </tr>
           </thead>
           <tbody class="h6">
-<!--            @for(item of tabla; track item.ot_number){-->
+            <t t-foreach="state.tabla" t-as="row" t-key="row.orden">
               <tr>
-                <td>Datos</td>
-                <td>Datos</td>
-                <td>Datos</td>
-                <td>Datos</td>
-                <td>Datos</td>
-                <td>Datos</td>
-                <td>Datos</td>
-                <td>Datos</td>
-
+                <td><t t-esc="row.orden"/></td>
+                <td><t t-esc="row.tipo"/></td>
+                <td><t t-esc="row.fecha_ini"/></td>
+                <td><t t-esc="row.dias"/></td>
+                <td><t t-esc="row.fecha_rel"/></td>
+                <td><t t-esc="row.cliente"/></td>
+                <td><t t-esc="row.producto"/></td>
+                <td><t t-esc="row.status"/></td>
               </tr>
-<!--            }-->
+            </t>
           </tbody>
       </table>
     </div>

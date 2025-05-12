@@ -8,24 +8,39 @@ import { useService } from "@web/core/utils/hooks";
 
 export class Seguimiento extends Component {
     setup(){
+        this.state = useState({
+            tabla:[],
+            total:0,
+        })
+        onMounted(async () => {
 
-//        onMounted(async () => {
-//            const response = await fetch('/',{
-//                method:'Post',
-//                header:{
-//                    'Content-Type': 'application/json',
-//                    'X-Requested-With': 'XMLHttpRequest'
-//                },
-//                body:JSON.stringify({
-//                    parametro1:'valor1',
-//                    parametro2:'valor2'
-//                })
-//            })
-//
-//        });
-//        const data = await response.json();
-//        console.log('Respuesta:', data)
+            try {
+                const response = await fetch('/seguimiento_procesos',{
+                    method:'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body:JSON.stringify({})
+                })
 
+                const data = await response.json();
+                this.state.tabla = data.result;
+                this.state.tabla = this.state.tabla.map(row =>(
+                    {
+                        ...row,
+                        dias: (((new Date(row.fecha_rel) - new Date().getTime()) / (1000 * 60 * 60 * 24)) + 1).toFixed(0),
+                    }
+                ));
+                this.state.tabla.sort((a,b)=> a.dias - b.dias)
+                this.state.total = this.state.tabla.length
+                console.log('Respuesta:', this.state.tabla);
+
+            }catch (error){
+                console.log('Error al hacer el fetch: ',error);
+            }
+
+        });
 
     }
 }
