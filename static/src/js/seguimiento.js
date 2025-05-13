@@ -36,14 +36,14 @@ export class Seguimiento extends Component {
 
      async dataFetch() {
 
-             const response = await fetch('/seguimiento_procesos',{
+            const response = await fetch('/seguimiento_procesos',{
                         method:'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-Requested-With': 'XMLHttpRequest'
                         },
                         body:JSON.stringify({})
-                    })
+            })
 
             const data = await response.json();
             this.state.tabla = data.result;
