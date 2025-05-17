@@ -192,13 +192,6 @@ class Proceso(models.Model):
             raise ValidationError("Falta firma de calidad")
 
 
-
-        # if self.firma_calidad and self.status != "instalacion":
-        #     self.status = "terminado"
-        # else:
-        #     raise ValidationError("Esta orden ya fue firmada por calidad")
-
-
     def get_view(self, view_id=None, view_type='form', **options):
         res = super(Proceso,self).get_view(view_id, view_type,**options)
         # Loop para sacer los indicadores de este modulo
