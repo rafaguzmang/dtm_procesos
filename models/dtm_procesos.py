@@ -24,7 +24,8 @@ class Proceso(models.Model):
     date_in = fields.Date(string="ENTRADA", readonly=True)
     po_number = fields.Char(string="PO",readonly=True)
     date_rel = fields.Date(string="ENTREGA",readonly=True)
-    version_ot = fields.Integer(string="VERSIÓN OT",readonly=True)
+    version_ot = fields.Integer(string="REVISIÓN",readonly=True)
+    revision_ot = fields.Integer(string="VERSIÓN",readonly=True)
     color = fields.Char(string="COLOR",readonly=True)
     cuantity = fields.Integer(string="CANTIDAD",readonly=True)
     materials_ids = fields.Many2many("dtm.materials.line",readonly=True)
@@ -190,13 +191,6 @@ class Proceso(models.Model):
     def _onchange_status(self):
         if self.status in ["terminado","instalacion"] and not self.firma_calidad:
             raise ValidationError("Falta firma de calidad")
-
-
-
-        # if self.firma_calidad and self.status != "instalacion":
-        #     self.status = "terminado"
-        # else:
-        #     raise ValidationError("Esta orden ya fue firmada por calidad")
 
 
     def get_view(self, view_id=None, view_type='form', **options):
