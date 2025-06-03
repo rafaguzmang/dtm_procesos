@@ -1,7 +1,7 @@
 <template xml:space="preserve">
     <t t-name="dtm_procesos.indicador" owl="1">
           <div class="container mt-4" >
-            <h3>Procesos</h3>
+            <h3>Tabla</h3>
             <table class="table  table-striped">
               <thead class="table-primary">
                 <tr>
