@@ -154,6 +154,7 @@ class Proceso(models.Model):
                 "firma": False,
                 "firma_ventas": False,
                 "firma_ingenieria":False,
+                "firma_almacen":False,
                 "manufactura":False
 
             })
