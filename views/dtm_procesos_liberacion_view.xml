@@ -12,6 +12,7 @@
             <field name="model">dtm.proceso.liberacion</field>
             <field name="arch" type="xml">
                 <tree>
+                     <field name="aprovacion" />
                     <field name="aprobada"/>
                     <field name="motivo_rechazo"/>
                     <field name="fecha_revision"/>
@@ -47,6 +48,10 @@
                         topic.innerText="CHECK LIST DE LIBERACIÓN DE PIEZAS FINALES";
                     </script>
 
+                    <div class="h2">
+                        <field name="aprovacion" />
+                    </div>
+
                    <group class="col-12">
                          <group string="Funcional" class="col-6">
                             <field name="sujecion"/>
@@ -67,7 +72,6 @@
                                 <field name="etiqueta_mexico"/>
                                 <field name="empaque"/>
                             </group>
-
                        </div>
 
                    </group>
