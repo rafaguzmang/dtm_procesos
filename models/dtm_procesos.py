@@ -569,8 +569,10 @@ class LiberacionPrimera(models.Model):
     _name = "dtm.proceso.liberacion"
     _description = "Liberación de primera pieza/única"
 
+
     model_id = fields.Many2one("dtm.proceso")
     fecha_revision = fields.Date(default= datetime.today(),readonly=True)
+    aprovacion = fields.Char(string='Aprobación', default=lambda self: self.env.user.partner_id.name,readonly=True)
 
     #Funcional
     sujecion = fields.Selection(string="Sujeción correcta de la pieza.",selection=[("si","SI"),
