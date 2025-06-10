@@ -189,6 +189,10 @@ class Proceso(models.Model):
 
     @api.onchange('status')
     def _onchange_status(self):
+        corte = self.env['dtm.materiales.laser'].search([('orden_trabajo','=',self.ot_number),('revision_ot','=',self.revision_ot)])
+        if corte:
+            self.status = 'corte'
+            raise ValidationError(f"{self.ot_number} no liberada de corte")
         if self.status in ["terminado","instalacion"] and not self.firma_calidad:
             raise ValidationError("Falta firma de calidad")
 
@@ -255,6 +259,11 @@ class Proceso(models.Model):
                 record.materials = cont * 100 / total
             else:
                 record.materials = 0
+
+            if self.env['dtm.materiales.laser'].search([('orden_trabajo', '=', record.ot_number), ('revision_ot', '=', record.revision_ot)]):
+                record.status = 'corte'
+
+
         return res
 
     def eliminacion_ot (self,get_ordenes):
