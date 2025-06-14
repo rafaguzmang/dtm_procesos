@@ -11,6 +11,7 @@ export class Seguimiento extends Component {
         this.state = useState({
             tabla:[],
             total:0,
+            materiales:["item1","item2","item3","item4"]
         })
 
         onWillStart(async() => {
