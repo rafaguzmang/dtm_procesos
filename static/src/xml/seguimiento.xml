@@ -19,8 +19,9 @@
       <table class="table" style="border-radius: 5px;">
           <thead class="h6">
             <tr class="table-secondary">
-                <th style="width: 2%;">Orden</th>
                 <th style="width: 2%;">Tipo</th>
+                <th style="width: 2%;">Versión</th>
+                <th style="width: 2%;">Orden</th>
                 <th style="width: 10%;">Diseño</th>
                 <th style="width: 2%;">Días</th>
                 <th style="width: 6%;">Entrega</th>
@@ -34,6 +35,7 @@
             <t t-foreach="state.tabla" t-as="row" t-key="row.orden">
               <tr>
                 <td><t t-esc="row.orden"/></td>
+                <td><t t-esc="row.revision_ot"/></td>
                 <td><t t-esc="row.tipo"/></td>
                 <td><t t-esc="row.fecha_ini"/></td>
                 <td><t t-esc="row.dias"/></td>
@@ -42,10 +44,12 @@
                 <td><t t-esc="row.producto"/></td>
                 <td><t t-esc="row.status"/></td>
                 <td>
+<!--                    <td><t t-esc="row.materiales_lista"/></td>-->
+
                     <select>
-                        <t t-foreach="state.materiales" t-as="material" t-key="material" >
+                        <t t-foreach="row.materiales_lista" t-as="material" t-key="material.id" >
                             <option  t-att-value="material">
-                                <t t-esc="material"></t>
+                                <t t-esc="material.material"></t>
                             </option>
                         </t>
                     </select>
