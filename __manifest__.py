@@ -31,6 +31,8 @@
             'dtm_procesos/static/src/js/indicador.js',
             'dtm_procesos/static/src/xml/seguimiento.xml',
             'dtm_procesos/static/src/js/seguimiento.js',
+            'dtm_procesos/static/src/js/dialog_materiales.js',
+            'dtm_procesos/static/src/xml/dialog_materiales_template.xml'
             ],
     },
     'license': 'LGPL-3',

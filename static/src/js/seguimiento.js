@@ -3,15 +3,20 @@
 import { Component, useState, useRef, onMounted, onWillUnmount, onWillStart   } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { DialogMateriales } from "./dialog_materiales";
 
-//console.log("indicacor de Procesos");
+
 
 export class Seguimiento extends Component {
+    static components = { DialogMateriales };
     setup(){
         this.state = useState({
             tabla:[],
             total:0,
-            materiales:[]
+            materiales:[],
+            showDialogMateriales: false,
+            dialogOrden: null,
+            dialogMateriales:[],
         })
 
         onWillStart(async() => {
@@ -22,9 +27,9 @@ export class Seguimiento extends Component {
 
             try {
 
-                this.intervalId = setInterval(() => {
+//                this.intervalId = setInterval(() => {
                    this.dataFetch();
-                }, 5000); // 5000ms = 5 segundos
+//                }, 5000); // 5000ms = 5 segundos
 
 
             }catch (error){
@@ -32,6 +37,19 @@ export class Seguimiento extends Component {
             }
 
         });
+    }
+
+    mostrarDialogo(orden) {
+        this.state.dialogOrden = orden;
+        this.state.showDialogMateriales = true;
+        const materialData = this.state.materiales.find(item => item.orden === orden);
+        if (materialData) {
+        this.state.dialogOrden = orden;
+        this.state.dialogMateriales = materialData.materiales;
+        this.state.showDialogMateriales = true;
+        } else {
+            console.error("No se encontraron materiales para la orden:", orden);
+        }
 
     }
 
@@ -47,8 +65,8 @@ export class Seguimiento extends Component {
             })
 
             const materiales_data = await response_materiales.json();
-
-            console.log('Materiales',materiales_data.result);
+            this.state.materiales = materiales_data.result;
+//            console.log('Materiales',materiales_data.result);
 
 
             const response = await fetch('/seguimiento_procesos',{
@@ -88,7 +106,7 @@ export class Seguimiento extends Component {
 //            console.log(this.state.tabla)
             this.state.tabla.sort((a,b)=> a.dias - b.dias)
             this.state.total = this.state.tabla.length
-            console.log('Respuesta:', this.state.tabla);
+//            console.log('Respuesta:', this.state.tabla);
         }
 }
 
