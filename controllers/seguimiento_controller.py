@@ -41,12 +41,12 @@ class ProcesosController(http.Controller):
                     material.medida,
                     material.materials_cuantity,
                     material.materials_required,
-                    'Entregado' if request.env['dtm.materials.line'].search([('model_id', '=', ot_id.id)], limit=1).entregado else
+                    'Entregado' if material.entregado else
                     'Comprado' if request.env['dtm.compras.realizado'].search([('orden_trabajo', '=', orden.ot_number), ('revision_ot', '=', orden.revision_ot),('codigo', '=', material.materials_list.id)], limit=1).comprado else
                     'En cámino' if request.env['dtm.compras.realizado'].search([('orden_trabajo','=',orden.ot_number),('revision_ot','=',orden.revision_ot),('codigo','=',material.materials_list.id)],limit=1) else
                     'En compra' if request.env['dtm.compras.requerido'].search([('orden_trabajo','=',orden.ot_number),('revision_ot','=',orden.revision_ot),('codigo','=',material.materials_list.id)],limit=1) else
-                    'En Almacén' if request.env['dtm.materials.line'].search([('model_id','=',ot_id.id)],limit=1).materials_required == 0 and request.env['dtm.materials.line'].search([('model_id','=',ot_id.id)],limit=1).materials_cuantity > 0  else
-                    'En Revisión' if not request.env['dtm.materials.line'].search([('model_id','=',ot_id.id)],limit=1) else
+                    'En Almacén' if material.materials_required == 0 and material.materials_cuantity > 0  else
+                    'En Revisión' if not material.almacen else
                     None
                 ]
                 for material in ot_id.materials_ids]
