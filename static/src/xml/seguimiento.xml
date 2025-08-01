@@ -48,12 +48,10 @@
                   </tbody>
               </table>
             </div>
-<!--            <div class="p-3">-->
-<!--              <button class="btn btn-primary" >-->
-<!--                Mostrar ventana-->
-<!--              </button>-->
-<!--            </div>-->
+
         </div>
+
+
 
         <t t-if="state.showDialogMateriales">
             <DialogMateriales

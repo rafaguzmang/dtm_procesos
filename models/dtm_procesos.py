@@ -223,6 +223,7 @@ class Proceso(models.Model):
                             tarde += 1
 
                         mes = cotizacion[0].strftime("%B").capitalize()
+
                 # Si el mes existe lo actualiza si no lo crea
                 get_this = self.env['dtm.procesos.indicadores'].search([('no_month', '=', month)])
                 if get_this:
@@ -370,13 +371,11 @@ class Proceso(models.Model):
                         "cantidad": lamina.materials_cuantity,
                         "inventario": lamina.materials_inventory,
                         "requerido": lamina.materials_required,
-                        # "localizacion": get_almacen.localizacion
                     }
                     get_cortadora_laminas = self.env['dtm.cortadora.laminas'].search([
                         ("identificador","=",lamina.materials_list.id),("nombre","=",lamina.nombre),
                         ("medida","=",lamina.medida),("cantidad","=",lamina.materials_cuantity),
-                        ("inventario","=",lamina.materials_inventory),("requerido","=",lamina.materials_required),
-                        ("localizacion","=","")])
+                        ("inventario","=",lamina.materials_inventory),("requerido","=",lamina.materials_required)])
 
                     if get_cortadora_laminas:
                         get_cortadora_laminas.write(content)
@@ -386,8 +385,7 @@ class Proceso(models.Model):
                         get_cortadora_laminas = self.env['dtm.cortadora.laminas'].search([
                         ("identificador","=",lamina.materials_list.id),("nombre","=",lamina.nombre),
                         ("medida","=",lamina.medida),("cantidad","=",lamina.materials_cuantity),
-                        ("inventario","=",lamina.materials_inventory),("requerido","=",lamina.materials_required),
-                        ("localizacion","=",get_almacen.localizacion)])
+                        ("inventario","=",lamina.materials_inventory),("requerido","=",lamina.materials_required)])
                         lines.append(get_cortadora_laminas.id)
             get_corte.write({"materiales_id":[(6, 0,lines)]})
         else:

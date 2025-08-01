@@ -40,13 +40,12 @@ export class Seguimiento extends Component {
     }
 
     mostrarDialogo(orden) {
-        this.state.dialogOrden = orden;
-        this.state.showDialogMateriales = true;
+
         const materialData = this.state.materiales.find(item => item.orden === orden);
         if (materialData) {
-        this.state.dialogOrden = orden;
-        this.state.dialogMateriales = materialData.materiales;
-        this.state.showDialogMateriales = true;
+            this.state.dialogOrden = orden;
+            this.state.dialogMateriales = materialData.materiales;
+            this.state.showDialogMateriales = true;
         } else {
             console.error("No se encontraron materiales para la orden:", orden);
         }
