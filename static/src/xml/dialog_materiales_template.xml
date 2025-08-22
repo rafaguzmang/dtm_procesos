@@ -17,7 +17,8 @@
                                     <th>Descripción</th>
                                     <th>Medidas</th>
                                     <th>Cantidad</th>
-                                    <th>Restante</th>
+                                    <th>Apartado</th>
+                                    <th>Requerido</th>
                                     <th>Status</th>
                                   </tr>
                                 </thead>
@@ -30,6 +31,7 @@
                                       <td><t t-esc="material[3]"/></td>
                                       <td><t t-esc="material[4]"/></td>
                                       <td><t t-esc="material[5]"/></td>
+                                      <td><t t-esc="material[6]"/></td>
                                     </tr>
                                   </t>
                                 </tbody>

@@ -19,18 +19,81 @@
               <table class="table table-hover" style="border-radius: 5px;">
                   <thead class="h6">
                     <tr class="table-secondary">
-                        <th style="width: 2%;">Tipo</th>
-                        <th style="width: 2%;">Versión</th>
                         <th style="width: 2%;">Orden</th>
-                        <th style="width: 10%;">Diseño</th>
+                        <th style="width: 2%;">Versión</th>
+                        <th style="width: 2%;">Tipo</th>
+                        <th style="width: 10%;">En Diseño</th>
                         <th style="width: 2%;">Días</th>
-                        <th style="width: 6%;">Entrega</th>
+                        <th style="width: 6%;">Fecha Entrega</th>
                         <th style="width: 20%;">Cliente</th>
-                        <th style="width: 30%;">Producto</th>
+                        <th style="width: 30%;">Proyecto</th>
+                        <th style="width: 10%;">Diseñador</th>
                         <th style="width: 5%;">Status</th>
                     </tr>
                   </thead>
                   <tbody class="h6">
+                        <tr>
+                            <td>
+                                <select name="orden" t-on-change="onOrdenChange">
+                                    <option value="Todo">Todo</option>
+                                    <t t-foreach="state.orden" t-as="orden" t-key="orden">
+                                        <option t-esc="orden"/>
+                                    </t>
+                                </select>
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+                                 <select name="tipo" t-on-change="onTipoChange">
+                                    <option value="Todo">Todo</option>
+                                    <t t-foreach="state.tipo" t-as="tipo" t-key="tipo">
+                                        <option t-esc="tipo"/>
+                                    </t>
+                                </select>
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+                               <select name="clientes" t-on-change="onClienteChange">
+                                   <option value="Todo">Todo</option>
+                                    <t t-foreach="state.clientes" t-as="cliente" t-key="cliente">
+                                        <option t-esc="cliente"/>
+                                    </t>
+                                </select>
+                            </td>
+                            <td>
+                               <select name="producto" t-on-change="onProductoChange">
+                                   <option value="Todo">Todo</option>
+                                    <t t-foreach="state.producto" t-as="producto" t-key="producto">
+                                        <option t-esc="producto"/>
+                                    </t>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="disenador" t-on-change="onDisenadorChange">
+                                    <option value="Todo">Todo</option>
+                                    <t t-foreach="state.disenador" t-as="disenador" t-key="disenador">
+                                        <option t-esc="disenador"/>
+                                    </t>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="status" t-on-change="onStatusChange">
+                                    <option value="Todo">Todo</option>
+                                    <t t-foreach="state.status" t-as="status" t-key="status">
+                                        <option t-esc="status"/>
+                                    </t>
+                                </select>
+                            </td>
+                        </tr>
                     <t t-foreach="state.tabla" t-as="row" t-key="row.orden">
                         <tr t-on-click="mostrarDialogo.bind(this, row.orden)">
                             <td><t t-esc="row.orden"/></td>
@@ -41,8 +104,8 @@
                             <td><t t-esc="row.fecha_rel"/></td>
                             <td><t t-esc="row.cliente"/></td>
                             <td><t t-esc="row.producto"/></td>
+                            <td><t t-esc="row.disenador"/></td>
                             <td><t t-esc="row.status"/></td>
-
                         </tr>
                     </t>
                   </tbody>

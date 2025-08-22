@@ -11,12 +11,19 @@ export class Seguimiento extends Component {
     static components = { DialogMateriales };
     setup(){
         this.state = useState({
+            completa:[],
             tabla:[],
             total:0,
             materiales:[],
             showDialogMateriales: false,
             dialogOrden: null,
             dialogMateriales:[],
+            clientes:[],
+            producto:[],
+            disenador:[],
+            status:[],
+            orden:[],
+            tipo:[]
         })
 
         onWillStart(async() => {
@@ -52,7 +59,7 @@ export class Seguimiento extends Component {
 
     }
 
-     async dataFetch() {
+    async dataFetch() {
 
             const response_materiales = await fetch('/seguimiento_materiales',{
                 method:'POST',
@@ -103,10 +110,85 @@ export class Seguimiento extends Component {
                 }
             ));
 //            console.log(this.state.tabla)
-            this.state.tabla.sort((a,b)=> a.dias - b.dias)
-            this.state.total = this.state.tabla.length
+            this.state.tabla.sort((a,b)=> a.dias - b.dias);
+            this.state.completa = this.state.tabla;
+            this.state.total = this.state.tabla.length;
 //            console.log('Respuesta:', this.state.tabla);
+//            Obtenemos todos los clientes
+            const clientes = new Set(this.state.tabla.map(row=> row.cliente));
+            this.state.clientes = Array.from(clientes);
+//            Obtenemos el nombre de todos los proyectos
+            const producto = new Set(this.state.tabla.map(row=> row.producto));
+            this.state.producto = Array.from(producto);
+//            Obtenemos el nombre de los diseñadores
+            const disenador = new Set(this.state.tabla.map(row=> row.disenador));
+            this.state.disenador = Array.from(disenador);
+//            Obtenemos el status de los proyectos
+            const status = new Set(this.state.tabla.map(row=> row.status));
+            this.state.status = Array.from(status);
+//            Obtenemos los números de orden
+            const orden = new Set(this.state.tabla.map(row=> row.orden));
+            this.state.orden = Array.from(orden);
+//            Obtenemos los tipos de orden que hay
+            const tipo = new Set(this.state.tabla.map(row=> row.tipo));
+            this.state.tipo = Array.from(tipo);
         }
+
+    onClienteChange(ev) {
+        const cliente = ev.target.value
+        this.state.tabla = this.state.completa;
+        if (cliente== 'Todo'){
+            this.state.tabla = this.state.completa;
+        }else{
+            this.state.tabla = this.state.tabla.filter(row=> row.cliente == cliente);
+        }
+    }
+    onProductoChange(ev) {
+        const producto = ev.target.value
+        this.state.tabla = this.state.completa;
+        if (producto== 'Todo'){
+            this.state.tabla = this.state.completa;
+        }else{
+            this.state.tabla = this.state.tabla.filter(row=> row.producto == producto);
+        }
+    }
+    onDisenadorChange(ev) {
+        const disenador = ev.target.value
+        this.state.tabla = this.state.completa;
+
+        if (disenador == 'Todo'){
+            this.state.tabla = this.state.completa;
+        }else{
+             this.state.tabla = this.state.tabla.filter(row=> row.disenador == disenador);
+        }
+    }
+    onStatusChange(ev) {
+        const status = ev.target.value
+        this.state.tabla = this.state.completa;
+        if (status == 'Todo'){
+            this.state.tabla = this.state.completa;
+        }else{
+            this.state.tabla = this.state.tabla.filter(row=> row.status == status);
+        }
+    }
+    onOrdenChange(ev) {
+        const orden = ev.target.value
+        this.state.tabla = this.state.completa;
+        if (orden == 'Todo'){
+            this.state.tabla = this.state.completa;
+        }else{
+            this.state.tabla = this.state.tabla.filter(row=> row.orden == orden);
+        }
+    }
+    onTipoChange(ev) {
+        const tipo = ev.target.value
+        this.state.tabla = this.state.completa;
+        if (tipo == 'Todo'){
+            this.state.tabla = this.state.completa;
+        }else{
+            this.state.tabla = this.state.tabla.filter(row=> row.tipo == tipo);
+        }
+    }
 }
 
 Seguimiento.template = "dtm_procesos.seguimiento";
