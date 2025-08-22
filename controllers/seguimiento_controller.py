@@ -7,10 +7,12 @@ class ProcesosController(http.Controller):
     @http.route('/seguimiento_procesos', type='json', auth='public')
     def ordenes_trabajo(self, **kwargs):
         ordenes = request.env['dtm.proceso'].sudo().search([('status','!=','calidad'),('status','!=','terminado'),('status','!=','instalacion')])
+
         result = [{
                     'orden':orden.ot_number,
                     'revision_ot':orden.revision_ot,
                     'status':orden.status,
+                    'disenador':orden.firma_diseno,
                     'tipo':orden.tipe_order,
                     'cliente':orden.name_client,
                     'producto':orden.product_name,
@@ -39,6 +41,7 @@ class ProcesosController(http.Controller):
                     material.nombre,
                     material.medida,
                     material.materials_cuantity,
+                    material.materials_availabe,
                     material.materials_required,
                     'Entregado' if material.entregado else
                     'Comprado' if request.env['dtm.compras.realizado'].search([('orden_trabajo', '=', orden.ot_number), ('revision_ot', '=', orden.revision_ot),('codigo', '=', material.materials_list.id)], limit=1).comprado else
