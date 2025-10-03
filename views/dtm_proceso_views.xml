@@ -196,7 +196,7 @@
                                 <field name="create_date"  string="Producción" widget="statinfo"/>
                             </button>
                             <button name="action_pasive" type="object" string="tipo" class="oe_stat_button" icon="fa-pencil">
-                                <field name="firma_diseno"  string="" widget="statinfo"/>
+                                <field name="disenador"  string="" widget="statinfo"/>
                             </button>
                              <button name="action_pasive" type="object" string="Anexos" class="oe_stat_button" icon="fa-calendar">
                                 <field name="date_in"  string="" widget="statinfo"/>
@@ -234,6 +234,7 @@
                         <field name="firma_compras" invisible="1"/>
                         <field name="pausa" invisible="1" />
                         <field name="ot_number" invisible="1"/>
+                        <field name="disenador" invisible="1"/>
 
 
 

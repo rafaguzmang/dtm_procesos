@@ -29,6 +29,7 @@ class Proceso(models.Model):
     color = fields.Char(string="COLOR",readonly=True)
     cuantity = fields.Integer(string="CANTIDAD",readonly=True)
     materials_ids = fields.Many2many("dtm.materials.line",readonly=True)
+    disenador = fields.Char(string='Disenador')
     # materials_npi_ids = fields.Many2many("dtm.materials.npi",readonly=True)
     planos = fields.Boolean(string="Planos",default=False,readonly=True)
     nesteos = fields.Boolean(string="Nesteos",default=False,readonly=True)
