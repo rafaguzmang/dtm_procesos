@@ -95,15 +95,14 @@ class Proceso(models.Model):
     def action_devolver(self):
         if self.notes:
             # Obtiene el número de orden y el tipo de orden que se va a devolver del modulo diseño
-            get_odt = self.env['dtm.odt'].search([("ot_number","=",self.ot_number),("tipe_order","=",self.tipe_order)])
+            dtm_odt = self.env['dtm.odt'].search([('ot_number','=',self.ot_number), ('tipe_order', '=', self.tipe_order)],limit=1)
             # ----------------------Se obtiene la fecha---------------------------
-            day = int(get_odt.date_disign_finish.strftime('%j'))+1 if get_odt.date_disign_finish else int(datetime.now().strftime('%j')) + 1
-            year = int(get_odt.date_disign_finish.strftime('%Y')) if get_odt.date_disign_finish else int(datetime.now().strftime('%Y'))
+            day = int(dtm_odt.date_disign_finish.strftime('%j'))+1 if dtm_odt.date_disign_finish else int(datetime.now().strftime('%j')) + 1
+            year = int(dtm_odt.date_disign_finish.strftime('%Y')) if dtm_odt.date_disign_finish else int(datetime.now().strftime('%Y'))
             fecha = datetime.strptime(f"{year}-{day}", "%Y-%j").date()
             #--------------------------------------------------------------------------
             # Cambia los parametros de la orden devuelta en el modulo de diseño
-
-            self.env['dtm.odt.revisiones'].search([('ot_number','=',self.ot_number), ('tipe_order', '=', self.tipe_order)],limit=1).create({
+            get_versiones = self.env['dtm.odt.revisiones'].create({
                 "ot_number":self.ot_number,
                 "tipe_order":self.tipe_order,
                 "name_client":self.name_client,
@@ -122,22 +121,38 @@ class Proceso(models.Model):
                 "description":self.description,
                 #--------------------------
             })
-            dtm_odt = self.env['dtm.odt'].search([('ot_number','=',self.ot_number), ('tipe_order', '=', self.tipe_order)],limit=1)
-            self.env['dtm.odt.revisiones'].search([('ot_number', '=', self.ot_number), ('tipe_order', '=', self.tipe_order)], limit=1).write(
+
+            if dtm_odt.cortadora_id:
+                for nesteo in dtm_odt.cortadora_id:
+                    self.env['dtm.odt.revisionescortadora'].create({
+                            'model_id2':get_versiones.id,
+                            'archivo':nesteo.archivo,
+                            'nombre':nesteo.nombre,
+                            'material_ids':f"{nesteo.material_ids.nombre} {nesteo.material_ids.medida}",
+                            'cantidad':nesteo.cantidad,
+                            'maquina':nesteo.maquina,
+                        })
+            if dtm_odt.primera_pieza_id:
+                for nesteo in dtm_odt.primera_pieza_id:
+                    self.env['dtm.odt.revisionescortadora'].create({
+                        'model_id':get_versiones.id,
+                        'archivo':nesteo.archivo,
+                        'nombre':nesteo.nombre,
+                        'material_ids':f"{nesteo.material_ids.nombre} {nesteo.material_ids.medida}",
+                        'cantidad':nesteo.cantidad,
+                        'maquina':nesteo.maquina,
+                    })
+            get_versiones.write(
                 {
-                    'anexos_id':[(6, 0, dtm_odt.mapped('anexos_id').ids)],
-                    # 'materials_ids':[(6, 0, dtm_odt.mapped('materials_ids').ids)],
-                    'anexos_ventas_id':[(6, 0, dtm_odt.mapped('anexos_ventas_id').ids)],
-                    'cortadora_id':[(6, 0, dtm_odt.mapped('cortadora_id').ids)],
-                    'tubos_id':[(6, 0, dtm_odt.mapped('tubos_id').ids)],
-                    # 'archivos_id':[(6, 0, dtm_odt.mapped('archivos_id').ids)],
-                    # 'maquinados_id':[(6, 0, dtm_odt.mapped('maquinados_id').ids)],
-                    'primera_pieza_id':[(6, 0, dtm_odt.mapped('primera_pieza_id').ids)],
-                    # 'ligas_tubos_id':[(6, 0, dtm_odt.mapped('ligas_tubos_id').ids)],
-                    'orden_compra_pdf':[(6, 0, dtm_odt.mapped('orden_compra_pdf').ids)],
-                    'ligas_id':[(6, 0, dtm_odt.mapped('ligas_id').ids)],
-                    'ligas_tubos_id':[(6, 0, dtm_odt.mapped('ligas_tubos_id').ids)],
-                })
+                    'anexos_id': [(6, 0, dtm_odt.mapped('anexos_id').ids)],
+                    'anexos_ventas_id': [(6, 0, dtm_odt.mapped('anexos_ventas_id').ids)],
+                    'tubos_id': [(6, 0, dtm_odt.mapped('tubos_id').ids)],
+                    'orden_compra_pdf': [(6, 0, dtm_odt.mapped('orden_compra_pdf').ids)],
+                    'ligas_id': [(6, 0, dtm_odt.mapped('ligas_id').ids)],
+                    'ligas_tubos_id': [(6, 0, dtm_odt.mapped('ligas_tubos_id').ids)],
+                }
+            )
+
             dtm_odt.write({
                 'anexos_id': [(5, 0, {})],
                 'cortadora_id': [(5, 0, {})],
@@ -147,8 +162,8 @@ class Proceso(models.Model):
                 'anexos_ventas_id':[(5, 0, {})],
                 'ligas_tubos_id':[(5, 0, {})],
 
-                'version_ot':get_odt.version_ot + 1,
-                'notes':f"{get_odt.notes}\n\n Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" if get_odt.notes else f"Motivo de rechazo ({get_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" ,
+                'version_ot':dtm_odt.version_ot + 1,
+                'notes':f"{dtm_odt.notes}\n\n Motivo de rechazo ({dtm_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" if dtm_odt.notes else f"Motivo de rechazo ({dtm_odt.version_ot+1}):\n {self.notes} \n Rechaza: {self.env.user.partner_id.name}" ,
                 'date_disign_finish':fecha,
                 "firma": False,
                 "firma_ventas": False,
@@ -158,6 +173,7 @@ class Proceso(models.Model):
 
             })
             self.unlink()
+            return self.env.ref('dtm_procesos.dtm_proceso_accion').read()[0]
 
         else:
             raise ValidationError('Favor de especificar en la pestaña de "NOTAS" motivo del rechazo')
@@ -470,7 +486,11 @@ class Proceso(models.Model):
                             lista.append(get_material.id)
                         if get_fact:
                             get_fact.write({'materieales_id': [(6, 0, lista)]})
-                            get_diseno = self.env['dtm.odt'].search([('ot_number','=',self.ot_number),('tipe_order','=',self.tipe_order)])
+                            get_diseno = self.env['dtm.odt'].search(
+                                [('ot_number', '=', self.ot_number), ('tipe_order', '=', self.tipe_order),
+                                 ('revision_ot', '=', self.revision_ot)])
+                            get_diseno.cortadora_id.unlink()
+                            get_diseno.primera_pieza_id.unlink()
                             get_diseno.materials_ids.unlink()
                             get_diseno.unlink()
                             get_compras = self.env['dtm.compras.realizado'].search([('orden_trabajo','like',self.ot_number)])
