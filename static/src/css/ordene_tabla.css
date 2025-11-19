@@ -1,0 +1,14 @@
+.ordenes_tabla_materiales:hover{
+    border: 1px solid #000;
+    cursor: pointer;
+}
+
+.ordenes_tabla_corte_laser:hover{
+    border: 1px solid #000;
+    cursor: pointer;
+}
+
+.ordenes_tabla_maquinado:hover{
+    border: 1px solid #000;
+    cursor: pointer;
+}

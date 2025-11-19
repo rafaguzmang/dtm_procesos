@@ -1,0 +1,48 @@
+<template xml:space="preserve">
+    <odoo>
+        <t t-name="dtm_procesos.dialog_materiales_template" owl="1">
+        <t t-name="dtm_procesos.DialogMateriales" owl="1">
+          <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Materiales para la orden <t t-esc="props.orden"/></h5>
+                  <button type="button" class="btn-close" aria-label="Close" t-on-click="props.cerrar"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Medida</th>
+                        <th>Cantidad</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <t t-foreach="state.materiales" t-as="material" t-key="material.num">
+                      <!-- t-attf-style="background-color: #{orden.compra_material == '100%' ? '#0de940ff' : '#f2fa0aff'};" -->
+                        <tr t-attf-style="background-color: #{material.status == 'Entregado' ? '#0de940ff' : null};" >
+                          <td><t t-esc="material.id"/></td>
+                          <td><t t-esc="material.nombre"/></td>
+                          <td><t t-esc="material.medida"/></td>
+                          <td><t t-esc="material.cantidad_solicitada"/></td>
+                          <td><t t-esc="material.cantidad_disponible"/></td>
+                          <td><t t-esc="material.status"/></td>
+                        </tr>
+                      </t>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" t-on-click="props.cerrar">Cerrar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </t>
+        </t>
+    </odoo>
+</template>

@@ -1,0 +1,93 @@
+<template xml:space="preserve">
+    <odoo>
+    <t t-name="dtm_procesos.dialog_corte_laser_template" owl="1">
+        <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Corte Láser para la orden <t t-esc="props.orden"/></h5>
+                  <button type="button" class="btn-close" aria-label="Close" t-on-click="props.cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container row">
+                      <div class="col-12">
+                        <t t-if="state.cortes_primera.length > 0">
+                          <h4>Primera Pieza</h4>
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Archivo</th>
+                                <th>Material</th>
+                                <th>Cantidad</th>
+                                <th>Tiempo</th>
+                                <th>Cortadora</th>
+                                <th>Porcentaje</th>
+                                <th>Tiempo Real</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <t t-foreach="state.cortes_primera" t-as="corte" t-key="corte.index">
+                                <tr>
+                                  <td><t t-esc="corte.archivo"/></td>
+                                  <td><t t-esc="corte.material"/></td>
+                                  <td><t t-esc="corte.cantidad"/></td>
+                                  <td><t t-esc="corte.tiempo_teorico"/> min</td>
+                                  <td><t t-esc="corte.cortadora"/></td>
+                                  <td><t t-esc="corte.porcentaje"/> %</td>
+                                  <td><t t-esc="corte.tiempo_real"/> min</td>
+                                </tr>
+                              </t>
+                            </tbody>
+                          </table>      
+                        </t>                  
+                      </div>
+                    
+                    </div>
+                    <div class="container row">
+                      <div class="col-12">
+                        <t t-if="state.cortes_segunda.length > 0">
+                          <h4>Segundas Piezas</h4>
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Archivo</th>
+                                <th>Material</th>
+                                <th>Cantidad</th>
+                                <th>Tiempo</th>
+                                <th>Cortadora</th>
+                                <th>Porcentaje</th>
+                                <th>Tiempo Real</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <t t-foreach="state.cortes_primera" t-as="corte" t-key="corte.index">
+                                <tr>
+                                  <td><t t-esc="corte.archivo"/></td>
+                                  <td><t t-esc="corte.material"/></td>
+                                  <td><t t-esc="corte.cantidad"/></td>
+                                  <td><t t-esc="corte.tiempo_teorico"/> min</td>
+                                  <td><t t-esc="corte.cortadora"/></td>
+                                  <td><t t-esc="corte.porcentaje"/> %</td>
+                                  <td><t t-esc="corte.tiempo_real"/> min</td>
+                                </tr>
+                              </t>
+                            </tbody>
+                          </table>  
+                        </t>
+                      </div>
+                    
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" t-on-click="props.cerrar">Cerrar</button> 
+                </div>
+              </div>
+            </div>
+        </div>
+    </t>
+
+
+
+
+    </odoo>
+</template>

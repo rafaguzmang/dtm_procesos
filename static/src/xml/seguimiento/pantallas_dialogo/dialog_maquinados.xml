@@ -1,0 +1,46 @@
+<template xml:space="preserve">
+  <odoo>
+    <t t-name="dtm_procesos.dialog_maquinados_template" owl="1">
+        <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+          <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Corte Láser para la orden <t t-esc="props.orden"/></h5>
+                <button type="button" class="btn-close" aria-label="Close" t-on-click="props.cerrar"></button>
+              </div>
+              <div class="modal-body">
+                 <h4>Primera Pieza</h4>
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>nombre</th>
+                                <th>cantidad</th>
+                                <th>porcentaje</th>
+                                <th>tiempo</th>                               
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <t t-foreach="state.maquinados" t-as="maquinado" t-key="maquinado.index">
+                                <tr>
+                                  <!-- <td><t t-esc="maquinado.index"/></td> -->
+                                  <td><t t-esc="maquinado.nombre"/></td>
+                                  <td><t t-esc="maquinado.cantidad"/></td>
+                                  <td><t t-esc="maquinado.porcentaje"/></td>
+                                  <td><t t-esc="maquinado.tiempo"/> min</td>                                  
+                                </tr>
+                              </t>
+                            </tbody>
+                          </table>
+                  
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" t-on-click="props.cerrar">Cerrar</button> 
+              </div>
+            </div>
+          </div>
+        </div>
+    </t>
+  </odoo>
+  
+    
+</template>

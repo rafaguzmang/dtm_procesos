@@ -1,0 +1,113 @@
+<template xml:space="preserve">
+    <t t-name="dtm_procesos.corte_laser_template" owl="1">
+        <div class="container col-3 mt-4 border p-4 rounded shadow-sm">
+            <h2>Máquinas de corte</h2>
+               <div class="container d-flex justify-content-center">
+               <!-- mitsubishi -->
+                <div class="card p-2" style="width: 50%;">
+                    <div class="d-flex justify-content-center"> 
+                        <img src="/dtm_procesos/static/src/img/mitsubishi.png"
+                            class="card-img-top img-fluid"
+                            style="width:100px; height:100px; object-fit:cover;"
+                            alt="mitsubishi"/>
+                    </div>
+                    <t t-foreach="this.state.mitsubishi" t-as="maquina" t-key="maquina.id">
+                        <div class="card-body">
+                            <h5 class="card-title"><t t-esc="maquina.nombre"/></h5>                                
+                                        <p class="card-text">
+                                            <strong>Archivo:</strong>                                                
+                                            <br/>
+                                            <t t-esc="maquina.archivo"/>
+                                        </p>
+                                        <p class="card-text">
+                                            <strong>Cantidad:</strong>                                                                                                
+                                            <br/>
+                                            <t t-esc="maquina.cantidad"/>
+                                        </p>
+                                        <p class="card-text">
+                                            <strong>Contador:</strong>                                                
+                                            <br/>
+                                            <t t-esc="maquina.contador"/>
+                                        </p>
+                                        <p class="card-text">
+                                            <strong>Lámina:</strong>                                                                                                
+                                            <br/>
+                                            <t t-esc="maquina.lamina"/>
+                                        </p>                            
+                                        <p class="card-text">
+                                            <strong>Tiempo:</strong>                                                                                                
+                                            <br/>
+                                            <t t-esc="maquina.tiempo"/>
+                                        </p>
+                                        <p class="card-text">
+                                            <strong>Porcentaje:</strong>                                                                                                
+                                            <br/>
+                                            <t t-esc="maquina.porcentaje"/>
+                                        </p>
+                            
+                                
+                        </div>
+                    </t>
+                         
+                            
+                    </div>
+                
+                <!-- jfy -->
+                <div class="card p-2" style="width: 50%;">
+                        <div class="d-flex justify-content-center">
+                            <img src="/dtm_procesos/static/src/img/jfy.png"
+                            class="card-img-top img-fluid"
+                            style="width:100px; height:100px; object-fit:cover;"
+                            alt="jfy"/>
+                        </div>
+                         <t t-foreach="this.state.jfy" t-as="maquina" t-key="maquina.id">
+                            <div class="card-body">
+                                <h5 class="card-title"><t t-esc="maquina.nombre"/></h5>                                
+                                            <p class="card-text">
+                                                <strong>Archivo:</strong>                                                
+                                                <br/>
+                                                <t t-esc="maquina.archivo"/>
+                                            </p>
+                                            <p class="card-text">
+                                                <strong>Cantidad:</strong>                                                                                                
+                                                <br/>
+                                                <t t-esc="maquina.cantidad"/>
+                                            </p>
+                                            <p class="card-text">
+                                                <strong>Contador:</strong>                                                
+                                                <br/>
+                                                <t t-esc="maquina.contador"/>
+                                            </p>
+                                            <p class="card-text">
+                                                <strong>Lámina:</strong>                                                                                                
+                                                <br/>
+                                                <t t-esc="maquina.lamina"/>
+                                            </p>                            
+                                            <p class="card-text">
+                                                <strong>Tiempo:</strong>                                                                                                
+                                                <br/>
+                                                <t t-esc="maquina.tiempo"/>
+                                            </p>
+                                            <p class="card-text">
+                                                <strong>Porcentaje:</strong>                                                                                                
+                                                <br/>
+                                                <t t-esc="maquina.porcentaje"/>
+                                            </p>
+                                
+                                    
+                            </div>
+                        </t>
+                    </div>
+               
+               
+               </div>
+
+                
+
+          
+        </div>
+
+        
+    </t>
+    
+</template>
