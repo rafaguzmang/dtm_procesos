@@ -1,0 +1,174 @@
+<template xml:space="preserve">
+    <t t-name="dtm_procesos.ordenes_tabla" owl="1">
+        <div class="container-fluid">           
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Orden</th>
+                        <th>Versión</th>
+                        <th>Tipo</th>
+                        <th>Cliente</th>
+                        <th>Descripción</th>
+                        <th>Fecha de Entrega</th>
+                        <th>Nesteo</th>
+                        <th>Compra Material</th>
+                        <th>Corte</th>
+                        <th>Maquinado</th>
+                        <th>Habilitado</th>
+                        <th>Ensamble</th>
+                        <th>Soldadura</th>
+                        <th>Limpieza</th>
+                        <th>Tipo_acabado</th>
+                        <th>Acabado</th>
+                        <th>Cotizacion</th>
+                        <th>Terminado</th>
+                        <th>PO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr> <!--Filtros-->
+                        <td> <!--Código-->
+                            <input type="number" min="0" t-on-input="(ev)=>this.ordenFiltro(ev)"/>
+                        </td>
+                        <td></td>
+                        <td><!--Tipo de orden NPI/OT-->
+                            <select  name="stock_filtro" t-on-change="(ev) => this.tipoOrdenFiltro(ev)">
+                                <option value="">--</option>
+                                <option value="ot">OT</option>
+                                <option value="npi">NPI</option>  
+                            </select>
+                        </td>
+                        <td><!--Cliente-->
+                            <select name="cliente_filtro" t-on-change="(ev) => this.clienteFiltro(ev)"  >
+                                <option value="">--</option>
+                                <t t-foreach="state.clientes_tabla" t-as="cliente" t-key="cliente">
+                                    <option t-att-value="cliente">
+                                        <t t-esc="cliente"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </td>
+                        <td name="descripcion_filtro"><!--Descripción-->
+                            <input type='text' t-on-input="(ev) => this.descripcionFiltro(ev)"/>                            
+                        </td>
+                        <td><!--Fecha-->
+                            <input type='date' name="fecha_filtro" t-on-input="(ev) => this.fechaFiltro(ev)"/>                        
+                        </td>
+                        <td><!--Nesteo-->
+                            <select name="nesteo_filtro" t-on-change="(ev) => this.nesteoFiltro(ev)">
+                                <option value="">--</option>
+                                <option value="si">Si</option>
+                                <option value="no">No</option>
+                            </select>
+                        </td>
+                        <td><!--Material-->
+                            <select name="material_filtro" t-on-change="(ev) => this.materialFiltro(ev)">
+                                <option value="">--</option>
+                                <option value="completo">Completo</option>
+                                <option value="incompleto">Incompleto</option>
+                                <option value="vacio">0%</option>
+                            </select>
+                        </td>
+                        <td><!--Corte-->
+                            <select name="corte_filtro" t-on-change="(ev) => this.corteFiltro(ev)">
+                                <option value="">--</option>
+                                <option value="completo">Completo</option>
+                                <option value="incompleto">Incompleto</option>
+                                <option value="vacio">0%</option>
+                                <option value="na">N/A</option>
+                            </select>
+                        </td>
+                        <td><!--Maquinados-->
+                            <select name="maquinados_filtro" t-on-change="(ev) => this.maquinadosFiltro(ev)">
+                                <option value="">--</option>
+                                <option value="completo">Completo</option>
+                                <option value="incompleto">Incompleto</option>
+                                <option value="vacio">0%</option>
+                                <option value="na">N/A</option>
+                            </select>                        
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><!--Cotización-->
+                            <input type="number" name="cotizacion_filtro" min="0" t-on-input="(ev)=>this.cotizacionFiltro(ev)"/>
+                        </td>
+                        <td><!--Terminado-->
+                            <select name="terminado_filtro" t-on-change="(ev) => this.terminadoFiltro(ev)">
+                                <option value="">--</option>
+                                <option value="si">Terminado</option>
+                                <option value="no">En Proceso</option>
+                            </select>         
+                        </td>
+                        <td><!--P.O.-->
+                            <input type="number" name="po_filtro" min="0" t-on-input="(ev)=>this.poFiltro(ev)"/>
+                        </td>
+                    </tr>
+                    <t t-foreach="state.tabla" t-as="orden" t-key="orden.num">
+                        <tr>
+                            <td><t t-esc="orden.orden"/></td>
+                            <td><t t-esc="orden.version_ot"/></td>
+                            <td><t t-esc="orden.tipo"/></td>
+                            <td><t t-esc="orden.cliente"/></td>
+                            <td><t t-esc="orden.producto"/></td>
+                            <td><t t-esc="orden.fecha_entrega"/></td>
+                            <td t-attf-style="background-color: #{orden.nesteo == '100%' ? '#0de940ff' : '#f2fa0aff'};">
+                                <t t-esc="orden.nesteo"/>
+                            </td>
+<!--                            Materiales-->
+                            <td class="ordenes_tabla_materiales"
+                                t-attf-style="background-color: #{orden.compra_material == '100%' ? '#0de940ff' : '#f2fa0aff'};"
+                                t-on-click="()=>materialesFunc(orden.orden,orden.version_ot)"
+                            >
+                                <t t-esc="orden.compra_material"/>                        
+                            </td>
+<!--                            Corte Laser-->
+                            <td class="ordenes_tabla_corte_laser"
+                                t-attf-style="background-color: #{orden.corte == '100%' ? '#0de940ff' : '#f2fa0aff'};"
+                                t-on-click="()=>corteLaserFunc(orden.orden,orden.version_ot)"
+                            >
+                                <t t-esc="orden.corte"/>
+                            </td>
+                            <td class="ordenes_tabla_maquinado"
+                                t-attf-style="background-color: #{orden.maquinado == '100%' ? '#0de940ff' : '#f2fa0aff'};"
+                                t-on-click="()=>maquinadosFunc(orden.orden,orden.version_ot)">
+                                <t t-esc="orden.maquinado"/>
+                            </td>
+                            <td><t t-esc="orden.habilitado"/></td>
+                            <td><t t-esc="orden.ensamble"/></td>
+                            <td><t t-esc="orden.soldadura"/></td>
+                            <td><t t-esc="orden.limpieza"/></td>
+                            <td><t t-esc="orden.tipo_acabado"/></td>
+                            <td><t t-esc="orden.acabado"/></td>
+                            <td><t t-esc="orden.cotizacion"/></td>
+                            <td><t t-esc="orden.terminado"/></td>
+                            <td><t t-esc="orden.po"/></td>
+                        </tr> 
+                    </t>                    
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <t t-if="state.materiales_dialog">
+                <DialogMateriales cerrar="cerrarDialogoMateriales" orden="this.state.orden_actual" version="this.state.version_actual" />
+            </t>
+        </div>
+        <div>
+            <t t-if="state.corte_laser_dialog">
+                <DialogCorteLaser cerrar="cerrarDialogoCorteLaser" orden="this.state.orden_actual" version="this.state.version_actual"/>
+            </t>
+        </div>
+
+        <div>
+            <t t-if="state.maquinados_dialog">
+                <DialogMaquinados cerrar="cerrarDialogoMaquinados" orden="this.state.orden_actual" version="this.state.version_actual"/>
+            </t>
+        </div>
+
+
+       
+    </t>
+</template>

@@ -1,0 +1,12 @@
+<template xml:space="preserve">
+    <t t-name="dtm_procesos.seguimiento" owl="1">
+        <h1>
+            Ordenes de Trabajo
+        </h1>
+        <div class="container-fluid mt-4 d-flex justify-content-center">
+            <Importantes/>
+            <CorteLaser/>
+        </div>
+        <Ordenes/>
+    </t>
+</template>

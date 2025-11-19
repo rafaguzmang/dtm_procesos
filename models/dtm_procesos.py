@@ -62,7 +62,7 @@ class Proceso(models.Model):
 
     user_pausa = fields.Boolean(compute="_compute_user_email_match")
 
-    materials = fields.Integer(string="Material")
+    materials = fields.Integer(string="Material", compute="_compute_materials")
 
     #Calidad - Libarción de primera pieza
     calidad_liberacion = fields.One2many("dtm.proceso.liberacion","model_id")
@@ -71,6 +71,23 @@ class Proceso(models.Model):
     anexos_certificacion = fields.Many2many("ir.attachment",string="Archivos")
 
     permiso = fields.Boolean(compute='_compute_permiso')
+
+    def _compute_materials(self):
+        for record in self:  # Actualiza la lista de materiales de las ordenes
+            materiales = record.materials_ids
+            total = len(materiales)
+            cont = 0
+            if materiales:
+                for material in materiales:
+                    if material.materials_required == 0:
+                        cont += 1
+                record.materials = cont * 100 / total
+            else:
+                record.materials = 0
+
+            if self.env['dtm.materiales.laser'].search(
+                    [('orden_trabajo', '=', record.ot_number), ('revision_ot', '=', record.revision_ot)]):
+                record.status = 'corte'
 
     def _compute_permiso(self):
         for record in self:
@@ -259,26 +276,6 @@ class Proceso(models.Model):
                         'tarde': tarde,
                         'porcentaje': (tiempo * 100) / max(len(get_proceso), 1),
                     })
-
-        get_materiales = self.env['dtm.proceso'].search([])
-        for record in get_materiales: # Actualiza la lista de materiales de las ordenes
-            # if record.tipe_order == "OT":
-            materiales = record.materials_ids
-            # else:
-            #     materiales = record.materials_npi_ids
-            total = len(materiales)
-            cont = 0
-            if materiales:
-                for material in materiales:
-                    if material.materials_required == 0:
-                        cont += 1
-                record.materials = cont * 100 / total
-            else:
-                record.materials = 0
-
-            if self.env['dtm.materiales.laser'].search([('orden_trabajo', '=', record.ot_number), ('revision_ot', '=', record.revision_ot)]):
-                record.status = 'corte'
-
 
         return res
 
