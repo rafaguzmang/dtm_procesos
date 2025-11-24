@@ -4,36 +4,58 @@ import { Component, onWillStart, useState, onMounted,onWillUnmount } from "@odoo
 export class CorteLaser extends Component{
     setup(){
         this.state = useState({
-            mitsubishi: [],
-            jfy: [],
+            mitsubishi: null,
+            jfy: null,
+            cortes:[],
+            tiempo_estimado:0,
+            tiempo_real:0,
+            porcentaje_corte:0,
         });
         let interval = null;
         onWillStart(async () => {
-            await this.mitsubishiData();
+            await this.maquinasData();
+            await this.cortesLaser();
         });
 
-        onMounted(() => {
-            interval = setInterval(() => {
-                this.mitsubishiData();
-            }, 5000);
-        });
-
-        onWillUnmount(() => {
-            clearInterval(interval);
-        });
+//        onMounted(() => {
+//            interval = setInterval(() => {
+//                this.maquinasData();
+//            }, 5000);
+//        });
+//
+//        onWillUnmount(() => {
+//            clearInterval(interval);
+//        });
 
 
     }
-    async mitsubishiData(){
-        const response = await fetch("/maquinas_corte");        
+    async cortesLaser(){
+        const response = await fetch("/corte_diario");
+        const data = await response.json();
+        console.log('data',data);
+        let id = 0;
+        this.state.cortes = data.map(item => ({id: id++, ...item}));
+        this.state.tiempo_estimado = Number(this.state.cortes.reduce((total, corte) => total + (corte.tiempo_teorico || 0), 0)).toFixed(2);
+        this.state.tiempo_real = Number(this.state.cortes.reduce((total, corte) => total + (corte.tiempo_real || 0), 0)).toFixed(2);
+        const avance = Number(this.state.cortes.reduce((total,corte)=> total + (corte.porcentaje||0),0)).toFixed(2);
+        console.log(avance);
+        this.state.porcentaje_corte = Number((avance * 100)/(id * 100)).toFixed(2);
+        console.log('this.state.porcentaje_corte',this.state.porcentaje_corte);
+
+    }
+
+    async maquinasData(){
+        const response = await fetch("/maquinas_corte");
         const data = await response.json();
         console.log(data);
         let id = 0;
         const newData = data.map(item => ({id: id++, ...item}));
-        this.state.mitsubishi = newData.filter(item => item.cortadora === "MITSUBISHI");
-        this.state.jfy = newData.filter(item => item.cortadora === "BFC6025");
-        console.log(this.state.mitsubishi);
-        console.log(this.state.jfy);
+        const mitsubishidata = newData.filter(item => item.cortadora === "MITSUBISHI");
+        this.state.mitsubishi = mitsubishidata[0]?.archivo||null;
+        const jfyData = newData.filter(item => item.cortadora === "BFC6025");
+        this.state.jfy = jfyData[0].archivo||null;
+        console.log('mitsubishi',this.state.mitsubishi);
+        console.log('jfy',this.state.jfy);
     }
 }
 

@@ -1,7 +1,7 @@
 <template xml:space="preserve">
     <t t-name="dtm_procesos.importantes" owl="1">
-      <div class="container col-8 mt-4 border p-4 rounded shadow-sm">
-        <h2>Importantes Component</h2>        
+      <div class="container mt-4 border p-4 rounded shadow-sm">
+        <h2>Importantes</h2>        
             <table class="table table-sm table-hover mt-2 table-bordered">
                 <thead class = "table-primary">
                     <tr>

@@ -1,32 +1,10 @@
 <odoo>
-
-    <record id="module_category_dtm_procesos" model = "ir.module.category">
-        <field name="name">Producción</field>
-        <field name="description">Ayuda para administrar permisos</field>
-        <field name="sequence">50</field>
+    <record id="group_procesos_admin" model="res.groups">
+        <field name="name">DTM Procesos Admin</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
     </record>
-
-    <record id="group_property_user" model="res.groups">
-        <field name="name">Usuario: Manejo de propiedades</field>
-        <field name="category_id" ref="dtm_procesos.module_category_dtm_procesos"/>
-        <field name="implied_ids"  eval="[(4,ref('base.group_user'))]"/>
-    </record>
-
-    <record id="group_property_user_not" model="res.groups">
-        <field name="name">Usuario: Acceso restringido</field>
-        <field name="category_id" ref="dtm_procesos.module_category_dtm_procesos"/>
-        <field name="implied_ids"  eval="[(4,ref('base.group_user'))]"/>
-    </record>
-
-     <record id="group_property_manager" model="res.groups">
-        <field name="name">Administrador : Manejo de todas las propiedades</field>
-        <field name="category_id" ref="dtm_procesos.module_category_dtm_procesos"/>
-        <field name="implied_ids" eval="[(4,ref('dtm_procesos.group_property_user'))]"/>
-        <field name="users" eval="[(4,ref('base.user_admin'))]" />
-    </record>
-
-    <record id="group_restricted_menu" model="res.groups">
-        <field name="name">Restricted Menu Group</field>
+    <record id="group_procesos_general" model="res.groups">
+        <field name="name">DTM Procesos General</field>
         <field name="category_id" ref="base.module_category_hidden"/>
     </record>
 </odoo>

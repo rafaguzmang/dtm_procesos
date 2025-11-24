@@ -6,13 +6,12 @@
     "description": "Modulo para el área de compras",
     "depends":['base', 'mail',"dtm_odt",'web'],
     "data":[
-        'security/ir.model.access.csv',
+        #Security
         'security/res_groups.xml',
         'security/model_access.xml',
         #Views
         'views/dtm_proceso_views.xml',
         'views/dtm_procesos_liberacion_view.xml',
-        # 'views/dtm_procesos_indicadores_view.xml',
         'views/indicador_view.xml',
         'views/seguimiento_view.xml',
 

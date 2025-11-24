@@ -3,10 +3,20 @@
         <h1>
             Ordenes de Trabajo
         </h1>
-        <div class="container-fluid mt-4 d-flex justify-content-center">
+      
+        <!-- Fila 1: izquierda -->
+        <div class="container mt-4">            
             <Importantes/>
-            <CorteLaser/>
         </div>
+
+        <!-- Fila 2: derecha -->
+        <div class="container mt-4">            
+            <CorteLaser/>
+            
+        </div>
+       
+
+
         <Ordenes/>
     </t>
 </template>

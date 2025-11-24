@@ -219,3 +219,34 @@ class ProcesosController(http.Controller):
                 'Access-Control-Allow-Origin':'*'
             }
         )
+
+    # Busca todos los archivos pendientes a cortar
+    @http.route('/corte_diario', type='http', auth='public')
+    def corte_diario(selfs):
+
+        get_cortes = request.env['dtm.documentos.cortadora'].sudo().search([('priority','in',['1','2','3','4'])])
+        result = [{
+                    'nombre':f"{maquina.model_id.orden_trabajo} - {maquina.model_id.nombre_orden}",
+                    'cliente':request.env['dtm.odt'].sudo().search([('ot_number','=',maquina.model_id.orden_trabajo),('revision_ot','=',maquina.model_id.revision_ot)],limit=1).name_client,
+                    'primera_pieza': maquina.model_id.primera_pieza,
+                    'archivo': maquina.nombre,
+                    'cantidad': maquina.cantidad,
+                    'contador': maquina.contador,
+                    'lamina': maquina.lamina,
+                    'tiempo_teorico': round(maquina.tiempo_teorico, 2) if maquina.tiempo_teorico else 0,
+                    'porcentaje': round(maquina.porcentaje, 2),
+                    'cortadora': maquina.cortadora,
+                    'prioridad':maquina.priority,
+                    'play':maquina.start,
+                    'tiempo_real':round(maquina.tiempo_total, 2) if maquina.tiempo_total else 0
+                } for maquina in get_cortes]
+        # Se sortea por prioridad
+        result = sorted(result, key=lambda x:x['prioridad'],reverse=True)
+        return request.make_response(
+            json.dumps(result),
+            headers={
+                'Content-Type':'application/json',
+                'Access-Control-Allow-Origin':'*'
+            }
+        )
+

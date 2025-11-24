@@ -1,28 +1,40 @@
 <odoo>
-    <data>
-         <record id="dtm_procesos.access_dtm_proceso" model="ir.model.access">
-            <field name="group_id" ref="dtm_procesos.group_property_manager"/>
+    <data noupdate="0">
+        <record id="access_dtm_procesos_admin" model="ir.model.access" >
+            <field name="name">dtm.procesos admin</field>
+            <field name="model_id" ref="model_dtm_proceso"/>
+            <field name="group_id" ref="dtm_procesos.group_procesos_admin"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
         </record>
-        <record id="dtm_procesos_users_not" model="ir.model.access">
-            <field name="name">Procesos reglas</field>
-            <field name="model_id" ref="dtm_procesos.model_dtm_proceso"/>
-            <field name="group_id" ref="dtm_procesos.group_property_user_not"/>
-            <field name="perm_read">0</field>
-            <field name="perm_write">0</field>
-            <field name="perm_create">0</field>
-            <field name="perm_unlink">0</field>
+        <record id="access_dtm_procesos_indicadores_admin" model="ir.model.access" >
+            <field name="name">dtm.procesos admin</field>
+            <field name="model_id" ref="model_dtm_procesos_indicadores"/>
+            <field name="group_id" ref="dtm_procesos.group_procesos_admin"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
         </record>
-
-        <record id="dtm_procesos_users" model="ir.model.access">
-            <field name="name">Procesos reglas</field>
-            <field name="model_id" ref="dtm_procesos.model_dtm_proceso"/>
-            <field name="group_id" ref="dtm_procesos.group_property_user"/>
-            <field name="perm_read">1</field>
-            <field name="perm_write">1</field>
-            <field name="perm_create">1</field>
-            <field name="perm_unlink">1</field>
+        <record id="access_dtm_proceso_primer_admin" model="ir.model.access" >
+            <field name="name">dtm.proceso.primer admin</field>
+            <field name="model_id" ref="model_dtm_proceso_primer"/>
+            <field name="group_id" ref="dtm_procesos.group_procesos_admin"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
         </record>
-
-
+        <record id="access_dtm_proceso_liberacion_admin" model="ir.model.access" >
+            <field name="name">dtm.proceso.liberacion admin</field>
+            <field name="model_id" ref="model_dtm_proceso_liberacion"/>
+            <field name="group_id" ref="dtm_procesos.group_procesos_admin"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
     </data>
 </odoo>
