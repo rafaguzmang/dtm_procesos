@@ -17,7 +17,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <t t-foreach="this.state.importantes" t-as="orden" t-key="orden.orden">
+                    <t t-foreach="this.state.importantes" t-as="orden" t-key="orden.id">
                         <tr>
                             <td><t t-esc="orden.orden"/></td>
                             <td><t t-esc="orden.cliente"/></td>
@@ -33,23 +33,23 @@
                             </td>
                             <td class="importantes_hover" t-on-click="() => this.abrirDialogoMaquinados(orden.orden, orden.version_ot)">
                                 <t t-esc="orden.maquinado"/>
-                            </td>                            
+                            </td>
                         </tr>
-                        
+
                     </t>
                 </tbody>
-            </table>   
-            <div>
-                <t t-if="state.materiales_dialog">
-                    <DialogMateriales cerrar="cerrarDialogoMateriales" orden="this.state.orden_actual" version="this.state.version_actual" />
-                </t>
-                <t t-if="state.corte_dialog">
-                    <DialogCorteLaser cerrar="cerrarDialogoCorte" orden="this.state.orden_actual" version="this.state.version_actual" />
-                </t>
-                <t t-if="state.DialogMaquinados">
-                    <DialogCorteLaser cerrar="cerrarDialogoMaquinados" orden="this.state.orden_actual" version="this.state.version_actual" />
-                </t>
-            </div>
+            </table>
+<!--            <div>-->
+<!--                <t t-if="state.materiales_dialog">-->
+<!--                    <DialogMateriales cerrar="cerrarDialogoMateriales" orden="this.state.orden_actual" version="this.state.version_actual" />-->
+<!--                </t>-->
+<!--                <t t-if="state.corte_dialog">-->
+<!--                    <DialogCorteLaser cerrar="cerrarDialogoCorte" orden="this.state.orden_actual" version="this.state.version_actual" />-->
+<!--                </t>-->
+<!--                <t t-if="state.DialogMaquinados">-->
+<!--                    <DialogCorteLaser cerrar="cerrarDialogoMaquinados" orden="this.state.orden_actual" version="this.state.version_actual" />-->
+<!--                </t>-->
+<!--            </div>-->
         </div>
     </t>    
 </template>

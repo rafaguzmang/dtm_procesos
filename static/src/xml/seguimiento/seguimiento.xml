@@ -3,20 +3,22 @@
         <h1>
             Ordenes de Trabajo
         </h1>
-      
-        <!-- Fila 1: izquierda -->
-        <div class="container mt-4">            
-            <Importantes/>
-        </div>
 
-        <!-- Fila 2: derecha -->
-        <div class="container mt-4">            
+        <!--         Fila 2: derecha-->
+        <div class="container mt-4">
             <CorteLaser/>
-            
+
         </div>
+      
+<!--         Fila 1: izquierda-->
+<!--        <div class="container mt-4">-->
+<!--            <Importantes/>-->
+<!--        </div>-->
+
+
        
 
 
-        <Ordenes/>
+<!--        <Ordenes/>-->
     </t>
 </template>

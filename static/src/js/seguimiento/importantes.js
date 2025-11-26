@@ -1,11 +1,11 @@
     /** @odoo-module **/
     import { Component, useState, onWillStart, onWillUnmount,onMounted  } from "@odoo/owl";
-    import { DialogMateriales } from "./pantallas_dialogo/dialog_materiales";
-    import { DialogCorteLaser } from "./pantallas_dialogo/dialog_corte_laser";
-    import { DialogMaquinados } from "./pantallas_dialogo/dialog_maquinados";
+//    import { DialogMateriales } from "./pantallas_dialogo/dialog_materiales";
+//    import { DialogCorteLaser } from "./pantallas_dialogo/dialog_corte_laser";
+//    import { DialogMaquinados } from "./pantallas_dialogo/dialog_maquinados";
 
     export class Importantes extends Component {
-        static components = { DialogMateriales, DialogCorteLaser, DialogMaquinados };
+//        static components = { DialogMateriales, DialogCorteLaser, DialogMaquinados };
         setup() {
             let interval = null;
             this.state = useState({
@@ -21,28 +21,28 @@
             });
 
             onWillStart(async () => {
-                await this.loadImportantes();
+               await this.loadImportantes();
             });
 
-            onMounted(() => {
-                interval = setInterval(() => {
-                    this.loadImportantes();
-                }, 5000);
-            });
-
-            onWillUnmount(() => {
-                clearInterval(interval);
-            });
+//            onMounted(() => {
+//                interval = setInterval(() => {
+//                    this.loadImportantes();
+//                }, 5000);
+//            });
+//
+//            onWillUnmount(() => {
+//                clearInterval(interval);
+//            });
         }
 
         async loadImportantes() {
             const response = await fetch("/seguimiento_procesos");
             const data = await response.json();
-            this.state.importantes = data.filter(item => item.prioridad);
+            let num = 0;
+            const result  = data.map(row=>({'id':num++,...row}))
+            this.state.importantes = result.filter(item => item.prioridad);
             this.state.importantes = this.state.importantes.sort((a,b) => b.prioridad - a.prioridad);
-            // console.log( this.state.importantes);
-
-            
+            console.log( this.state.importantes);
         }
 
         // Función para obtener todos los materiales en el cuadro de diálogo
@@ -75,8 +75,8 @@
         }
         // Función para cerrar el diálogo de materiales
         cerrarDialogoMaquinados = () => {
-            this.state.corte_dialog = false;
-        };
-    }
+           this.state.corte_dialog = false;
+       };
+     }
 
     Importantes.template = "dtm_procesos.importantes";

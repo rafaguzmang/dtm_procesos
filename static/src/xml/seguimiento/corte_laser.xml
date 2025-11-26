@@ -12,6 +12,7 @@
                                 <th>Máquina</th>
                                 <th>Cliente</th>
                                 <th>Nombre</th>
+                                <th>Fecha</th>
                                 <th>Nesteo</th>
                                 <th>Cantidad</th>
                                 <th>Contador</th>
@@ -23,25 +24,26 @@
                         </thead>
                         <tbody>
                             <t t-foreach="this.state.cortes" t-as="corte" t-key="corte.id">
-                                <tr>
+                                <tr  t-attf-style="background-color: #{corte.porcentaje == 100 ?' #c3f7cfff' : ''}">
                                     <td style="text-align: center;width:15%">
+<!--                                        <t t-if="this.state."-->
                                         <t t-if="this.state.mitsubishi == corte.archivo">
-                                            <img src="dtm_procesos/static/src/img/mitsubishi.png" style="width:20%" alt="Máquina Mitsubishi"/>                                            
+                                            <img src="dtm_procesos/static/src/img/mitsubishi.png" style="width:20%" alt="Máquina Mitsubishi"/>
                                         </t>
                                         <t t-if="this.state.jfy == corte.archivo">
                                             <img src="dtm_procesos/static/src/img/jfy.png" style="width:20%" alt="Máquina JFY"/>
-                                        </t>                                        
+                                        </t>
                                     </td>
                                     <td><t t-esc="corte.cliente"/></td>
                                     <td><t t-esc="corte.nombre"/></td>
                                     <td><t t-esc="corte.archivo"/></td>
+                                    <td><t t-esc="corte.fecha_corte"/></td>
                                     <td><t t-esc="corte.cantidad"/></td>
                                     <td><t t-esc="corte.contador"/></td>
                                     <td><t t-esc="corte.lamina"/></td>
                                     <td><t t-esc="corte.tiempo_teorico"/></td>
                                     <td><t t-esc="corte.tiempo_real"/></td>
                                     <td><t t-esc="corte.porcentaje"/></td>
-
                                 </tr>
                             </t>
                         </tbody>
@@ -49,55 +51,63 @@
                 </div>            
             </div>
             <div class="row">      
-                <div class="col-4">
-                    <span class="fw-bold">Hoy</span>
+                <div class="col-8">
+                    <span class="fw-bold">Tiempos</span>
                     <table class="table">
                         <thead>
                             <tr>                               
-                                <th>Real</th>
                                 <th>Estimado</th>
-                                <th>%</th>
+                                <th>Mitsubishi</th>
+                                <th>%Día</th>
+                                <th>Estimado</th>
+                                <th>JFY</th>
+                                <th>%Día</th>
+                                <th>%Proyectado</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><t t-esc='this.state.tiempo_real'/>min</td>
-                                <td><t t-esc='this.state.tiempo_estimado'/>min</td>
+                                <td><t t-esc='this.state.tiempo_estimado_mitsubishi'/>min</td>
+                                <td><t t-esc="this.state.tiempo_mitsubishi"/></td>
+                                <td><t t-esc="this.state.porcentaje_mitsubishi"/></td>                               
+                                <td><t t-esc="this.state.tiempo_estimado_jfy"/></td>                               
+                                <td><t t-esc="this.state.tiempo_jfy"/></td>
+                                <td><t t-esc="this.state.porcentaje_jfy"/></td>                                
                                 <td><t t-esc='this.state.porcentaje_corte'/>%</td>
                             </tr>                          
                         </tbody>
                     </table>
 
                 </div>
-                <div class="col-4">
-                    <span class="fw-bold">Semana</span>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Día</th>
-                                <th>Estimado</th>
-                                <th>Real</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Hoy:</td>
-                                <td>Tiempo Total Estimado:</td>
-                                <td>968.2</td>
-                            </tr>                          
-                        </tbody>
-                    </table>
-
-                </div>
+            
                 <div class="col-4">
                     <t t-if="!this.state.cortes.some(item => item.archivo === state.jfy)">
-                        <h5>Otros:</h5>
+                         <div class="d-flex align-items-start">
+                            <t t-foreach="this.state.data" t-as="datos" t-key="datos.id">
+                                <t t-if="datos.cortadora == 'BFC6025'">
+                                    <img src="dtm_procesos/static/src/img/jfy.png" class="img-fluid w-25" alt="Máquina JFY"/>
+                                    <div class="ms-4">
+                                        <strong><span><t t-esc="datos.nombre"/></span></strong><br/>
+                                        <strong><span><t t-esc="datos.cliente"/></span></strong><br/>
+                                        <strong><span><t t-esc="datos.archivo"/></span></strong><br/>
+                                    </div>
+                                </t>
+                            </t>
+                        </div>
+                    </t>
+                    <t t-if="!this.state.cortes.some(item => item.archivo === state.mitsubishi)">
                         <div class="d-flex align-items-start">
-                            <img src="dtm_procesos/static/src/img/jfy.png" class="img-fluid w-25" alt="Máquina JFY"/>
-                            <div class="ms-4">
-                                <strong><span><t t-esc="this.state.jfy"/></span></strong>
-                            </div>
-                        </div>                                            
+                            <t t-foreach="this.state.data" t-as="datos" t-key="datos.id">
+                                <t t-if="datos.cortadora == 'MITSUBISHI'">
+                                    <img src="dtm_procesos/static/src/img/mitsubishi.png" class="img-fluid w-25" alt="Máquina MITSUBISHI"/>
+                                    <div class="ms-4">
+                                        <strong><span><t t-esc="datos.nombre"/></span></strong><br/>
+                                        <strong><span><t t-esc="datos.cliente"/></span></strong><br/>
+                                        <strong><span><t t-esc="datos.archivo"/></span></strong><br/>
+                                    </div>
+                                </t>
+                            </t>
+                        </div>
                     </t>
                 </div>
             </div>                

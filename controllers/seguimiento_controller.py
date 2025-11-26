@@ -1,7 +1,7 @@
 from odoo import http
 from odoo.http import request,Response
 import json
-from datetime import datetime
+from datetime import datetime,date,timedelta
 class ProcesosController(http.Controller):
     # Carga las ordenes de trabajo y su estado en los procesos
     @http.route('/seguimiento_procesos', type='http', auth='public')
@@ -202,7 +202,8 @@ class ProcesosController(http.Controller):
         result = []
         for maquina in get_play:
             result.append({
-                'nombre':f"{maquina.model_id.orden_trabajo} - {maquina.model_id.nombre_orden}",                
+                'nombre':f"{maquina.model_id.orden_trabajo} - {maquina.model_id.nombre_orden}",
+                'cliente':request.env['dtm.odt'].sudo().search([('ot_number','=',maquina.model_id.orden_trabajo),('revision_ot','=',maquina.model_id.revision_ot)],limit=1).name_client,
                 'primera_pieza':maquina.model_id.primera_pieza,
                 'archivo':maquina.nombre,
                 'cantidad':maquina.cantidad,
@@ -224,7 +225,11 @@ class ProcesosController(http.Controller):
     @http.route('/corte_diario', type='http', auth='public')
     def corte_diario(selfs):
 
-        get_cortes = request.env['dtm.documentos.cortadora'].sudo().search([('priority','in',['1','2','3','4'])])
+        get_cortes = request.env['dtm.documentos.cortadora'].sudo().search([('fecha_corte','!=',False)])
+        cortes_validos = get_cortes.filtered(
+            lambda r: r.fecha_corte and (r.fecha_corte <= date.today())
+        )
+        # print(cortes_validos)
         result = [{
                     'nombre':f"{maquina.model_id.orden_trabajo} - {maquina.model_id.nombre_orden}",
                     'cliente':request.env['dtm.odt'].sudo().search([('ot_number','=',maquina.model_id.orden_trabajo),('revision_ot','=',maquina.model_id.revision_ot)],limit=1).name_client,
@@ -238,10 +243,45 @@ class ProcesosController(http.Controller):
                     'cortadora': maquina.cortadora,
                     'prioridad':maquina.priority,
                     'play':maquina.start,
-                    'tiempo_real':round(maquina.tiempo_total, 2) if maquina.tiempo_total else 0
-                } for maquina in get_cortes]
+                    'tiempo_real':round(maquina.tiempo_total, 2) if maquina.tiempo_total else 0,
+                    'fecha_corte':maquina.fecha_corte.strftime('%x')
+                } for maquina in cortes_validos]
         # Se sortea por prioridad
-        result = sorted(result, key=lambda x:x['prioridad'],reverse=True)
+        result = sorted(result, key=lambda x: (datetime.strptime(x['fecha_corte'],'%d/%m/%Y'),-1*int(x['prioridad'])))
+        return request.make_response(
+            json.dumps(result),
+            headers={
+                'Content-Type':'application/json',
+                'Access-Control-Allow-Origin':'*'
+            }
+        )
+
+    # Obtiene los tiempos del día en curso
+    @http.route('/corte_tiempos',type='http',auth='public')
+    def corte_tiempos(self):
+        hoy = date.today()
+        inicio = datetime.combine(hoy, datetime.min.time())  # 00:00:00
+        fin = datetime.combine(hoy + timedelta(days=1), datetime.min.time())  # mañana 00:00:00
+
+        get_cortes = request.env['dtm.documentos.tiempos'].search([
+            ('create_date', '>=', inicio),
+            ('create_date', '<', fin)
+        ])
+        maquina_mit = 0
+        maquina_jfy = 0
+        for nesteo in get_cortes:
+            if nesteo.model_id.cortadora == 'MITSUBISHI':
+                maquina_mit += nesteo.tiempo
+
+            if nesteo.model_id.cortadora == 'BFC6025':
+                maquina_jfy += nesteo.tiempo
+
+
+        result = {
+                    'mitsubishi':round(maquina_mit,2),
+                    'jfy':round(maquina_jfy,2)
+                  }
+
         return request.make_response(
             json.dumps(result),
             headers={

@@ -7,8 +7,9 @@
     "depends":['base', 'mail',"dtm_odt",'web'],
     "data":[
         #Security
-        'security/res_groups.xml',
-        'security/model_access.xml',
+        'security/ir.model.access.csv',
+        # 'security/res_groups.xml',
+        # 'security/model_access.xml',
         #Views
         'views/dtm_proceso_views.xml',
         'views/dtm_procesos_liberacion_view.xml',
