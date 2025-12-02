@@ -1,0 +1,48 @@
+<template xml:space="preserve">
+    <t t-name="dtm_procesos.dialog_material_liberar" owl="1">
+        <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+          <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Material a liberar para la orden <t t-esc="props.orden"/></h5>
+                <button type="button" class="btn-close" aria-label="Close" t-on-click="props.cerrar"></button>
+              </div>
+              <div class="modal-body">
+                 <h4>Liberar</h4>
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Código</th>
+                                <th>Descripción</th>
+                                <th>Cantidad</th>
+                                <th>Proveedor</th>
+                                <th>P.Unitario</th>
+                                <th>P.Total</th>
+                                <th>Nesteo</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <t t-foreach="this.state.materiales" t-as="material" t-key="material.num">
+                                <tr>
+                                  <td><t t-esc="material.codigo"/></td>
+                                  <td><t t-esc="material.descripcion"/></td>
+                                  <td><t t-esc="material.cantidad"/></td>
+                                  <td><t t-esc="material.proveedor"/></td>
+                                  <td><t t-esc="material.unitario"/></td>
+                                  <td><t t-esc="material.total"/></td>
+                                  <td><t t-esc="material.nesteo"/></td>
+                                </tr>
+                              </t>
+
+                            </tbody>
+                          </table>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" t-on-click="props.cerrar">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </t>
+</template>
