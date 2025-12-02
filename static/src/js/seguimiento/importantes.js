@@ -1,19 +1,24 @@
     /** @odoo-module **/
     import { Component, useState, onWillStart, onWillUnmount,onMounted  } from "@odoo/owl";
-//    import { DialogMateriales } from "./pantallas_dialogo/dialog_materiales";
-//    import { DialogCorteLaser } from "./pantallas_dialogo/dialog_corte_laser";
-//    import { DialogMaquinados } from "./pantallas_dialogo/dialog_maquinados";
+    import { DialogMateriales } from "./pantallas_dialogo/dialog_materiales";
+    import { DialogCorteLaser } from "./pantallas_dialogo/dialog_corte_laser";
+    import { DialogMaquinados } from "./pantallas_dialogo/dialog_maquinados";
+    import { DialogMaterialesLiberar } from "./pantallas_dialogo/dialog_materiales_liberar";
+    import { DialogCompraMaterial } from "./pantallas_dialogo/dialog_compra_material";
 
     export class Importantes extends Component {
-//        static components = { DialogMateriales, DialogCorteLaser, DialogMaquinados };
+        static components = { DialogMateriales, DialogCorteLaser, DialogMaquinados, DialogMaterialesLiberar, DialogCompraMaterial};
         setup() {
             let interval = null;
             this.state = useState({
                 importantes: [],
+                importante_total: 0,
                 // Ventanas de diálogo
                 materiales_dialog: false,
                 corte_dialog: false,
                 maquinados_dialog: false,
+                liberar_materiales_dialog: false,
+                compra_materiales_dialog: false,
 
                 // Datos para pasar a los diálogos
                 orden_actual: null,
@@ -24,15 +29,15 @@
                await this.loadImportantes();
             });
 
-//            onMounted(() => {
-//                interval = setInterval(() => {
-//                    this.loadImportantes();
-//                }, 5000);
-//            });
-//
-//            onWillUnmount(() => {
-//                clearInterval(interval);
-//            });
+           onMounted(() => {
+               interval = setInterval(() => {
+                   this.loadImportantes();
+               }, 5000);
+           });
+
+           onWillUnmount(() => {
+               clearInterval(interval);
+           });
         }
 
         async loadImportantes() {
@@ -42,9 +47,30 @@
             const result  = data.map(row=>({'id':num++,...row}))
             this.state.importantes = result.filter(item => item.prioridad);
             this.state.importantes = this.state.importantes.sort((a,b) => b.prioridad - a.prioridad);
-            console.log( this.state.importantes);
-        }
+            this.state.importante_total = this.state.importantes.length;
+        };
 
+        // Función para obtener todos los materiales faltantes de comprar
+        abrirDialogoCompra = (orden,version)=>{
+            this.state.compra_materiales_dialog = true;
+            this.state.orden_actual = orden;
+            this.state.version_actual = version;
+        };
+        // Función para cerrar el diálogo de materiales de comprar
+        cerrarDialogoCompra = () => {
+            this.state.compra_materiales_dialog = false;
+        };
+
+        // Función para obtener todos los materiales faltantes para autorizar
+        abrirDialogLiberar = (orden,version)=>{
+            this.state.liberar_materiales_dialog = true;
+            this.state.orden_actual = orden;
+            this.state.version_actual = version;
+        };
+        // Función para cerrar el diálogo de materiales para autorizar
+        cerrarDialogLiberar = () => {
+            this.state.liberar_materiales_dialog = false;
+        };
         // Función para obtener todos los materiales en el cuadro de diálogo
         abrirDialogoMateriales = (orden,version)=>{
             this.state.materiales_dialog = true;
@@ -69,13 +95,13 @@
 
         // Función para obtener todos los maquinados en el cuadro de diálogo
         abrirDialogoMaquinados = (orden,version)=>{
-            this.state.corte_dialog = true;
+            this.state.maquinados_dialog = true;
             this.state.orden_actual = orden;
             this.state.version_actual = version;
         }
         // Función para cerrar el diálogo de materiales
         cerrarDialogoMaquinados = () => {
-           this.state.corte_dialog = false;
+           this.state.maquinados_dialog = false;
        };
      }
 

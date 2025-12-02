@@ -5,11 +5,11 @@
           <div class="modal-dialog modal-xl">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Corte Láser para la orden <t t-esc="props.orden"/></h5>
+                <h5 class="modal-title">Maquinados para la orden <t t-esc="props.orden"/></h5>
                 <button type="button" class="btn-close" aria-label="Close" t-on-click="props.cerrar"></button>
               </div>
               <div class="modal-body">
-                 <h4>Primera Pieza</h4>
+                 <h4>Maquinados</h4>
                           <table class="table">
                             <thead>
                               <tr>

@@ -1,7 +1,6 @@
 <template xml:space="preserve">
     <odoo>
         <t t-name="dtm_procesos.dialog_materiales_template" owl="1">
-        <t t-name="dtm_procesos.DialogMateriales" owl="1">
           <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -23,7 +22,6 @@
                     </thead>
                     <tbody>
                       <t t-foreach="state.materiales" t-as="material" t-key="material.num">
-                      <!-- t-attf-style="background-color: #{orden.compra_material == '100%' ? '#0de940ff' : '#f2fa0aff'};" -->
                         <tr t-attf-style="background-color: #{material.status == 'Entregado' ? '#0de940ff' : null};" >
                           <td><t t-esc="material.id"/></td>
                           <td><t t-esc="material.nombre"/></td>
@@ -42,7 +40,6 @@
               </div>
             </div>
           </div>
-        </t>
         </t>
     </odoo>
 </template>

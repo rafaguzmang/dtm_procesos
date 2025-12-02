@@ -32,7 +32,6 @@ export class DialogCorteLaser extends Component{
         const data = await response.json();
         console.log("Cortadora",data.result);
         const primera_tabla = data.result.filter(row => row.primera_pieza === true);
-        console.log(primera_tabla);
         const segunda_tabla = data.result.filter(row => row.primera_pieza === false);
         let index = 0;
         this.state.cortes_primera = primera_tabla.map(row=>({'index':index++,...row}));

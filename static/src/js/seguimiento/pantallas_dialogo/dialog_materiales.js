@@ -33,9 +33,7 @@ export class DialogMateriales extends Component{
         });
         const data = await response.json();
         let num = 0;
-        this.state.materiales = data.result.map(item => ({'num':num++,...item}));
-
-        
+        this.state.materiales = data.result.map(item => ({'num':num++,...item}));        
     }
 }
 DialogMateriales.template = "dtm_procesos.dialog_materiales_template";

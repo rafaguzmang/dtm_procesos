@@ -1,7 +1,7 @@
 <template xml:space="preserve">
     <t t-name="dtm_procesos.importantes" owl="1">
       <div class="container mt-4 border p-4 rounded shadow-sm">
-        <h2>Importantes</h2>        
+        <h2>Importantes <t t-esc="this.state.importante_total"/></h2>        
             <table class="table table-sm table-hover mt-2 table-bordered">
                 <thead class = "table-primary">
                     <tr>
@@ -14,42 +14,73 @@
                         <th>Compras</th>
                         <th>Corte</th>
                         <th>Maquinado</th>
+                        <th>Manufactura</th>
                     </tr>
                 </thead>
                 <tbody>
                     <t t-foreach="this.state.importantes" t-as="orden" t-key="orden.id">
                         <tr>
-                            <td><t t-esc="orden.orden"/></td>
+                            <td t-attf-style="background-color: #{orden.orden == 0 ?'#f3f69cff' :''};">
+                                <t t-esc="orden.orden"/>
+                            </td>
                             <td><t t-esc="orden.cliente"/></td>
-                            <td><t t-esc="orden.fecha_entrega"/></td>
-                            <td><t t-esc="orden.nesteo"/></td>
-                            <td class="importantes_hover" t-on-click="() => this.abrirDialogoMateriales(orden.orden, orden.version_ot)">
+                            <td t-attf-style="background-color: #{orden.fecha_retardo?'#ec91b0' :''};"
+                                >
+                                <t t-esc="orden.fecha_entrega"/>
+                            </td>
+                            <td t-attf-style="background-color: #{orden.nesteo == '100%'?'#c3f7cfff' :''};">
+                                <t t-esc="orden.nesteo"/>
+                            </td>
+                            <td class="importantes_hover"
+                                t-attf-style="background-color: #{orden.compra_material == '100%'?'#c3f7cfff' :''};"
+                                t-on-click="() => this.abrirDialogoMateriales(orden.orden, orden.version_ot)">
                                 <t t-esc="orden.compra_material"/>
                             </td>
-                            <td><t t-esc="orden.requerido"/></td>
-                            <td><t t-esc="orden.realizado"/></td>
-                            <td class="importantes_hover" t-on-click="() => this.abrirDialogoCorte(orden.orden, orden.version_ot)">
+                            <td class="importantes_hover"
+                                t-attf-style="background-color: #{orden.requerido == 0 ?'#c3f7cfff' :'#f3f69cff'};"
+                                t-on-click="() => this.abrirDialogLiberar(orden.orden, orden.version_ot)">
+                                <t t-esc="orden.requerido"/>
+                            </td>
+                            <td class="importantes_hover"
+                                t-on-click="() => this.abrirDialogoCompra(orden.orden, orden.version_ot)"
+                                t-attf-style="background-color: #{orden.realizado == 0 ?'#c3f7cfff' :'#f3f69cff'};">
+                                <t t-esc="orden.realizado"/>
+                            </td>
+                            <td class="importantes_hover" t-on-click="() => this.abrirDialogoCorte(orden.orden, orden.version_ot)"
+                                t-attf-style="background-color: #{orden.corte == '100%' || orden.corte == 'N/A'?'#c3f7cfff' :''};">
                                 <t t-esc="orden.corte"/>
                             </td>
-                            <td class="importantes_hover" t-on-click="() => this.abrirDialogoMaquinados(orden.orden, orden.version_ot)">
+                            <td class="importantes_hover"
+                                t-attf-style="background-color: #{orden.maquinado == '100%' || orden.maquinado == 'N/A'?'#c3f7cfff' :''};"
+                                t-on-click="() => this.abrirDialogoMaquinados(orden.orden, orden.version_ot)">
                                 <t t-esc="orden.maquinado"/>
+                            </td>
+                            <td
+                                t-attf-style="background-color: #{orden.status == 'Terminado'?'#c3f7cfff' :''};">
+                                <t t-esc="orden.status"/>
                             </td>
                         </tr>
 
                     </t>
                 </tbody>
             </table>
-<!--            <div>-->
-<!--                <t t-if="state.materiales_dialog">-->
-<!--                    <DialogMateriales cerrar="cerrarDialogoMateriales" orden="this.state.orden_actual" version="this.state.version_actual" />-->
-<!--                </t>-->
-<!--                <t t-if="state.corte_dialog">-->
-<!--                    <DialogCorteLaser cerrar="cerrarDialogoCorte" orden="this.state.orden_actual" version="this.state.version_actual" />-->
-<!--                </t>-->
-<!--                <t t-if="state.DialogMaquinados">-->
-<!--                    <DialogCorteLaser cerrar="cerrarDialogoMaquinados" orden="this.state.orden_actual" version="this.state.version_actual" />-->
-<!--                </t>-->
-<!--            </div>-->
+            <div>
+                <t t-if="state.materiales_dialog">
+                    <DialogMateriales cerrar="cerrarDialogoMateriales" orden="this.state.orden_actual" version="this.state.version_actual" />
+                </t>
+                <t t-if="state.corte_dialog">
+                    <DialogCorteLaser cerrar="cerrarDialogoCorte" orden="this.state.orden_actual" version="this.state.version_actual" />
+                </t>
+                <t t-if="state.maquinados_dialog">
+                    <DialogMaquinados cerrar="cerrarDialogoMaquinados" orden="this.state.orden_actual" version="this.state.version_actual" />
+                </t>
+                <t t-if="state.liberar_materiales_dialog">
+                     <DialogMaterialesLiberar cerrar="cerrarDialogLiberar" orden="this.state.orden_actual" version="this.state.version_actual" />
+                </t>
+                <t t-if="state.compra_materiales_dialog">
+                     <DialogCompraMaterial cerrar="cerrarDialogoCompra" orden="this.state.orden_actual" version="this.state.version_actual" />
+                </t>
+            </div>
         </div>
     </t>    
 </template>

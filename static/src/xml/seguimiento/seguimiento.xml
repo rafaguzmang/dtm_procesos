@@ -5,15 +5,15 @@
         </h1>
 
         <!--         Fila 2: derecha-->
-        <div class="container mt-4">
-            <CorteLaser/>
+<!--        <div class="container mt-4">-->
+<!--            <CorteLaser/>-->
 
-        </div>
+<!--        </div>-->
       
 <!--         Fila 1: izquierda-->
-<!--        <div class="container mt-4">-->
-<!--            <Importantes/>-->
-<!--        </div>-->
+       <div class="container mt-4">
+           <Importantes/>
+        </div>
 
 
        

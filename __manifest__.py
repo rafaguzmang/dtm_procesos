@@ -39,6 +39,8 @@
             'dtm_procesos/static/src/js/seguimiento/pantallas_dialogo/dialog_maquinados.js',
             'dtm_procesos/static/src/js/seguimiento/importantes.js',
             'dtm_procesos/static/src/js/seguimiento/corte_laser.js',
+            'dtm_procesos/static/src/js/seguimiento/pantallas_dialogo/dialog_materiales_liberar.js',
+            'dtm_procesos/static/src/js/seguimiento/pantallas_dialogo/dialog_compra_material.js',
 
             # XML
             'dtm_procesos/static/src/xml/indicador.xml',
@@ -49,6 +51,8 @@
             'dtm_procesos/static/src/xml/seguimiento/pantallas_dialogo/dialog_maquinados.xml',
             'dtm_procesos/static/src/xml/seguimiento/importantes.xml',
             'dtm_procesos/static/src/xml/seguimiento/corte_laser.xml',
+            'dtm_procesos/static/src/xml/seguimiento/pantallas_dialogo/dialog_material_liberar.xml',
+            'dtm_procesos/static/src/xml/seguimiento/pantallas_dialogo/dialog_compra_material.xml',
             ],
     },
     'license': 'LGPL-3',

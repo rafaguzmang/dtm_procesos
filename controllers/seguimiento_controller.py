@@ -11,6 +11,7 @@ class ProcesosController(http.Controller):
         result = []
         for orden in ordenes_trabajo:
             procesos_id = request.env['dtm.proceso'].sudo().search([('ot_number','=',orden.ot_number),('revision_ot','=',orden.revision_ot)],limit=1)
+            retardo = True if orden.date_rel < date.today() else False
             # Status del corte
             corte_id = request.env['dtm.materiales.laser'].sudo().search([('orden_trabajo','=',orden.ot_number),('revision_ot','=',orden.revision_ot)])
             corte_finalizado_id = request.env['dtm.laser.realizados'].sudo().search([('orden_trabajo','=',orden.ot_number),('revision_ot','=',orden.revision_ot)])
@@ -41,6 +42,7 @@ class ProcesosController(http.Controller):
                     'cliente':orden.name_client,
                     'producto':orden.product_name,
                     'fecha_entrega':orden.date_rel.strftime("%x"),
+                    'fecha_retardo':retardo,
                     'nesteo':'100%' if orden.firma_ingenieria else '0%',
                     'compra_material':f"{procesos_id.materials}%",
                     'corte': corte,
@@ -57,6 +59,7 @@ class ProcesosController(http.Controller):
                     'prioridad':orden.prioridad,
                     'requerido':requerido,
                     'realizado':realizado,
+                    'status':dict(procesos_id._fields['status'].selection).get(procesos_id.status) if dict(procesos_id._fields['status'].selection).get(procesos_id.status) else ''
             }
             result.append(vals)
         # datetime.strptime(x["fecha"], "%d/%m/%Y")
@@ -68,6 +71,7 @@ class ProcesosController(http.Controller):
                         'Access-Control-Allow-Origin':'*'
                     }
                 )
+
     # Carga los materiales de una orden de trabajo y su estado
     @http.route('/seguimiento_materiales', type='json', auth='public')
     def lista_materiales(self, **kwargs):
@@ -118,15 +122,15 @@ class ProcesosController(http.Controller):
             for primera in orden_id.primera_pieza_id:
                 # Se busca por nombre del archivo y se compara si está asociado a la orden tanto en archivo en corte como en terminado
                 en_corte_id = request.env['dtm.documentos.cortadora'].sudo().search([('nombre','=',primera.nombre)])
-                filtro_model_id = en_corte_id.filtered(lambda record: record.model_id.orden_trabajo == orden and record.model_id.revision_ot ==revision)
+                filtro_model_id = en_corte_id.filtered(lambda record: record.model_id.orden_trabajo == orden and record.model_id.revision_ot == revision and record.model_id.primera_pieza==True)
                 finalizado_id = request.env['dtm.documentos.finalizados'].sudo().search([('nombre','=',primera.nombre)])
-                filtro_finalizado_id = finalizado_id.filtered(lambda  record:record.model_id.orden_trabajo == orden and record.model_id.revision_ot == revision)
+                filtro_finalizado_id = finalizado_id.filtered(lambda  record:record.model_id.orden_trabajo == orden and record.model_id.revision_ot == revision and record.model_id.primera_pieza==True)
                 # Si está en finalizado el porcentaje está en 100 y si no se pone el porcentaje real del corte
                 if filtro_finalizado_id:
                     porcentaje = '100%'
                     tiempo_total = round(sum(filtro_finalizado_id.tiempos_id.mapped("tiempo")),2)
                 elif filtro_model_id:
-                    porcentaje = f"{filtro_model_id.porcentaje}"
+                    porcentaje = f"{round(filtro_model_id.porcentaje,2)}"
                     tiempo_total = round(sum(filtro_model_id.tiempos_id.mapped("tiempo")),2)
                 result.append({
                     'primera_pieza':True,
@@ -139,23 +143,22 @@ class ProcesosController(http.Controller):
                     'tiempo_real':tiempo_total
                 })
         if orden_id.cortadora_id:
-            for segunda in orden_id.primera_pieza_id:
+            for segunda in orden_id.cortadora_id:
                 en_corte_id = request.env['dtm.documentos.cortadora'].sudo().search([('nombre', '=', segunda.nombre)])
                 filtro_model_id = en_corte_id.filtered(
-                    lambda record: record.model_id.orden_trabajo == orden and record.model_id.revision_ot == revision)
+                    lambda record: record.model_id.orden_trabajo == orden and record.model_id.revision_ot == revision and record.model_id.primera_pieza == False)
                 finalizado_id = request.env['dtm.documentos.finalizados'].sudo().search(
                     [('nombre', '=', segunda.nombre)])
                 filtro_finalizado_id = finalizado_id.filtered(
-                    lambda record: record.model_id.orden_trabajo == orden and record.model_id.revision_ot == revision)
-
+                    lambda record: record.model_id.orden_trabajo == orden and record.model_id.revision_ot == revision and record.model_id.primera_pieza == False)
                 if filtro_finalizado_id:
                     porcentaje = '100%'
                     tiempo_total = round(sum(filtro_finalizado_id.tiempos_id.mapped("tiempo")),2)
                 elif filtro_model_id:
-                    porcentaje = f"{filtro_model_id.porcentaje}"
+                    porcentaje = f"{round(filtro_model_id.porcentaje,2)}"
                     tiempo_total = round(sum(filtro_model_id.tiempos_id.mapped("tiempo")),2)
                 result.append({
-                    'primera_pieza': True,
+                    'primera_pieza': False,
                     'archivo': segunda.nombre,
                     'material': f"{segunda.material_ids.id} - {segunda.material_ids.nombre} {segunda.material_ids.medida}",
                     'cantidad': segunda.cantidad,
@@ -226,8 +229,11 @@ class ProcesosController(http.Controller):
     def corte_diario(selfs):
 
         get_cortes = request.env['dtm.documentos.cortadora'].sudo().search([('fecha_corte','!=',False)])
-        cortes_validos = get_cortes.filtered(
+        cortes = get_cortes.filtered(
             lambda r: r.fecha_corte and (r.fecha_corte <= date.today())
+        )
+        cortes_validos = cortes.filtered(
+            lambda r: round(r.porcentaje < 100,2) and (r.fecha_corte < date.today())
         )
         # print(cortes_validos)
         result = [{
@@ -290,3 +296,43 @@ class ProcesosController(http.Controller):
             }
         )
 
+    # Obtienes la lista de materiales que faltan por liberar según la orden de trabajo que lo solicite
+    @http.route('/liberar_materiales', type='json', auth='public')
+    def liberar_materiales(self):
+        raw = request.httprequest.data
+        data = json.loads(raw)
+        orden = data.get('orden')
+        revision = data.get('version')
+
+        orden_id = request.env['dtm.compras.requerido'].sudo().search([('orden_trabajo','=',orden),('revision_ot','=',revision),('tipo_orden','in',['OT','NPI'])])
+
+        result = [{
+                'codigo': material.codigo,
+                'descripcion': material.nombre,
+                'cantidad': material.cantidad,
+                'proveedor': request.env['dtm.compras.material'].sudo().search([('nombre','=',material.nombre)],limit=1).proveedor_id.nombre,
+                'unitario':request.env['dtm.compras.material'].sudo().search([('nombre','=',material.nombre)],limit=1).unitario,
+                'total': round(request.env['dtm.compras.material'].sudo().search([('nombre','=',material.nombre)],limit=1).unitario * material.cantidad,2),
+                'nesteo': 'Falta' if material.nesteo else 'Si',
+            } for material in orden_id]
+        return result
+    
+    # Obtienes la lista de materiales que faltan de comprar según la orden de trabajo que lo solicite
+    @http.route('/compra_material', type='json', auth='public')
+    def compra_material(self):
+        raw = request.httprequest.data
+        data = json.loads(raw)
+        orden = data.get('orden')
+        revision = data.get('version')
+
+        orden_id = request.env['dtm.compras.realizado'].sudo().search([('orden_trabajo','=',orden),('revision_ot','=',revision),('tipo_orden','in',['OT','NPI']),('listo_btn','!=',True)])
+
+        result = [{
+                'codigo': material.codigo,
+                'descripcion': material.nombre,
+                'cantidad': material.cantidad,
+                'proveedor': material.proveedor,
+                'unitario':material.unitario,
+                'total': round(material.unitario * material.cantidad,2),
+            } for material in orden_id]
+        return result

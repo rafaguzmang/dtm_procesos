@@ -60,7 +60,7 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <t t-foreach="state.cortes_primera" t-as="corte" t-key="corte.index">
+                              <t t-foreach="state.cortes_segunda" t-as="corte" t-key="corte.index">
                                 <tr>
                                   <td><t t-esc="corte.archivo"/></td>
                                   <td><t t-esc="corte.material"/></td>
