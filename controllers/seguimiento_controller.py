@@ -228,18 +228,16 @@ class ProcesosController(http.Controller):
     @http.route('/corte_diario', type='http', auth='public')
     def corte_diario(selfs):
 
-        get_cortes = request.env['dtm.documentos.cortadora'].sudo().search([('fecha_corte','!=',False)])
-        cortes = get_cortes.filtered(
-            lambda r: r.fecha_corte and (r.fecha_corte <= date.today())
-        )
-        cortes_validos = cortes.filtered(
-            lambda r: round(r.porcentaje < 100,2) and (r.fecha_corte < date.today())
-        )
+        get_cortes = request.env['dtm.cortadora.laser'].sudo().search([])
+        # cortes = get_cortes.filtered(
+        #     lambda r: r.fecha_corte and (r.fecha_corte <= date.today())
+        # )
+        # cortes_validos = cortes.filtered(
+        #     lambda r: round(r.porcentaje < 100,2) and (r.fecha_corte < date.today())
+        # )
         # print(cortes_validos)
         result = [{
-                    'nombre':f"{maquina.model_id.orden_trabajo} - {maquina.model_id.nombre_orden}",
-                    'cliente':request.env['dtm.odt'].sudo().search([('ot_number','=',maquina.model_id.orden_trabajo),('revision_ot','=',maquina.model_id.revision_ot)],limit=1).name_client,
-                    'primera_pieza': maquina.model_id.primera_pieza,
+                    'orden_trabajo':maquina.orden_trabajo,
                     'archivo': maquina.nombre,
                     'cantidad': maquina.cantidad,
                     'contador': maquina.contador,
@@ -251,7 +249,7 @@ class ProcesosController(http.Controller):
                     'play':maquina.start,
                     'tiempo_real':round(maquina.tiempo_total, 2) if maquina.tiempo_total else 0,
                     'fecha_corte':maquina.fecha_corte.strftime('%x')
-                } for maquina in cortes_validos]
+                } for maquina in get_cortes]
         # Se sortea por prioridad
         result = sorted(result, key=lambda x: (datetime.strptime(x['fecha_corte'],'%d/%m/%Y'),-1*int(x['prioridad'])))
         return request.make_response(

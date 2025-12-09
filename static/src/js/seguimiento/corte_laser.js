@@ -19,19 +19,19 @@ export class CorteLaser extends Component{
             porcentaje_jfy:0,
         });
 
-        this.busService = useService("bus_service");
-        this.busService.addeventListener("notifications", (notifications) => {
-            for ( const notification of notifications ) {
-                const [channel, message] = notification;
-                if ( channel[1] === "cortadora_channel" ) {
-                    const idx = this.state.importantes.findIndes(item => item.id === message.id);
-                    if ( idx !== -1 ) {
-                        this.state.importantes[idx].priority = message.priority;
-                        this.state.importantes[idx].status = message.status;
-                    }
-                }
-            }
-        });
+//        this.busService = useService("bus_service");
+//        this.busService.addeventListener("notifications", (notifications) => {
+//            for ( const notification of notifications ) {
+//                const [channel, message] = notification;
+//                if ( channel[1] === "cortadora_channel" ) {
+//                    const idx = this.state.importantes.findIndes(item => item.id === message.id);
+//                    if ( idx !== -1 ) {
+//                        this.state.importantes[idx].priority = message.priority;
+//                        this.state.importantes[idx].status = message.status;
+//                    }
+//                }
+//            }
+//        });
         
         
         let interval = null;
@@ -69,14 +69,14 @@ export class CorteLaser extends Component{
         const avance = Number(this.state.cortes.reduce((total,corte)=> total + (corte.porcentaje||0),0)).toFixed(2);
 //        console.log(avance);
         this.state.porcentaje_corte = Number((avance * 100)/(id * 100)).toFixed(2);
-        console.log('this.state.porcentaje_corte',this.state.porcentaje_corte);
+//        console.log('this.state.porcentaje_corte',this.state.porcentaje_corte);
     }
 
     // Obtener tiempos diarios de uso de las maquinas
     async tiempoDiario(){
         const response = await fetch("/corte_tiempos");
         const data = await response.json();
-        console.log(data);
+//        console.log(data);
         this.state.tiempo_mitsubishi = data.mitsubishi;
         this.state.tiempo_jfy = data.jfy;
         this.state.porcentaje_mitsubishi =Math.round(data.mitsubishi*100/540,0);
