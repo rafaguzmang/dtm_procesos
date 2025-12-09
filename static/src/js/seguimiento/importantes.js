@@ -45,7 +45,7 @@
             const data = await response.json();
             let num = 0;
             const result  = data.map(row=>({'id':num++,...row}))
-            this.state.importantes = result.filter(item => item.prioridad);
+            this.state.importantes = result.filter(item => item.prioridad && item.prioridad > 0);
             this.state.importantes = this.state.importantes.sort((a,b) => b.prioridad - a.prioridad);
             this.state.importante_total = this.state.importantes.length;
         };

@@ -1,6 +1,6 @@
 /** @odoo-module **/
 import { Component, onWillStart, useState, onMounted,onWillUnmount } from "@odoo/owl";
-
+import { useService } from "@web/core/utils/hooks";
 export class CorteLaser extends Component{
     setup(){
         this.state = useState({
@@ -18,6 +18,22 @@ export class CorteLaser extends Component{
             porcentaje_mitsubishi:0,
             porcentaje_jfy:0,
         });
+
+        this.busService = useService("bus_service");
+        this.busService.addeventListener("notifications", (notifications) => {
+            for ( const notification of notifications ) {
+                const [channel, message] = notification;
+                if ( channel[1] === "cortadora_channel" ) {
+                    const idx = this.state.importantes.findIndes(item => item.id === message.id);
+                    if ( idx !== -1 ) {
+                        this.state.importantes[idx].priority = message.priority;
+                        this.state.importantes[idx].status = message.status;
+                    }
+                }
+            }
+        });
+        
+        
         let interval = null;
         onWillStart(async () => {
             await this.maquinasData();
