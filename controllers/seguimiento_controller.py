@@ -229,13 +229,7 @@ class ProcesosController(http.Controller):
     def corte_diario(selfs):
 
         get_cortes = request.env['dtm.cortadora.laser'].sudo().search([])
-        # cortes = get_cortes.filtered(
-        #     lambda r: r.fecha_corte and (r.fecha_corte <= date.today())
-        # )
-        # cortes_validos = cortes.filtered(
-        #     lambda r: round(r.porcentaje < 100,2) and (r.fecha_corte < date.today())
-        # )
-        # print(cortes_validos)
+
         result = [{
                     'orden_trabajo':maquina.orden_trabajo,
                     'archivo': maquina.nombre,
@@ -266,17 +260,26 @@ class ProcesosController(http.Controller):
         hoy = date.today()
         inicio = datetime.combine(hoy, datetime.min.time())  # 00:00:00
         fin = datetime.combine(hoy + timedelta(days=1), datetime.min.time())  # mañana 00:00:00
+        maquina_mit = 0
+        maquina_jfy = 0
+        get_cortes_finalizados = request.env['dtm.documentos.finalizados'].sudo().search([
+            ('create_date', '>=', inicio),
+            ('create_date', '<=', fin)
+        ])
+        for nesteo in get_cortes_finalizados:
+            if nesteo.model_id.cortadora == 'MITSUBISHI':
+                maquina_mit += nesteo.tiempo
+            if nesteo.model_id.cortadora == 'BFC6025':
+                maquina_jfy += nesteo.tiempo
 
         get_cortes = request.env['dtm.documentos.tiempos'].search([
             ('create_date', '>=', inicio),
             ('create_date', '<', fin)
         ])
-        maquina_mit = 0
-        maquina_jfy = 0
+
         for nesteo in get_cortes:
             if nesteo.model_id.cortadora == 'MITSUBISHI':
                 maquina_mit += nesteo.tiempo
-
             if nesteo.model_id.cortadora == 'BFC6025':
                 maquina_jfy += nesteo.tiempo
 
