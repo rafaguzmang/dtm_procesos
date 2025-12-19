@@ -149,8 +149,9 @@ class ProcesosController(http.Controller):
             weeks_dict = {}
             for week in list_week:
                 lista_json_filter_week = [x for x in lista_json_filter_year if x["week"] == week]
-                lista_json_sorted = sorted(lista_json_filter_week, key=lambda x: x["day"])
-                weeks_dict[str(week)] = lista_json_sorted
+                if lista_json_filter_week:
+                    lista_json_sorted = sorted(lista_json_filter_week, key=lambda x: x["day"])
+                    weeks_dict[str(week)] = lista_json_sorted
             list_json_final[str(year)] = weeks_dict
 
         # # datetime.strptime(x["fecha"], "%d/%m/%Y")
