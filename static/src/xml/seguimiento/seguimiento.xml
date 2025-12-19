@@ -10,9 +10,9 @@
         </div>
       
 <!--         Fila 1: izquierda-->
-<!--        <div class="container mt-4">-->
-<!--           <Importantes/>-->
-<!--        </div>-->
-<!--        <Ordenes/>-->
+        <div class="container mt-4">
+           <Importantes/>
+        </div>
+        <Ordenes/>
     </t>
 </template>

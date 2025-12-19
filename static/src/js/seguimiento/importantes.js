@@ -32,7 +32,7 @@
            onMounted(() => {
                interval = setInterval(() => {
                    this.loadImportantes();
-               }, 5000);
+               }, 50000);
            });
 
            onWillUnmount(() => {
@@ -41,14 +41,48 @@
         }
 
         async loadImportantes() {
-            const response = await fetch("/seguimiento_procesos");
+            const response = await fetch("/seguimiento_importantes");
             const data = await response.json();
-            let num = 0;
-            const result  = data.map(row=>({'id':num++,...row}))
-            this.state.importantes = result.filter(item => item.prioridad && item.prioridad > 0);
-            this.state.importantes = this.state.importantes.sort((a,b) => b.prioridad - a.prioridad);
-            this.state.importante_total = this.state.importantes.length;
+//            console.log(data)
+            this.state.importantes = data;
         };
+
+        getMondayOfWeek(year, week) {
+            try {
+                // Validaciones duras
+                const y = parseInt(year, 10);
+                const w = parseInt(week, 10);
+                if (!Number.isInteger(y) || !Number.isInteger(w) || w < 1 || w > 53) {
+                    return "Semana inválida";
+                }
+
+                // ISO: el jueves de la semana 1 define el año de la semana
+                // Paso 1: jueves de la semana 'w'
+                const fourthJan = new Date(Date.UTC(y, 0, 4));            // 4 de enero (UTC)
+                const dayOfWeek = fourthJan.getUTCDay() || 7;             // 1..7 (lunes..domingo)
+                const isoWeek1Monday = new Date(fourthJan);               // lunes de la semana 1
+                isoWeek1Monday.setUTCDate(fourthJan.getUTCDate() - (dayOfWeek - 1));
+
+                // Paso 2: lunes de la semana w
+                const monday = new Date(isoWeek1Monday);
+                monday.setUTCDate(isoWeek1Monday.getUTCDate() + (w - 1) * 7);
+
+                // Validación final
+                if (isNaN(monday.getTime())) {
+                    return "Fecha inválida";
+                }
+
+                // Extraer día y mes (en local, pero desde UTC para evitar DST)
+                const dayNumber = monday.getUTCDate();
+                const monthName = monday.toLocaleString('es-MX', { month: 'long', timeZone: 'UTC' });
+
+                return `${dayNumber} de ${monthName}`; // "22 de diciembre"
+            } catch (e) {
+                // Previene que OWL se caiga silenciosamente
+                console.error("getMondayOfWeek error:", e);
+                return ""; // o "Error de fecha"
+            }
+        }
 
         // Función para obtener todos los materiales faltantes de comprar
         abrirDialogoCompra = (orden,version)=>{

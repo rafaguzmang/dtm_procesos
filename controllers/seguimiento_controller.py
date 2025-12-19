@@ -56,7 +56,6 @@ class ProcesosController(http.Controller):
                     'cotizacion':orden.no_cotizacion,
                     'terminado':'Terminado' if procesos_id.status == 'terminado' else '',
                     'po':orden.po_number,
-                    'prioridad':orden.prioridad,
                     'requerido':requerido,
                     'realizado':realizado,
                     'status':dict(procesos_id._fields['status'].selection).get(procesos_id.status) if dict(procesos_id._fields['status'].selection).get(procesos_id.status) else ''
@@ -64,8 +63,100 @@ class ProcesosController(http.Controller):
             result.append(vals)
         # datetime.strptime(x["fecha"], "%d/%m/%Y")
         result = sorted(result,key=lambda x:datetime.strptime(x["fecha_entrega"], "%d/%m/%Y"))
-        return request.make_response(
+        return (request.make_response(
                 json.dumps(result),
+                    headers={
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin':'*'
+                    }
+                )
+        )
+    @http.route('/seguimiento_importantes', type='http', auth='public')
+    def ordenes_importantes(self, **kwargs):
+        # Se obtienen todas las ordenes de trabajo
+        ordenes_trabajo = request.env['dtm.odt'].sudo().search([('prioridad_date','!=',False)])
+        result = []
+        years_list = []
+        week_list = []
+        for orden in ordenes_trabajo:
+            procesos_id = request.env['dtm.proceso'].sudo().search([('ot_number','=',orden.ot_number),('revision_ot','=',orden.revision_ot)],limit=1)
+            retardo = True if orden.date_rel < date.today() else False
+            # Status del corte
+            corte_id = request.env['dtm.materiales.laser'].sudo().search([('orden_trabajo','=',orden.ot_number),('revision_ot','=',orden.revision_ot)])
+            corte_finalizado_id = request.env['dtm.laser.realizados'].sudo().search([('orden_trabajo','=',orden.ot_number),('revision_ot','=',orden.revision_ot)])
+            corte = "N/A"
+            if corte_finalizado_id and not corte_id:
+                corte = "100%"
+            if corte_id:
+                corte = f"{round(corte_id.status, 2)}%"
+
+            # Status de maquinado
+            maquinados_id = request.env['dtm.maquinados'].sudo().search([('orden_trabajo','=',orden.ot_number),('revision_ot','=',orden.revision_ot)])
+            maquinados_finalizado_id = request.env['dtm.maquinados.terminados'].sudo().search([('orden_trabajo','=',orden.ot_number),('revision_ot','=',orden.revision_ot)])
+            maquinado = "N/A"
+            if maquinados_finalizado_id and not maquinados_id:
+                maquinado = "100%"
+            if maquinados_id:
+                maquinado = f"{round(maquinados_id.status,2)}%"
+
+            # Status del material en compras
+            get_requerido = request.env['dtm.compras.requerido'].sudo().search([('orden_trabajo','=',orden.ot_number),('revision_ot','=',orden.revision_ot)])
+            get_realizado = request.env['dtm.compras.realizado'].sudo().search([('orden_trabajo','=',orden.ot_number),('revision_ot','=',orden.revision_ot),('listo_btn','!=',True)])
+            requerido = len(get_requerido.ids) if get_requerido else 0
+            realizado = len(get_realizado.ids) if get_realizado else 0
+
+            year = orden.prioridad_date.isocalendar()[0] if orden.prioridad_date else 0
+            week = orden.prioridad_date.isocalendar()[1] if orden.prioridad_date else 0
+            day = orden.prioridad_date.isocalendar()[2] if orden.prioridad_date else 0
+            years_list.append(year)
+            week_list.append(week)
+            vals = {
+                    'orden':orden.ot_number,
+                    'version_ot':orden.revision_ot,
+                    'tipo':orden.tipe_order,
+                    'cliente':orden.name_client,
+                    'producto':orden.product_name,
+                    'fecha_entrega':orden.date_rel.strftime("%x"),
+                    'fecha_retardo':retardo,
+                    'nesteo':'100%' if orden.firma_ingenieria else '0%',
+                    'compra_material':f"{procesos_id.materials}%",
+                    'corte': corte,
+                    'maquinado': maquinado,
+                    'habilitado':'',
+                    'ensamble':'',
+                    'soldadura':'',
+                    'limpieza':'',
+                    'tipo_acabado':'',
+                    'acabado':'',
+                    'cotizacion':orden.no_cotizacion,
+                    'terminado':'Terminado' if procesos_id.status == 'terminado' else '',
+                    'po':orden.po_number,
+                    'day':day,
+                    'week':week,
+                    'year':year,
+                    'requerido':requerido,
+                    'realizado':realizado,
+                    'status':dict(procesos_id._fields['status'].selection).get(procesos_id.status) if dict(procesos_id._fields['status'].selection).get(procesos_id.status) else ''
+            }
+            result.append(vals)
+
+        list_years = list(set(years_list))
+        list_week = list(set(week_list))
+        list_json_final = {}
+
+        for year in list_years:
+            lista_json_filter_year = [x for x in result if x["year"] == year]
+            weeks_dict = {}
+            for week in list_week:
+                lista_json_filter_week = [x for x in lista_json_filter_year if x["week"] == week]
+                lista_json_sorted = sorted(lista_json_filter_week, key=lambda x: x["day"])
+                weeks_dict[str(week)] = lista_json_sorted
+            list_json_final[str(year)] = weeks_dict
+
+        # # datetime.strptime(x["fecha"], "%d/%m/%Y")
+        # result = sorted(result,key=lambda x:datetime.strptime(x["fecha_entrega"], "%d/%m/%Y"))
+        return request.make_response(
+                json.dumps(list_json_final),
                     headers={
                         'Content-Type': 'application/json',
                         'Access-Control-Allow-Origin':'*'
