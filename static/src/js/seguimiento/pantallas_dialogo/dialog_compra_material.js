@@ -26,7 +26,6 @@ export class DialogCompraMaterial extends Component {
             }),
         });
         const data = await response.json();
-        console.log("Materiales",data.result);
         let index = 0;
         this.state.materiales = data.result.map(row=>({'index':index++,...row}));
     }

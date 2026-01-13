@@ -19,7 +19,6 @@ export class DialogMateriales extends Component{
     }
 
     async cargarMateriales(){
-        console.log(this.props.orden);
         const response = await fetch("/seguimiento_materiales", {
             method: "POST",         
             headers: {

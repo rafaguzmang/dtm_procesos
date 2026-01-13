@@ -223,11 +223,39 @@ class Proceso(models.Model):
     @api.onchange('status')
     def _onchange_status(self):
         corte = self.env['dtm.materiales.laser'].search([('orden_trabajo','=',self.ot_number),('revision_ot','=',self.revision_ot)])
-        if corte:
-            self.status = 'corte'
-            raise ValidationError(f"{self.ot_number} no liberada de corte")
+        # if corte:
+        #     self.status = 'corte'
+        #     raise ValidationError(f"{self.ot_number} no liberada de corte")
         if self.status in ["terminado","instalacion"] and not self.firma_calidad:
             raise ValidationError("Falta firma de calidad")
+
+        if self.status == "soldadura":
+            get_soldadura = self.env['dtm.soldadura'].search([('orden_trabajo','=',self.ot_number),('revision_ot','=',self.revision_ot)])
+            vals = {
+                'orden_trabajo':self.ot_number,
+                'revision_ot':self.revision_ot,
+                'tipo_orden':self.tipe_order,
+                'cliente':self.name_client,
+                'product_name':self.product_name,
+                'disenador':self.disenador,
+            }
+            if get_soldadura:
+                get_soldadura.write(vals)
+            else:
+                get_soldadura = self.env['dtm.soldadura'].create(vals)
+
+            if self.anexos_id:
+                get_diseno = self.env['dtm.odt'].search([('ot_number', '=', self.ot_number), ('revision_ot', '=', self.revision_ot)], limit=1)
+                for plano in get_diseno.anexos_id:
+                    attachment = self.env['ir.attachment'].browse(plano.id)
+                    vals = {
+                        'model_id':get_soldadura.id,
+                        'nombre':attachment.name,
+                        'archivo':attachment.datas,
+                        'cantidad':get_diseno.cuantity
+                    }
+                    get_planos = self.env['dtm.soldadura.temporales'].search([('model_id','=',get_soldadura.id),('nombre','=',plano.name)],limit=1)
+                    get_planos.write(vals) if get_planos else get_planos.create(vals)
 
 
     def get_view(self, view_id=None, view_type='form', **options):

@@ -1,5 +1,5 @@
 /** @odoo-module **/
-import { Component, onWillStart, useState, onMounted,onWillUnmount } from "@odoo/owl";
+import { Component, onWillStart, useState, onMounted,onWillUnmount,onPatched  } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 export class CorteLaser extends Component{
     setup(){
@@ -42,12 +42,25 @@ export class CorteLaser extends Component{
         });
 
         onMounted(() => {
+
             interval = setInterval(() => {
                 this.maquinasData();
                 this.cortesLaser();
                 this.tiempoDiario();
             }, 5000);
         });
+
+
+        onPatched(() => {
+          const container = document.getElementById("table-container");
+          if (!container) return;
+          const targetRow = container.querySelector(".highlight-row");
+          if (targetRow) {
+            targetRow.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        });
+
+
 
         onWillUnmount(() => {
             clearInterval(interval);
