@@ -17,6 +17,9 @@ export class CorteLaser extends Component{
             porcentaje_corte:0,
             porcentaje_mitsubishi:0,
             porcentaje_jfy:0,
+//            no ordenes
+            no_mitsubishi: 0,
+            no_jfy:0,
         });
 
 //        this.busService = useService("bus_service");
@@ -76,6 +79,8 @@ export class CorteLaser extends Component{
         this.state.cortes = data.map(item => ({id: id++, ...item}));
         const mitsubishidata = this.state.cortes.filter(item => item.cortadora === "MITSUBISHI");
         const jfyData = this.state.cortes.filter(item => item.cortadora === "BFC6025");
+        this.state.no_mitsubishi = mitsubishidata.length;
+        this.state.no_jfy = jfyData.length;
         this.state.tiempo_estimado_mitsubishi = Number(mitsubishidata.reduce((total, corte) => total + (corte.tiempo_teorico || 0), 0)).toFixed(2);
         this.state.tiempo_estimado_jfy = Number(jfyData.reduce((total, corte) => total + (corte.tiempo_teorico || 0), 0)).toFixed(2);
         this.state.tiempo_real = Number(this.state.cortes.reduce((total, corte) => total + (corte.tiempo_real || 0), 0)).toFixed(2);

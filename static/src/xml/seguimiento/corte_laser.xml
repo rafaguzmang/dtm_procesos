@@ -7,12 +7,15 @@
                     <div class="card-header ">
                         <img src="dtm_procesos/static/src/img/jfy.png"
                             class="img-fluid" alt="jfy logo" />
-                        <h6 class="border border-black rounded-3 mt-2 text-center">
+                        <h4 class="border border-black rounded-3 mt-2 text-center">
                             <span><t t-esc="this.state.porcentaje_jfy"/>% del día</span>
-                        </h6>
-                        <h6 class="border border-black rounded-3 mt-2 text-center">
-                            <span><t t-esc="this.state.tiempo_estimado_jfy"/> min</span>
-                        </h6>
+                        </h4>
+                        <h4 class="border border-black rounded-3 mt-2 text-center">
+                            <span><t t-esc="this.state.tiempo_jfy"/> min</span>
+                        </h4>
+                        <h4 class="border border-black rounded-3 mt-2 text-center">
+                            <span><t t-esc="this.state.no_jfy"/> archivos</span>
+                        </h4>
                     </div>
                     <div id="table-container" class="card-body overflow-auto" style="width:100%; height:10rem;">
                         <table class="table align-middle table-sm">
@@ -43,13 +46,17 @@
                     <div class="card-header ">
                         <img src="dtm_procesos/static/src/img/mitsubishi.png"
                             class="img-fluid" alt="mitsubishi logo" />
-                        <h6 class="border border-black rounded-3 mt-2 text-center">
+                        <h4 class="border border-black rounded-3 mt-2 text-center">
                             <span><t t-esc="this.state.porcentaje_mitsubishi"/>% del día</span>
-                        </h6>
-                        <h6 class="border border-black rounded-3 mt-2 text-center">
+                        </h4>
+                        <h4 class="border border-black rounded-3 mt-2 text-center">
                             <span><t t-esc="this.state.tiempo_mitsubishi"/> min</span>
 
-                        </h6>
+                        </h4>
+                        <h4 class="border border-black rounded-3 mt-2 text-center">
+                            <span><t t-esc="this.state.no_mitsubishi"/> archivos</span>
+
+                        </h4>
                     </div>
                     <div class="card-body overflow-auto" style="width:100%; height:20rem;">
                         <table class="table align-middle table-sm">
