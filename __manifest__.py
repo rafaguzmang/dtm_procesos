@@ -30,6 +30,7 @@
             'dtm_procesos/static/src/css/styles.css',
             'dtm_procesos/static/src/css/ordene_tabla.css',
             'dtm_procesos/static/src/css/importantes.css',
+
             # JS
             'dtm_procesos/static/src/js/indicador.js',
             'dtm_procesos/static/src/js/seguimiento/seguimiento.js',
@@ -39,9 +40,9 @@
             'dtm_procesos/static/src/js/seguimiento/pantallas_dialogo/dialog_maquinados.js',
             'dtm_procesos/static/src/js/seguimiento/importantes.js',
             'dtm_procesos/static/src/js/seguimiento/corte_laser.js',
+            'dtm_procesos/static/src/js/seguimiento/soldadura.js',
             'dtm_procesos/static/src/js/seguimiento/pantallas_dialogo/dialog_materiales_liberar.js',
             'dtm_procesos/static/src/js/seguimiento/pantallas_dialogo/dialog_compra_material.js',
-
             # XML
             'dtm_procesos/static/src/xml/indicador.xml',
             'dtm_procesos/static/src/xml/seguimiento/seguimiento.xml',
@@ -51,6 +52,7 @@
             'dtm_procesos/static/src/xml/seguimiento/pantallas_dialogo/dialog_maquinados.xml',
             'dtm_procesos/static/src/xml/seguimiento/importantes.xml',
             'dtm_procesos/static/src/xml/seguimiento/corte_laser.xml',
+            'dtm_procesos/static/src/xml/seguimiento/soldadura.xml',
             'dtm_procesos/static/src/xml/seguimiento/pantallas_dialogo/dialog_material_liberar.xml',
             'dtm_procesos/static/src/xml/seguimiento/pantallas_dialogo/dialog_compra_material.xml',
             ],

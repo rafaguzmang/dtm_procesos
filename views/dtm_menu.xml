@@ -16,8 +16,12 @@
             <menuitem id="dtm_facturado_retrabajo_view"  action="dtm_facturado_odt.dtm_facturado_retrabajo_accion"/>
         </menuitem>
         <menuitem id="menu_dtm_procesos"  action="dtm_procesos.dtm_proceso_accion" />
+         <menuitem name="Soldadura" id="menu_root_dtm_soldadura_menu">
+            <menuitem id="dtm_soldadura_menu" action="dtm_soldadura.dtm_soldadura_act_window" />
+            <menuitem id="dtm_soldadura_terminados_window_menu" action="dtm_soldadura.dtm_soldadura_terminados_act_window"/>
 
-<!--        <menuitem id="dtm_soldadura_menu" action="dtm_soldadura.dtm_soldadura_act_window" />-->
+        </menuitem>
+
 
 <!--        <menuitem id="dtm_procesos_indicadores_menu" action ="dtm_procesos_indicador_action" />-->
         <menuitem id="dtm_procesos_seguimientoes_menu" action ="dtm_procesos_seguimiento_action"/>

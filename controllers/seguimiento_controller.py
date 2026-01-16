@@ -419,3 +419,28 @@ class ProcesosController(http.Controller):
                 'total': round(material.unitario * material.cantidad,2),
             } for material in orden_id]
         return result
+
+    # Obtien la información del modulo de Soldadura
+    @http.route('/soldadura_ordenes')
+    def soldadura_ordenes(self ):
+
+        get_ordenes = request.env['dtm.soldadura'].sudo().search([])
+        ordenes_list = []
+
+        for orden in get_ordenes:
+            vals = {
+                "no_orden":orden.orden_trabajo,
+                "cliente":orden.cliente,
+                "product_name":orden.product_name,
+                "produccion":[{'nombre':data.nombre,'soldador':dict(data._fields['soldador'].selection).get(data.soldador),'tiempo':str(data.tiempos_id[0].create_date).split(".")[0] if data.tiempos_id else None } for data in orden.planos_id if data.soldador],
+
+            }
+            ordenes_list.append(vals)
+
+        return request.make_response(
+            json.dumps(ordenes_list),
+            headers={
+                'Content-Type':'application/json',
+                'Access-Control-Allow-Origin':'*'
+            }
+        )

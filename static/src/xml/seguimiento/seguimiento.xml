@@ -4,9 +4,14 @@
             Ordenes de Trabajo
         </h1>
 
-        <!--         Fila 2: derecha-->
-        <div class="container mt-4">
-            <CorteLaser/>
+<!--         Fila 2: derecha-->
+        <div class="container mt-4 d-flex justify-content-center align-items-start">
+                <div class="col-5">
+                    <CorteLaser/>
+                </div>
+                <div class="col-7">
+                    <Soldadura/>
+                </div>
         </div>
       
 <!--         Fila 1: izquierda-->

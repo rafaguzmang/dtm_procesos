@@ -1,9 +1,9 @@
 <template xml:space="preserve">
     <t t-name="dtm_procesos.corte_laser_template" owl="1">
         <div class="container mt-4 border p-4 rounded shadow-sm">
-            <div class="container d-flex flex-row">
+            <div class="container d-flex flex-row justify-content-center">
 <!--                JFY-->
-                <div class="card text-dark  mb-3" style="max-width: 18rem;">
+                <div class="card text-dark  mb-3 col-6" style="max-width: 18rem;">
                     <div class="card-header ">
                         <img src="dtm_procesos/static/src/img/jfy.png"
                             class="img-fluid" alt="jfy logo" />
@@ -42,7 +42,7 @@
                     </div>
                     </div>
 <!--                MITSUBISHI-->
-                <div class="card text-dark  mb-3" style="max-width: 18rem;">
+                <div class="card text-dark  mb-3 col-6" style="max-width: 18rem;">
                     <div class="card-header ">
                         <img src="dtm_procesos/static/src/img/mitsubishi.png"
                             class="img-fluid" alt="mitsubishi logo" />

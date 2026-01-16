@@ -1,0 +1,25 @@
+<template xml:space="preserve">
+    <t t-name="dtm_procesos.soldadura_template" owl="1">
+        <div class="container  p-4 d-flex flex-row justify-content-center">
+            <div class="card mb-3" style="max-width: 100%;">
+              <div class="row g-0">
+                <div class="col-md-3">
+                  <img src="dtm_procesos/static/src/img/soldador.jpg" class="card-img-top " alt="soldador" style="width:92%"/>
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <t t-foreach="this.state.soldadura" t-as="variable" t-key="variable.no_orden">
+                      <h5 class="card-title"><t t-esc="variable.no_orden"/> - <t t-esc="variable.cliente"/> - <t t-esc="variable.product_name"/></h5>
+                      <t t-foreach="variable.produccion" t-as="datos" t-key="datos.nombre">
+                        <p class="card-text ps-3"><t t-esc="datos.nombre"/> - <t t-esc="datos.soldador"/></p>
+                        <p class="card-text ps-3"><small class="text-muted">&nbsp;&nbsp;<t t-esc="datos.tiempo"/>5</small></p>
+                      </t>
+                      
+                    </t>                    
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </t>
+</template>
