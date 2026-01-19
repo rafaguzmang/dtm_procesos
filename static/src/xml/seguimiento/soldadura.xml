@@ -8,13 +8,13 @@
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">
-                    <t t-foreach="this.state.soldadura" t-as="variable" t-key="variable.no_orden">
+                    <t t-foreach="state.soldadura" t-as="variable" t-key="variable.no_orden">
                       <h5 class="card-title"><t t-esc="variable.no_orden"/> - <t t-esc="variable.cliente"/> - <t t-esc="variable.product_name"/></h5>
                       <t t-foreach="variable.produccion" t-as="datos" t-key="datos.nombre">
-                        <p class="card-text ps-3"><t t-esc="datos.nombre"/> - <t t-esc="datos.soldador"/></p>
-                        <p class="card-text ps-3"><small class="text-muted">&nbsp;&nbsp;<t t-esc="datos.tiempo"/>5</small></p>
+                        <t t-if="datos.start">
+                          <p class="card-text ps-3"><t t-esc="datos.nombre"/> - <t t-esc="datos.soldador"/> - <t t-esc="datos.tiempo"/></p>
+                        </t>
                       </t>
-                      
                     </t>                    
                   </div>
                 </div>

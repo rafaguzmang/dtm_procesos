@@ -432,8 +432,7 @@ class ProcesosController(http.Controller):
                 "no_orden":orden.orden_trabajo,
                 "cliente":orden.cliente,
                 "product_name":orden.product_name,
-                "produccion":[{'nombre':data.nombre,'soldador':dict(data._fields['soldador'].selection).get(data.soldador),'tiempo':str(data.tiempos_id[0].create_date).split(".")[0] if data.tiempos_id else None } for data in orden.planos_id if data.soldador],
-
+                "produccion":[{'start':data.start,'nombre':data.nombre,'soldador':dict(data._fields['soldador'].selection).get(data.soldador),'tiempo':str(data.tiempos_id[0].create_date).split(".")[0] if data.tiempos_id else None } for data in orden.planos_id if data.soldador],
             }
             ordenes_list.append(vals)
 
