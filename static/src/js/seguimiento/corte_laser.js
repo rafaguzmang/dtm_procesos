@@ -21,38 +21,23 @@ export class CorteLaser extends Component{
             no_mitsubishi: 0,
             no_jfy:0,
         });
-
-//        this.busService = useService("bus_service");
-//        this.busService.addeventListener("notifications", (notifications) => {
-//            for ( const notification of notifications ) {
-//                const [channel, message] = notification;
-//                if ( channel[1] === "cortadora_channel" ) {
-//                    const idx = this.state.importantes.findIndes(item => item.id === message.id);
-//                    if ( idx !== -1 ) {
-//                        this.state.importantes[idx].priority = message.priority;
-//                        this.state.importantes[idx].status = message.status;
-//                    }
-//                }
-//            }
-//        });
+        this.busService = useService("bus_service");
+        this.onBusNotification = this.onBusNotification.bind(this);      
         
-        
-        let interval = null;
         onWillStart(async () => {
             await this.maquinasData();
             await this.cortesLaser();
             await this.tiempoDiario();
+
+            this.busService.addChannel('canal_corte');
+            this.busService.addEventListener('notification', this.onBusNotification);
         });
 
         onMounted(() => {
-
-            interval = setInterval(() => {
                 this.maquinasData();
                 this.cortesLaser();
                 this.tiempoDiario();
-            }, 5000);
         });
-
 
         onPatched(() => {
           const container = document.getElementById("table-container");
@@ -62,15 +47,21 @@ export class CorteLaser extends Component{
             targetRow.scrollIntoView({ behavior: "smooth", block: "center" });
           }
         });
-
-
-
         onWillUnmount(() => {
-            clearInterval(interval);
+            this.busService.removeEventListener('notification', this.onBusNotification);
         });
-
-
     }
+
+     onBusNotification(notifications) {
+        // Ponemos este log para ver en la consola la estructura real que llega
+        console.log("Paquete recibido del bus:", notifications);
+        console.log("notifications.detail",notifications.detail[0].payload.mensaje);
+        this.maquinasData();
+        this.cortesLaser();
+        this.tiempoDiario();       
+    }
+
+
     async cortesLaser(){
         const response = await fetch("/corte_diario");
         const data = await response.json();
