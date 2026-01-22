@@ -1,9 +1,10 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, useState } from "@odoo/owl";
+import { Component, onWillStart, useState, onMounted,onWillUnmount } from "@odoo/owl";
 import { DialogMateriales } from "./pantallas_dialogo/dialog_materiales";
 import { DialogCorteLaser } from "./pantallas_dialogo/dialog_corte_laser";
 import { DialogMaquinados } from "./pantallas_dialogo/dialog_maquinados";
+import { useService } from "@web/core/utils/hooks";
 
 export class Ordenes extends Component{
     static components = {DialogMateriales, DialogCorteLaser, DialogMaquinados};
@@ -27,10 +28,28 @@ export class Ordenes extends Component{
             version_actual:'',
 
         })
+        this.busService = useService("bus_service")
+        this.onBusNotification = this.onBusNotification.bind(this);
 
         onWillStart(async () => {
             await this.cargarTabla();          
-        })
+            this.busService.addChannel('canal_ots');
+            this.busService.addEventListener('notification', this.onBusNotification);
+        });
+
+        onMounted(()=>{
+            this.cargarTabla();
+        });
+
+        onWillUnmount(() => {
+            this.busService.removeEventListener('notification', this.onBusNotification);
+        });
+    }
+
+    onBusNotification(notifications) {
+        console.log("Paquete recibido del bus:", notifications);
+        console.log("notifications.detail",notifications.detail[0].payload.mensaje);
+        this.cargarTabla();
     }
     // Función para obtener los maquinados
     maquinadosFunc = (orden,version)=>{        

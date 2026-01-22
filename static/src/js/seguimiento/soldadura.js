@@ -22,7 +22,7 @@ export class Soldadura extends Component{
         })
 
         onWillUnmount(() => {
-            clearInterval(interval);
+           this.busService.removeEventListener('notification', this.onBusNotification);
         });
 
     }

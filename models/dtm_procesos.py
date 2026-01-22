@@ -85,9 +85,9 @@ class Proceso(models.Model):
             else:
                 record.materials = 0
 
-            if self.env['dtm.materiales.laser'].search(
-                    [('orden_trabajo', '=', record.ot_number), ('revision_ot', '=', record.revision_ot)]):
-                record.status = 'corte'
+            # if self.env['dtm.materiales.laser'].search(
+            #         [('orden_trabajo', '=', record.ot_number), ('revision_ot', '=', record.revision_ot)]):
+            #     record.status = 'corte'
 
     def _compute_permiso(self):
         for record in self:
@@ -195,8 +195,6 @@ class Proceso(models.Model):
         else:
             raise ValidationError('Favor de especificar en la pestaña de "NOTAS" motivo del rechazo')
 
-
-
     def action_detener(self):
         email = self.env.user.partner_id.email
         if email == 'calidad@dtmindustry.com' or email == 'calidad2@dtmindustry.com':
@@ -222,13 +220,11 @@ class Proceso(models.Model):
 
     @api.onchange('status')
     def _onchange_status(self):
-        corte = self.env['dtm.materiales.laser'].search([('orden_trabajo','=',self.ot_number),('revision_ot','=',self.revision_ot)])
-        # if corte:
-        #     self.status = 'corte'
-        #     raise ValidationError(f"{self.ot_number} no liberada de corte")
+
         if self.status in ["terminado","instalacion"] and not self.firma_calidad:
             raise ValidationError("Falta firma de calidad")
 
+        # Pone la orden en el modulo de soldadura
         if self.status == "soldadura":
             get_soldadura = self.env['dtm.soldadura'].search([('orden_trabajo','=',self.ot_number),('revision_ot','=',self.revision_ot)])
             vals = {
@@ -257,10 +253,16 @@ class Proceso(models.Model):
                     get_planos = self.env['dtm.soldadura.temporales'].search([('model_id','=',get_soldadura.id),('nombre','=',plano.name)],limit=1)
                     get_planos.write(vals) if get_planos else get_planos.create(vals)
 
+        self.env['bus.bus']._sendone(
+            'canal_manufactura',
+            'manufactura',
+            {'mensaje':'Actualizado por Manufactura'}
+        )
+
 
     def get_view(self, view_id=None, view_type='form', **options):
         res = super(Proceso,self).get_view(view_id, view_type,**options)
-        # Loop para sacer los indicadores de este modulo
+        # Loop para sacar los indicadores de este modulo
         for month in range(1, 13):
             if month <= int(datetime.today().strftime("%m")):
                 # Busca las cotizaciones del mes actual y del mes pasado
@@ -499,7 +501,6 @@ class Proceso(models.Model):
                         lista = []
                         get_fact.write({'materieales_id': [(5, 0, {})]})
                         for material in self.materials_ids:
-                            # print(material.nombre,material.medida)
                             vals = {
                                 "npi_id":get_fact.id,
                                 "material":f"{material.id} - {material.nombre} {material.medida}",
