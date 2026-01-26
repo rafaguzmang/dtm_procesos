@@ -17,7 +17,7 @@ export class CorteLaser extends Component{
             porcentaje_corte:0,
             porcentaje_mitsubishi:0,
             porcentaje_jfy:0,
-//            no ordenes
+            //no ordenes
             no_mitsubishi: 0,
             no_jfy:0,
         });

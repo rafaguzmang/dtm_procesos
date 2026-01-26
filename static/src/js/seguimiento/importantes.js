@@ -1,6 +1,5 @@
     /** @odoo-module **/
     import { Component, useState, onWillStart, onWillUnmount,onMounted  } from "@odoo/owl";
-    import { useService } from "@web/core/utils/hooks";
     import { DialogMateriales } from "./pantallas_dialogo/dialog_materiales";
     import { DialogCorteLaser } from "./pantallas_dialogo/dialog_corte_laser";
     import { DialogMaquinados } from "./pantallas_dialogo/dialog_maquinados";
@@ -10,6 +9,7 @@
     export class Importantes extends Component {
         static components = { DialogMateriales, DialogCorteLaser, DialogMaquinados, DialogMaterialesLiberar, DialogCompraMaterial};
         setup() {
+            let interval = null;
             this.state = useState({
                 importantes: [],
                 importante_total: 0,
@@ -24,36 +24,20 @@
                 orden_actual: null,
                 version_actual: null,
             });
-            this.busService = useService("bus_service");
-            this.onBusNotification = this.onBusNotification.bind(this);
 
             onWillStart(async () => {
-                await this.loadImportantes();
-                this.busService.addChannel("canal_ots");
-                this.busService.addEventListener("notification", this.onBusNotification);
-                this.busService.addChannel("canal_compras");
-                this.busService.addEventListener("notification", this.onBusNotification);
-                this.busService.addChannel("canal_corte");
-                this.busService.addEventListener("notification", this.onBusNotification);
-                this.busService.addChannel("canal_maquinados");
-                this.busService.addEventListener("notification", this.onBusNotification);
-                this.busService.addChannel("canal_manufactura");
-                this.busService.addEventListener("notification", this.onBusNotification);
+               await this.loadImportantes();
             });
 
            onMounted(() => {
-               this.loadImportantes();
+               interval = setInterval(() => {
+                   this.loadImportantes();
+               }, 50000);
            });
 
            onWillUnmount(() => {
-              this.busService.removeEventListener('notification', this.onBusNotification);
+               clearInterval(interval);
            });
-        }
-
-        onBusNotification(notifications){
-            console.log("Paquete recibido del bus");
-            console.log("nofications.detail");
-            this.loadImportantes();
         }
 
         async loadImportantes() {

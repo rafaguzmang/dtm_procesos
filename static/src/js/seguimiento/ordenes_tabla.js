@@ -33,8 +33,7 @@ export class Ordenes extends Component{
 
         onWillStart(async () => {
             await this.cargarTabla();          
-            this.busService.addChannel('canal_ots');
-            this.busService.addEventListener('notification', this.onBusNotification);
+
         });
 
         onMounted(()=>{
@@ -42,7 +41,6 @@ export class Ordenes extends Component{
         });
 
         onWillUnmount(() => {
-            this.busService.removeEventListener('notification', this.onBusNotification);
         });
     }
 

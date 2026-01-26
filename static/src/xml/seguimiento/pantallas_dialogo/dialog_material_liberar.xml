@@ -18,7 +18,7 @@
                                 <th>Proveedor</th>
                                 <th>P.Unitario</th>
                                 <th>P.Total</th>
-                                <th>Nesteo</th>
+<!--                                <th>Nesteo</th>-->
                               </tr>
                             </thead>
                             <tbody>
