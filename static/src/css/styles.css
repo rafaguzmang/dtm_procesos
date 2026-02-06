@@ -1,4 +1,104 @@
-.terminado{
+.terminado {
     background-color: #52df73;
     color: #e4f3e8;
+}
+
+/* ---------------------------Seguimiento--------------------------- */
+
+/* === Contenedor Principal === */
+.dtm-seguimiento {
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* === Encabezado === */
+.dtm-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+.dtm-header h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #2c3e50;
+    letter-spacing: -0.5px;
+}
+
+/* === Grid Principal === */
+.dtm-main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr 1.7fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    align-items: stretch;
+    /* Asegura que todos tengan la misma altura */
+}
+
+/* === Cards === */
+.dtm-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    height: 550px;
+    /* Altura fija para todos los cards */
+    display: flex;
+    flex-direction: column;
+}
+
+.dtm-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+/* Card específica para Importantes */
+.dtm-card-importantes {
+    max-width: 100%;
+}
+
+/* === Sección de Órdenes === */
+.dtm-ordenes {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 0;
+    overflow: hidden;
+}
+
+/* === Responsive === */
+@media (max-width: 1400px) {
+    .dtm-main-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media (max-width: 1200px) {
+    .dtm-main-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .dtm-card {
+        margin-bottom: 0;
+        height: auto;
+        /* En móvil permite altura automática */
+    }
+}
+
+@media (max-width: 768px) {
+    .dtm-seguimiento {
+        padding: 1rem;
+    }
+
+    .dtm-header h1 {
+        font-size: 1.6rem;
+    }
 }

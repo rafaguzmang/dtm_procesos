@@ -1,23 +1,30 @@
 <template xml:space="preserve">
     <t t-name="dtm_procesos.seguimiento" owl="1">
-        <h1>
-            Ordenes de Trabajo
-        </h1>
+        <div class="dtm-seguimiento">
+            <!-- Encabezado -->
+            <div class="dtm-header">
+                <h1>Órdenes de Trabajo</h1>
+            </div>
 
-<!--         Fila 2: derecha-->
-        <div class="container mt-4 d-flex justify-content-center align-items-start">
-                <div class="col-5">
+            <!-- Fila combinada: CorteLaser, Soldadura e Importantes -->
+            <div class="dtm-main-grid">
+                <div class="dtm-card">
                     <CorteLaser/>
                 </div>
-                <div class="col-7">
+                
+                <div class="dtm-card">
                     <Soldadura/>
                 </div>
+                
+                <div class="dtm-card dtm-card-importantes">
+                    <Importantes/>
+                </div>
+            </div>
+
+            <!-- Órdenes -->
+            <div class="dtm-ordenes">
+                <Ordenes/>
+            </div>
         </div>
-      
-<!--         Fila 1: izquierda-->
-        <div class="container mt-4">
-           <Importantes/>
-        </div>
-        <Ordenes/>
     </t>
 </template>
