@@ -2,13 +2,13 @@
 
 import { Component, useState, onWillStart } from "@odoo/owl";
 
-export class DialogMateriales extends Component{
+export class DialogMateriales extends Component {
     static props = [
         "cerrar",
         "orden",
         "version",
     ];
-    setup(){
+    setup() {
         this.state = useState({
             materiales: [],
         })
@@ -18,9 +18,9 @@ export class DialogMateriales extends Component{
         })
     }
 
-    async cargarMateriales(){
+    async cargarMateriales() {
         const response = await fetch("/seguimiento_materiales", {
-            method: "POST",         
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -32,7 +32,7 @@ export class DialogMateriales extends Component{
         });
         const data = await response.json();
         let num = 0;
-        this.state.materiales = data.result.map(item => ({'num':num++,...item}));        
+        this.state.materiales = data.result.map(item => ({ 'num': num++, ...item }));
     }
 }
 DialogMateriales.template = "dtm_procesos.dialog_materiales_template";

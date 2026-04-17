@@ -1,30 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
      <menuitem name="Procesos" id="menu_root_dtm_procesos">
-        <menuitem id="dtm_cortadora_laser__menu" action="dtm_materiales_laser.dtm_cortadora_laser_act_window"/>
-        <menuitem name="Administración Laser" id="menu_root_dtm_corte">
-            <menuitem id="menu_dtm_materiales_laser"  action="dtm_materiales_laser.dtm_materiales_laser_accion" />
-            <menuitem id="menu_dtm_laser_realizados"  action="dtm_materiales_laser.dtm_laser_realizados_accion" />
+        <menuitem id="dtm_cortadora_laser__menu" action="dtm_materiales_laser.dtm_cortadora_laser_act_window" 
+                groups="group_dtm_procesos_admin,group_dtm_procesos_user"
+                sequence="1"/>
+        <menuitem name="Administración Laser" id="menu_root_dtm_corte" groups="group_dtm_procesos_admin" sequence="6">
+            <menuitem id="menu_dtm_materiales_laser"
+                      action="dtm_materiales_laser.dtm_materiales_laser_accion"
+                      groups="group_dtm_procesos_admin"/>
+            <menuitem id="menu_dtm_laser_realizados"
+                      action="dtm_materiales_laser.dtm_laser_realizados_accion"
+                      groups="group_dtm_procesos_admin"/>
         </menuitem>
-        <menuitem name="Tubos" id="menu_root_dtm_tubos">
+        <menuitem name="Tubos" id="menu_root_dtm_tubos" groups="group_dtm_procesos_admin" sequence="4">
             <menuitem id="dtm_tubos_corte"  action="dtm_corte_tubos.dtm_tubos_corte_accion"/>
             <menuitem id="dtm_tubos_realizados"  action="dtm_corte_tubos.dtm_tubos_realizados_accion"/>
         </menuitem>
-        <menuitem name="Terminado" id="menu_root_dtm_ordenes">
+        <menuitem name="Terminado" id="menu_root_dtm_ordenes" groups="group_dtm_procesos_admin" sequence="5">
             <menuitem id="dtm_facturado_odt_view"  action="dtm_facturado_odt.dtm_facturado_odt_accion"/>
             <menuitem id="dtm_facturado_npi_view"  action="dtm_facturado_odt.dtm_facturado_npi_accion"/>
             <menuitem id="dtm_facturado_retrabajo_view"  action="dtm_facturado_odt.dtm_facturado_retrabajo_accion"/>
         </menuitem>
-        <menuitem id="menu_dtm_procesos"  action="dtm_procesos.dtm_proceso_accion" />
-         <menuitem name="Soldadura" id="menu_root_dtm_soldadura_menu">
+        <menuitem id="menu_dtm_procesos"  action="dtm_procesos.dtm_proceso_accion" groups="group_dtm_procesos_admin" sequence="2"/>
+         <menuitem name="Soldadura" id="menu_root_dtm_soldadura_menu" groups="group_dtm_procesos_admin" sequence="3">
             <menuitem id="dtm_soldadura_menu" action="dtm_soldadura.dtm_soldadura_act_window" />
             <menuitem id="dtm_soldadura_terminados_window_menu" action="dtm_soldadura.dtm_soldadura_terminados_act_window"/>
-
         </menuitem>
 
 
 <!--        <menuitem id="dtm_procesos_indicadores_menu" action ="dtm_procesos_indicador_action" />-->
-        <menuitem id="dtm_procesos_seguimientoes_menu" action ="dtm_procesos_seguimiento_action"/>
+        <menuitem id="dtm_procesos_seguimientoes_menu" action ="dtm_procesos_seguimiento_action" sequence="7" groups="group_dtm_procesos_admin"/>
 
 
      </menuitem>
