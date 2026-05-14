@@ -226,13 +226,14 @@ class ProcesosController(http.Controller):
                     tiempo_total = round(sum(filtro_model_id.tiempos_id.mapped("tiempo")),2)
                 result.append({
                     'primera_pieza':True,
-                    'archivo':primera.nombre,
+                    'archivo_nombre':primera.nombre,
                     'material': f"{primera.material_ids.id} - {primera.material_ids.nombre} {primera.material_ids.medida}",
                     'cantidad':primera.cantidad,
                     'tiempo_teorico':primera.tiempo_teorico,
                     'cortadora':primera.maquina,
                     'porcentaje':porcentaje,
-                    'tiempo_real':tiempo_total
+                    'tiempo_real':tiempo_total,
+                    'archivo_pdf':primera.archivo.decode('utf-8') if primera.archivo else None
                 })
         if orden_id.cortadora_id:
             for segunda in orden_id.cortadora_id:

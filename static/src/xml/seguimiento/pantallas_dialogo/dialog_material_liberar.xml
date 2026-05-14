@@ -4,39 +4,78 @@
           <div class="modal-dialog modal-xl">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Material a liberar para la orden <t t-esc="props.orden"/></h5>
+                <h5 class="modal-title">Corte Láser para la orden<t t-esc="props.orden"/></h5>
                 <button type="button" class="btn-close" aria-label="Close" t-on-click="props.cerrar"></button>
               </div>
               <div class="modal-body">
-                 <h4>Liberar</h4>
+                    <div class="container row">
+                      <div class="col-12">
+                        <t t-if="state.cortes_primera.length > 0">
+                          <h4>Primera Pieza</h4>
                           <table class="table">
                             <thead>
                               <tr>
-                                <th>Código</th>
-                                <th>Descripción</th>
+                                <th>Archivo</th>
+                                <th>Material</th>
                                 <th>Cantidad</th>
-                                <th>Proveedor</th>
-                                <th>P.Unitario</th>
-                                <th>P.Total</th>
-<!--                                <th>Nesteo</th>-->
+                                <th>Tiempo</th>
+                                <th>Cortadora</th>
+                                <th>Porcentaje</th>
+                                <th>Tiempo Real</th>
                               </tr>
                             </thead>
                             <tbody>
-                              <t t-foreach="this.state.materiales" t-as="material" t-key="material.num">
+                              <t t-foreach="state.cortes_primera" t-as="corte" t-key="corte.index">
                                 <tr>
-                                  <td><t t-esc="material.codigo"/></td>
-                                  <td><t t-esc="material.descripcion"/></td>
-                                  <td><t t-esc="material.cantidad"/></td>
-                                  <td><t t-esc="material.proveedor"/></td>
-                                  <td><t t-esc="material.unitario"/></td>
-                                  <td><t t-esc="material.total"/></td>
-                                  <td><t t-esc="material.nesteo"/></td>
+                                  <td><t t-esc="corte.archivo"/></td>
+                                  <td><t t-esc="corte.material"/></td>
+                                  <td><t t-esc="corte.cantidad"/></td>
+                                  <td><t t-esc="corte.tiempo_teorico"/> min</td>
+                                  <td><t t-esc="corte.cortadora"/></td>
+                                  <td><t t-esc="corte.porcentaje"/> %</td>
+                                  <td><t t-esc="corte.tiempo_real"/> min</td>
                                 </tr>
                               </t>
-
                             </tbody>
-                          </table>
-
+                          </table>      
+                        </t>                  
+                      </div>
+                    
+                    </div>
+                    <div class="container row">
+                      <div class="col-12">
+                        <t t-if="state.cortes_segunda.length > 0">
+                          <h4>Segundas Piezas</h4>
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Archivo</th>
+                                <th>Material</th>
+                                <th>Cantidad</th>
+                                <th>Tiempo</th>
+                                <th>Cortadora</th>
+                                <th>Porcentaje</th>
+                                <th>Tiempo Real</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <t t-foreach="state.cortes_segunda" t-as="corte" t-key="corte.index">
+                                <tr>
+                                  <td><t t-esc="corte.archivo"/></td>
+                                  <td><t t-esc="corte.material"/></td>
+                                  <td><t t-esc="corte.cantidad"/></td>
+                                  <td><t t-esc="corte.tiempo_teorico"/> min</td>
+                                  <td><t t-esc="corte.cortadora"/></td>
+                                  <td><t t-esc="corte.porcentaje"/> %</td>
+                                  <td><t t-esc="corte.tiempo_real"/> min</td>
+                                </tr>
+                              </t>
+                            </tbody>
+                          </table>  
+                        </t>
+                      </div>
+                    
+                    </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" t-on-click="props.cerrar">Cerrar</button>

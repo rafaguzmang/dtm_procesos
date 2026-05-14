@@ -1,28 +1,28 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_dtm_proceso_admin,access.dtm.proceso.admin,model_dtm_proceso,group_dtm_procesos_admin,1,1,1,1
-access_dtm_proceso_admin,access.dtm.proceso.admin,model_dtm_proceso,group_dtm_procesos_user,1,1,0,0
+access_dtm_proceso_user,access.dtm.proceso.user,model_dtm_proceso,group_dtm_procesos_user,1,1,0,0
 
 access_dtm_proceso_materials_admin,access.dtm.proceso.materials.admin,model_dtm_proceso_materials,group_dtm_procesos_admin,1,1,1,1
-access_dtm_proceso_materials_admin,access.dtm.proceso.materials.admin,model_dtm_proceso_materials,group_dtm_procesos_user,1,1,0,0
+access_dtm_proceso_materials_user,access.dtm.proceso.materials.user,model_dtm_proceso_materials,group_dtm_procesos_user,1,1,0,0
 
 access_dtm_proceso_rechazo_admin,access.dtm.proceso.rechazo.admin,model_dtm_proceso_rechazo,group_dtm_procesos_admin,1,1,1,1
-access_dtm_proceso_rechazo_admin,access.dtm.proceso.rechazo.admin,model_dtm_proceso_rechazo,group_dtm_procesos_user,1,1,0,0
+access_dtm_proceso_rechazo_user,access.dtm.proceso.rechazo.user,model_dtm_proceso_rechazo,group_dtm_procesos_user,1,1,0,0
 
 access_dtm_proceso_anexos_admin,access.dtm.proceso.anexos.admin,model_dtm_proceso_anexos,group_dtm_procesos_admin,1,1,1,1
-access_dtm_proceso_anexos_admin,access.dtm.proceso.anexos.admin,model_dtm_proceso_anexos,group_dtm_procesos_user,1,1,0,0
+access_dtm_proceso_anexos_user,access.dtm.proceso.anexos.user,model_dtm_proceso_anexos,group_dtm_procesos_user,1,1,0,0
 
 access_dtm_proceso_cortadora_admin,access.dtm.proceso.cortadora.admin,model_dtm_proceso_cortadora,group_dtm_procesos_admin,1,1,1,1
-access_dtm_proceso_cortadora_admin,access.dtm.proceso.cortadora.admin,model_dtm_proceso_cortadora,group_dtm_procesos_user,1,1,0,0
+access_dtm_proceso_cortadora_user,access.dtm.proceso.cortadora.user,model_dtm_proceso_cortadora,group_dtm_procesos_user,1,1,0,0
 
 access_dtm_proceso_tubos_admin,access.dtm.proceso.tubos.admin,model_dtm_proceso_tubos,group_dtm_procesos_admin,1,1,1,1
-access_dtm_proceso_tubos_admin,access.dtm.proceso.tubos.admin,model_dtm_proceso_tubos,group_dtm_procesos_user,1,1,0,0
+access_dtm_proceso_tubos_user,access.dtm.proceso.tubos.user,model_dtm_proceso_tubos,group_dtm_procesos_user,1,1,0,0
 
 access_dtm_proceso_primer_admin,access.dtm.proceso.primer.admin,model_dtm_proceso_primer,group_dtm_procesos_admin,1,1,1,1
-access_dtm_proceso_primer_admin,access.dtm.proceso.primer.admin,model_dtm_proceso_primer,group_dtm_procesos_user,1,1,0,0
+access_dtm_proceso_primer_user,access.dtm.proceso.primer.user,model_dtm_proceso_primer,group_dtm_procesos_user,1,1,1,0
 
 access_dtm_proceso_liberacion_admin,access.dtm.proceso.liberacion.admin,model_dtm_proceso_liberacion,group_dtm_procesos_admin,1,1,1,1
-access_dtm_proceso_liberacion_admin,access.dtm.proceso.liberacion.admin,model_dtm_proceso_liberacion,group_dtm_procesos_user,1,1,0,0
+access_dtm_proceso_liberacion_user,access.dtm.proceso.liberacion.user,model_dtm_proceso_liberacion,group_dtm_procesos_user,1,1,0,0
 
 access_dtm_procesos_indicadores_admin,access.dtm.procesos.indicadores.admin,model_dtm_procesos_indicadores,group_dtm_procesos_admin,1,1,1,1
-access_dtm_procesos_indicadores_admin,access.dtm.procesos.indicadores.admin,model_dtm_procesos_indicadores,group_dtm_procesos_user,1,1,0,0
+access_dtm_procesos_indicadores_user,access.dtm.procesos.indicadores.user,model_dtm_procesos_indicadores,group_dtm_procesos_user,1,1,1,0
 
