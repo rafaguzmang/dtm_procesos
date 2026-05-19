@@ -502,13 +502,16 @@ class Proceso(models.Model):
                         get_fact.write({'materieales_id': [(5, 0, {})]})
                         for material in self.materials_ids:
                             vals = {
-                                "npi_id":get_fact.id,
+                                "npi_id":get_fact.id if self.tipe_order == 'NPI' else False,
+                                "retrabajo_id":get_fact.id if self.tipe_order == 'RT' else False,
                                 "material":f"{material.id} - {material.nombre} {material.medida}",
                                 "cantidad":material.materials_cuantity
                             }
-                            get_material = self.env['dtm.facturado.materiales'].search([("npi_id","=",get_fact.id),("material","=",f"{material.id} - {material.nombre} {material.medida}")])
-                            get_material.write(vals) if get_material else get_material.create(vals)
-                            get_material = self.env['dtm.facturado.materiales'].search([("npi_id","=",get_fact.id),("material","=",f"{material.id} - {material.nombre} {material.medida}")])
+                            get_material = self.env['dtm.facturado.materiales'].search([("npi_id","=",get_fact.id),("material","=",f"{material.id} - {material.nombre} {material.medida}")],limit=1)
+                            if get_material:
+                                get_material.write(vals)
+                            else:
+                                get_material = self.env['dtm.facturado.materiales'].create(vals)
                             lista.append(get_material.id)
                         if get_fact:
                             get_fact.write({'materieales_id': [(6, 0, lista)]})
