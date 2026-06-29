@@ -1,0 +1,134 @@
+.nc-modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.nc-section {
+    margin-bottom: 2rem;
+}
+
+.nc-section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 12px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #6366f1;
+    display: inline-block;
+    letter-spacing: 0.01em;
+}
+
+.nc-table-wrapper {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.nc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+}
+
+.nc-table thead tr {
+    background: #f1f5f9;
+}
+
+.nc-table thead th {
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.nc-table tbody tr {
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.15s;
+}
+
+.nc-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.nc-table tbody tr:hover {
+    background: #f8faff;
+}
+
+.nc-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.nc-table tbody tr:nth-child(even):hover {
+    background: #f0f4ff;
+}
+
+.nc-table td {
+    padding: 10px 14px;
+    color: #334155;
+    vertical-align: middle;
+}
+
+.nc-td-archivo {
+    font-family: monospace;
+    font-size: 12.5px;
+    color: #6366f1;
+    font-weight: 500;
+}
+
+.nc-td-archivo:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.nc-td-material {
+    color: #475569;
+    max-width: 280px;
+}
+
+.nc-td-cantidad {
+    text-align: center;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.nc-td-tiempo {
+    color: #64748b;
+    white-space: nowrap;
+}
+
+.nc-td-cortadora {
+    font-size: 12px;
+    background: #ede9fe;
+    color: #5b21b6;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-weight: 600;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.nc-td-porcentaje {
+    white-space: nowrap;
+}
+
+.nc-pct-high {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.nc-pct-low {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.nc-td-tiempo-real {
+    font-weight: 600;
+    color: #1e293b;
+    white-space: nowrap;
+}

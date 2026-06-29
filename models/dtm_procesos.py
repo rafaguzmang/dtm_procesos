@@ -307,6 +307,87 @@ class Proceso(models.Model):
                         'porcentaje': (tiempo * 100) / max(len(get_proceso), 1),
                     })
 
+        get_self = self.env['dtm.proceso'].search([('status','=','terminado')])
+        cont = 0
+        for orden in get_self:
+            print("ESTA ES LA CONT", cont)
+            get_diseno = self.env['dtm.odt'].search([('ot_number','=',orden.ot_number),('revision_ot','=',orden.revision_ot)], limit=1)
+            get_facturado = self.env['dtm.compras.items'].search([("orden_trabajo","=",orden.ot_number)], limit=1)
+            get_factura_id = get_facturado.model_id.factura_pdf
+            # if get_factura_id:
+            if cont < 5:
+                cont+=1
+                vals = {
+                    'ot_number': orden.ot_number,
+                    'tipe_order': orden.tipe_order,
+                    'name_client': orden.name_client,
+                    'product_name': orden.product_name,
+                    'date_in': orden.date_in,
+                    'po_number': orden.po_number,
+                    'date_rel': orden.date_rel,
+                    'version_ot': orden.version_ot,
+                    'revision_ot': orden.revision_ot,
+                    'color': orden.color,
+                    'cuantity': orden.cuantity,
+                    'date_inicio': orden.create_date,
+                    'date_terminado': orden.date_terminado,
+                    'description': orden.description,
+                    'notes':orden.notes,
+                    'calidad_liberacion':orden.calidad_liberacion,
+                    'rechazo_id':orden.rechazo_id,
+                }
+                get_terminado = self.env['dtm.facturado.odt'].search([("ot_number","=",orden.ot_number)], limit=1)
+                
+                if get_terminado:
+                    get_terminado.write(vals)
+                else:
+                    get_terminado = self.env['dtm.facturado.odt'].create(vals)
+                
+                planos_procesos = get_diseno.anexos_id  
+                for plano in planos_procesos:
+                    get_planos = self.env['dtm.facturado.planos'].search([('model_id','=',get_terminado.id),('nombre','=',plano.name)],limit=1) 
+                    if not get_planos:  
+                        attachment = self.env['ir.attachment'].browse(plano.id)                    
+                        get_planos.create({
+                            'model_id':get_terminado.id,
+                            'nombre':attachment.name,
+                            'archivo':attachment.datas
+                        })  
+
+
+                if get_diseno.materials_ids:
+                    for mat in get_diseno.materials_ids:
+                        get_material = self.env["dtm.facturado.materiales"].search([
+                            ('model_id','=',get_terminado.id),
+                            ('material','=',f"{mat.materials_list.id} - {mat.materials_list.nombre} {mat.materials_list.medida}"),
+                            ('cantidad','=',mat.materials_cuantity)                          
+                        ])
+                        if not get_material:
+                            get_material = self.env["dtm.facturado.materiales"].create({
+                                'model_id':get_terminado.id,
+                                'material':f"{mat.materials_list.id} - {mat.materials_list.nombre} {mat.materials_list.medida}",
+                                'cantidad':mat.materials_cuantity,
+                                'precio':mat.costo,
+                                'factura':mat.factura
+                            })                       
+                            
+                if get_diseno.lista_material_id:
+                    for mat in get_diseno.lista_material_id:
+                        get_material = self.env["dtm.facturado.materiales.diseno"].search([
+                            ('model_id','=',get_terminado.id),
+                            ('material','=',f"{mat.material_id.id} - {mat.material_id.nombre} {mat.material_id.medida}"),
+                            ('cantidad','=',mat.cantidad)                          
+                        ])
+                        if not get_material:
+                            get_material = self.env["dtm.facturado.materiales.diseno"].create({
+                                'model_id':get_terminado.id,
+                                'material':f"{mat.material_id.id} - {mat.material_id.nombre} {mat.material_id.medida}",
+                                'cantidad':mat.cantidad,
+                                'precio':mat.precio,
+                            })                      
+
+                orden.unlink()
+            
         return res
 
     def eliminacion_ot (self,get_ordenes):
