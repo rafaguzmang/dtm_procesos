@@ -72,6 +72,50 @@ class Proceso(models.Model):
 
     permiso = fields.Boolean(compute='_compute_permiso')
 
+    status_time = fields.Datetime() # Guarda el momento en que se cambia el status
+    horas_atorado = fields.Float() # Calcula las horas que lleva en el mismo status
+    atorado = fields.Boolean()
+
+    def _cron_revisar_atorados(self):
+        ordenes = self.search([('status', '!=', 'terminado')])
+        for orden in ordenes:
+            if orden.status_time:
+                delta = fields.Datetime.now() - orden.status_time
+                horas = delta.total_seconds() / 3600
+                orden.write({
+                    'horas_atorado': horas,
+                    'atorado': horas > 24,
+                })
+               
+
+
+    def write(self, vals):
+        if 'status' in vals:
+            registros_que_cambian = self.filtered(lambda r: r.status != vals['status'])
+            if registros_que_cambian:
+                ahora = fields.Datetime.now()
+                for r in registros_que_cambian:
+                    if r.status_time:  # solo si ya tenía un status previo con tiempo inicial
+                        horas = (ahora - r.status_time).total_seconds() / 3600.0
+                        odt = self.env['dtm.odt'].search([('ot_number', '=', r.ot_number)], limit=1)
+                        self.env['dtm.odt.tiempos.status'].create({
+                            'estacion': dict(r._fields['status'].selection).get(r.status),
+                            'inicial': r.status_time,
+                            'final': ahora,
+                            'total': horas,
+                            'model_id': odt.id if odt else False,
+                        })
+
+                res = super(Proceso, self).write(vals)
+                registros_que_cambian.write({
+                    'status_time': ahora,
+                    'atorado': False,
+                    'horas_atorado': 0,
+                })
+                return res
+
+        return super(Proceso, self).write(vals)
+
     def _compute_materials(self):
         for record in self:  # Actualiza la lista de materiales de las ordenes
             materiales = record.materials_ids
@@ -308,15 +352,12 @@ class Proceso(models.Model):
                     })
 
         get_self = self.env['dtm.proceso'].search([('status','=','terminado')])
-        cont = 0
         for orden in get_self:
-            print("ESTA ES LA CONT", cont)
             get_diseno = self.env['dtm.odt'].search([('ot_number','=',orden.ot_number),('revision_ot','=',orden.revision_ot)], limit=1)
             get_facturado = self.env['dtm.compras.items'].search([("orden_trabajo","=",orden.ot_number)], limit=1)
             get_factura_id = get_facturado.model_id.factura_pdf
-            # if get_factura_id:
-            if cont < 5:
-                cont+=1
+            if  get_factura_id:
+          
                 vals = {
                     'ot_number': orden.ot_number,
                     'tipe_order': orden.tipe_order,
@@ -386,6 +427,19 @@ class Proceso(models.Model):
                                 'precio':mat.precio,
                             })                      
 
+                get_compras = self.env['dtm.compras.realizado'].search([
+                        ('orden_trabajo','=',orden.ot_number),
+                        ('tipo_orden','in',["OT","NPI"]),
+                    ])
+
+                #Se borran las ordenes de los demas modelos                
+                get_compras.unlink() if get_compras else None
+                get_materiales_diseno = self.env['dtm.materials.line'].search([("model_id","=",get_diseno.id)])
+                get_materiales_diseno.unlink() if get_materiales_diseno else None
+                get_diseno.unlink() if get_diseno else None 
+                get_materiales_diseno = self.env['dtm.odt.listamateriales'].search([("model_id","=",get_diseno.id)])
+                get_materiales_diseno.unlink() if get_materiales_diseno else None
+                    
                 orden.unlink()
             
         return res

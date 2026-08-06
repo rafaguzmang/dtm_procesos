@@ -2,6 +2,17 @@
 <odoo>
     <data>
 
+        <record id="ir_cron_revisar_atorados" model="ir.cron">
+            <field name="name">DTM Proceso: Revisar órdenes atoradas</field>
+            <field name="model_id" ref="model_dtm_proceso"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_revisar_atorados()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+
         <record id = "dtm_proceso_accion" model="ir.actions.act_window">
             <field name="name">Manufactura</field>
             <field name="res_model">dtm.proceso</field>
@@ -32,6 +43,19 @@
                 <kanban default_group_by = "status">
                     <template>
                         <t t-name="kanban-box">
+                            <style>
+                                .or-tipo-orden {
+                                    margin-right: 4px;
+                                }
+                                .or-revision {
+                                    margin-right: 4px;
+                                    color: #666666;
+                                    font-size: 0.85em;
+                                }
+                                .or-ot-number {
+                                    font-weight: 700;
+                                }
+                            </style>
                              <script>
                                 var tabla = document.getElementsByClassName('o_kanban_renderer');
                                 var colums = tabla[0].children.length;
@@ -102,10 +126,13 @@
 
                                             <field name="materials" widget="percentpie"/>
                                         </div>
-                                        <strong class="o_kanban_record_title display-row"  >
-                                            <field name="tipe_order" />
-                                            <field name="revision_ot" />
-                                            <field name="ot_number" />
+                                        <strong class="o_kanban_record_title display-row">
+                                            <span class="or-tipo-orden">
+                                                <field name="tipe_order"/>
+                                            </span>                                          
+                                            <span class="or-ot-number">
+                                                <field name="ot_number"/>
+                                            </span>
                                         </strong>
                                     <div class="o_kanban_tags_section flex-container"  >
                                         <ul>
