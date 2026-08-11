@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-     <menuitem name="Procesos" id="menu_root_dtm_procesos">
+     <menuitem name="Manufactura" id="menu_root_dtm_procesos" groups="group_dtm_procesos_admin,group_dtm_procesos_user,group_dtm_procesos_restringido">
         <menuitem id="dtm_cortadora_laser__menu" action="dtm_materiales_laser.dtm_cortadora_laser_act_window" 
                 groups="group_dtm_procesos_admin,group_dtm_procesos_user"
                 sequence="1"/>
