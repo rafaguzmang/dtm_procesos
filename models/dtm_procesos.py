@@ -702,6 +702,8 @@ class Documentos(models.Model):
     _name = "dtm.proceso.anexos"
     _description = "Guarda todos los planos de la orden de trabajo"
 
+    origin_attachment_id = fields.Many2one('ir.attachment', string='Adjunto origen')
+
     documentos = fields.Binary()
     nombre = fields.Char()
     color = fields.Integer(string='Color', readonly = False)
