@@ -2,7 +2,7 @@
 <odoo>
      <menuitem name="Manufactura" id="menu_root_dtm_procesos" groups="group_dtm_procesos_admin,group_dtm_procesos_user,group_dtm_procesos_restringido">
 
-        <menuitem id="action_modulo_nesteo_menu" action="dtm_odt.action_modulo_nesteo" groups="dtm_materiales_laser.group_dtm_materiales_laser_admin" sequence="0"/>
+        <menuitem id="action_modulo_nesteo_menu" action="dtm_odt.action_modulo_nesteo" groups="dtm_materiales_laser.group_dtm_materiales_laser_admin,dtm_odt.group_diseno_user" sequence="0"/>
 
         <menuitem name="Corte Láminas" id="menu_corte_laminas" groups="group_dtm_procesos_admin,group_dtm_procesos_user" sequence="1">  
             <menuitem id="dtm_cortadora_laser__menu" action="dtm_materiales_laser.dtm_cortadora_laser_act_window" 
