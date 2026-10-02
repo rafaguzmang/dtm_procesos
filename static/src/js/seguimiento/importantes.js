@@ -43,7 +43,6 @@ export class Importantes extends Component {
     async loadImportantes() {
         const response = await fetch("/seguimiento_importantes");
         const data = await response.json();
-        //            console.log(data)
         this.state.importantes = data;
     };
 

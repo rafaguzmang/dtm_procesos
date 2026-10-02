@@ -12,9 +12,9 @@
                     <CorteLaser/>
                 </div>
                 
-                <div class="dtm-card">
+                <!-- <div class="dtm-card">
                     <Soldadura/>
-                </div>
+                </div> -->
                 
                 <div class="dtm-card dtm-card-importantes">
                     <Importantes/>

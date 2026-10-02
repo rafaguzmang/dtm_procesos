@@ -76,7 +76,7 @@
 /* === Responsive === */
 @media (max-width: 1400px) {
     .dtm-main-grid {
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
     }
 }
 

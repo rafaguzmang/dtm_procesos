@@ -390,7 +390,10 @@ class ProcesosController(http.Controller):
 
         orden_id = request.env['dtm.compras.requerido'].sudo().search([('orden_trabajo','=',orden),('revision_ot','=',revision),('tipo_orden','in',['OT','NPI'])])
 
-        result = [{
+        result = []
+
+        for material in orden_id:
+            result.append({
                 'codigo': material.codigo,
                 'descripcion': material.nombre,
                 'cantidad': material.cantidad,
@@ -398,7 +401,7 @@ class ProcesosController(http.Controller):
                 'unitario':request.env['dtm.compras.material'].sudo().search([('nombre','=',material.nombre)],limit=1).unitario,
                 'total': round(request.env['dtm.compras.material'].sudo().search([('nombre','=',material.nombre)],limit=1).unitario * material.cantidad,2),
                 'nesteo': 'Falta' if material.nesteo else 'Si',
-            } for material in orden_id]
+            } )
         return result
     
     # Obtienes la lista de materiales que faltan de comprar según la orden de trabajo que lo solicite
