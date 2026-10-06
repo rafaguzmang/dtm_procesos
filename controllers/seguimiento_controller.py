@@ -447,3 +447,16 @@ class ProcesosController(http.Controller):
                 'Access-Control-Allow-Origin':'*'
             }
         )
+
+    @http.route('/seguimiento/po_pdf', type='json', auth='public')
+    def po_pdf(self):
+        raw = request.httprequest.data
+        data = json.loads(raw)
+        nombre = data.get('nombre')
+        orden_trabajo = data.get('orden_trabajo')
+        revision_ot = data.get('revision_ot')
+        get_maquinado_id = request.env['dtm.maquinados'].sudo().search([('orden_trabajo','=',orden_trabajo),('revision_ot','=',revision_ot)],limit=1)
+        po_id = request.env['dtm.maquinados.temporales'].sudo().search([('model_id','=',get_maquinado_id.id),('nombre','=',nombre)],limit=1)
+        pdf = po_id.anexos_id[0].datas.decode('utf-8')
+        return {'pdf':pdf}
+        

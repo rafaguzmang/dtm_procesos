@@ -1,0 +1,69 @@
+/* ---------- Tabla de maquinados ---------- */
+
+/* Sin ordenamiento: el encabezado no se ve clickeable */
+.dc-table--static thead th {
+    cursor: default;
+}
+
+.dc-table--static thead th:hover {
+    background: var(--dc-surface);
+    color: #4b5563;
+}
+
+/* Columnas numéricas */
+.dc-th--num,
+.dc-td--num {
+    text-align: right;
+}
+
+.dc-td--num {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* 100% completado */
+.dc-td--ok {
+    color: var(--dc-ok);
+    font-weight: 600;
+}
+
+/* Fila clickeable (abre el PDF) */
+.dc-row--click {
+    cursor: pointer;
+}
+
+.dc-row--click:hover td:first-child {
+    color: var(--dc-accent);
+    font-weight: 500;
+}
+
+
+/* ---------- Tabla de maquinados ---------- */
+
+/* Variables propias, porque esta tabla no vive dentro de .dc-table-section */
+.dc-table--static {
+    --dc-bg: #ffffff;
+    --dc-surface: #f8f9fb;
+    --dc-border: #e2e6ec;
+    --dc-text: #1f2937;
+    --dc-accent: #2563eb;
+    --dc-accent-soft: #e8efff;
+    --dc-ok: #15803d;
+
+    color: var(--dc-text);
+    font-size: 0.9rem;
+    background: var(--dc-bg);
+    border: 1px solid var(--dc-border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Sin ordenamiento: el encabezado no se ve clickeable */
+.dc-table--static thead th {
+    cursor: default;
+}
+
+.dc-table--static thead th:hover {
+    background: var(--dc-surface);
+    color: #4b5563;
+}

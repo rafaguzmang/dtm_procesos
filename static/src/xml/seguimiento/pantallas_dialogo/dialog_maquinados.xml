@@ -9,37 +9,61 @@
                 <button type="button" class="btn-close" aria-label="Close" t-on-click="props.cerrar"></button>
               </div>
               <div class="modal-body">                 
-                          <table class="table">
-                            <thead>
-                              <tr>
-                                <th>nombre</th>
-                                <th>cantidad</th>
-                                <th>porcentaje</th>
-                                <th>tiempo</th>                               
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <t t-foreach="state.maquinados" t-as="maquinado" t-key="maquinado.index">
-                                <tr>
-                                  <!-- <td><t t-esc="maquinado.index"/></td> -->
-                                  <td><t t-esc="maquinado.nombre"/></td>
-                                  <td><t t-esc="maquinado.cantidad"/></td>
-                                  <td t-attf-style="color: #{maquinado.porcentaje == '100%' ? '#33b952' : ''};">
-                                    <t t-esc="maquinado.porcentaje"/>
-                                  </td>
-                                  <td><t t-esc="maquinado.tiempo"/> min</td>                                  
-                                </tr>
-                              </t>
-                            </tbody>
-                          </table>
+                 <table class="table dc-table dc-table--static">
+                      <thead>
+                        <tr>
+                          <th>nombre</th>
+                          <th class="dc-th--num">cantidad</th>
+                          <th class="dc-th--num">porcentaje</th>
+                          <th class="dc-th--num">tiempo</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <t t-foreach="state.maquinados" t-as="maquinado" t-key="maquinado.index">
+                          <tr t-on-click="() => this.mostrarPDF(maquinado.nombre)" class="dc-row--click">
+                            <td><t t-esc="maquinado.nombre"/></td>
+                            <td class="dc-td--num"><t t-esc="maquinado.cantidad"/></td>
+                            <td t-attf-class="dc-td--num #{maquinado.porcentaje == '100%' ? 'dc-td--ok' : ''}">
+                              <t t-esc="maquinado.porcentaje"/>
+                            </td>
+                            <td class="dc-td--num"><t t-esc="maquinado.tiempo"/> min</td>
+                          </tr>
+                        </t>
+                      </tbody>
+                    </table>
                   
-              </div>
-              <div class="modal-footer">
+                  </div>
+                  <t t-if="state.showPDF">
+                        <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+                            <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">PO</h5>
+                                    <button type="button" class="btn-close" aria-label="Close" t-on-click="closePDF"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <iframe 
+                                        t-att-src="'data:application/pdf;base64,' + state.currentPDF"
+                                        class="pdf-iframe"
+                                        type="application/pdf">
+                                    </iframe>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" t-on-click="closePDF">Cerrar</button> 
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                  <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" t-on-click="props.cerrar">Cerrar</button> 
               </div>
             </div>
           </div>
         </div>
+
+
+
     </t>
   </odoo>
   

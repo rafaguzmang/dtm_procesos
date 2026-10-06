@@ -30,6 +30,8 @@
             'dtm_procesos/static/src/css/ordene_tabla.css',
             'dtm_procesos/static/src/css/importantes.css',
             'dtm_procesos/static/src/css/dialog_corte_laser.css',
+            'dtm_procesos/static/src/css/dialog_maquinados.css',
+            
 
             # JS
             'dtm_procesos/static/src/js/indicador.js',
