@@ -25,7 +25,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                 <t t-foreach="this.state.importantes[year][week]" t-as="orden" t-key="orden['orden']">
+                                 <t t-foreach="this.state.importantes[year][week]" t-as="orden" t-key="orden_index">
                                     <tr>
                                         <td t-attf-style="background-color: #{orden.orden == 0 ?'#f3f69cff' :''};">
                                            <t t-esc="orden['orden']"/>
