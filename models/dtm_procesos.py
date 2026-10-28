@@ -355,8 +355,10 @@ class Proceso(models.Model):
         for orden in get_self:
             get_diseno = self.env['dtm.odt'].search([('ot_number','=',orden.ot_number),('revision_ot','=',orden.revision_ot)], limit=1)
             get_facturado = self.env['dtm.compras.items'].search([("orden_trabajo","=",orden.ot_number)], limit=1)
+            # Revisa si la orden ya pasó a facturado en el módulo de ventas
+            get_facturado_ventas = self.env['dtm.compra.facturado.item'].search([("orden_trabajo","=",orden.ot_number)], limit=1)
             get_factura_id = get_facturado.model_id.factura_pdf
-            if  get_factura_id:
+            if  get_factura_id or get_facturado_ventas:
           
                 vals = {
                     'ot_number': orden.ot_number,
