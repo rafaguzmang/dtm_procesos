@@ -14,6 +14,7 @@
                                 <tr>
                                     <th>Orden</th>
                                     <th>Cliente</th>
+                                    <th>Proyecto</th>
                                     <th>Fecha</th>
                                     <th>Nesteo</th>
                                     <th>Material</th>
@@ -32,6 +33,9 @@
                                         </td>
                                         <td>
                                             <t t-esc="orden['cliente']"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="orden['producto']"/>
                                         </td>
                                         <td t-attf-style="background-color: #{orden.fecha_retardo?'#ec91b0' :''};">
                                            <t t-esc="orden['fecha_entrega']"/>

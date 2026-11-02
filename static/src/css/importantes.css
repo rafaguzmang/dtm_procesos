@@ -99,38 +99,37 @@
 }
 
 .importantes-table th:nth-child(3),
-/* Fecha */
+/* Cliente */
 .importantes-table td:nth-child(3) {
+    width: auto;
+    min-width: 120px;
+}
+
+.importantes-table th:nth-child(4),
+/* Fecha */
+.importantes-table td:nth-child(4) {
     width: 85px;
     max-width: 85px;
 }
 
-.importantes-table th:nth-child(4),
+.importantes-table th:nth-child(5),
 /* Nesteo */
-.importantes-table td:nth-child(4) {
+.importantes-table td:nth-child(5) {
     width: 55px;
     max-width: 55px;
     text-align: center;
 }
 
-.importantes-table th:nth-child(5),
+.importantes-table th:nth-child(6),
 /* Material */
-.importantes-table td:nth-child(5) {
+.importantes-table td:nth-child(6) {
     width: 60px;
     max-width: 60px;
     text-align: center;
 }
 
-.importantes-table th:nth-child(6),
-/* Autorizar */
-.importantes-table td:nth-child(6) {
-    width: 50px;
-    max-width: 50px;
-    text-align: center;
-}
-
 .importantes-table th:nth-child(7),
-/* Compras */
+/* Autorizar */
 .importantes-table td:nth-child(7) {
     width: 50px;
     max-width: 50px;
@@ -138,24 +137,32 @@
 }
 
 .importantes-table th:nth-child(8),
-/* Corte */
+/* Compras */
 .importantes-table td:nth-child(8) {
+    width: 50px;
+    max-width: 50px;
+    text-align: center;
+}
+
+.importantes-table th:nth-child(9),
+/* Corte */
+.importantes-table td:nth-child(9) {
     width: 55px;
     max-width: 55px;
     text-align: center;
 }
 
-.importantes-table th:nth-child(9),
+.importantes-table th:nth-child(10),
 /* Maquinado */
-.importantes-table td:nth-child(9) {
+.importantes-table td:nth-child(10) {
     width: 75px;
     max-width: 75px;
     text-align: center;
 }
 
-.importantes-table th:nth-child(10),
+.importantes-table th:nth-child(11),
 /* Manufactura */
-.importantes-table td:nth-child(10) {
+.importantes-table td:nth-child(11) {
     width: 90px;
     max-width: 90px;
 }
