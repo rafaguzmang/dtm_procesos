@@ -39,7 +39,7 @@ class Proceso(models.Model):
     rechazo_id = fields.One2many("dtm.proceso.rechazo",'model_id',readonly=False)
 
     anexos_id = fields.Many2many("dtm.proceso.anexos",readonly=True)
-    cortadora_id = fields.Many2many("dtm.proceso.cortadora",readonly=True)
+    cortadora_id = fields.One2many("dtm.proceso.cortadora","model_id",readonly=True)
     primera_pieza_id = fields.One2many("dtm.proceso.primer","model_id",readonly=True)
     tubos_id = fields.Many2many("dtm.proceso.tubos",readonly=True)
 
@@ -722,10 +722,11 @@ class Cortadora(models.Model):
     _name = "dtm.proceso.cortadora"
     _description = "Guarda los nesteos del Radán"
 
+    model_id = fields.Many2one('dtm.proceso')
     documentos = fields.Binary()
     nombre = fields.Char()
     cortado = fields.Char("Cortado")
-
+    cortadora = fields.Char(string="Cortadora")
 class CortadoraPrimera(models.Model):
     _name = "dtm.proceso.primer"
     _description = "Guarda los nesteos del Radán para primer corte"
