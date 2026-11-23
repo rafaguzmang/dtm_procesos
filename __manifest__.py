@@ -14,6 +14,7 @@
         'views/dtm_procesos_liberacion_view.xml',
         'views/indicador_view.xml',
         'views/seguimiento_view.xml',
+        'views/dtm_liberacion_primera_view.xml',
 
         #Menú
         'views/dtm_menu.xml',

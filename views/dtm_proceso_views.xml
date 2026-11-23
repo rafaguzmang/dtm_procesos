@@ -41,6 +41,9 @@
             <field name="model">dtm.proceso</field>
             <field name="arch" type="xml">
                 <kanban default_group_by = "status">
+                    <field name="primera_pza_rechazo" invisible="1"/>
+                    <field name="alerta_rechazo_material" invisible="1"/>
+                    <field name="alerta_rechazo_calidad" invisible="1"/>
                     <template>
                         <t t-name="kanban-box">
                             <style>
@@ -54,6 +57,10 @@
                                 }
                                 .or-ot-number {
                                     font-weight: 700;
+                                }
+                                .primera-pza-rechazada {
+                                    border: 2px solid red !important;
+                                    border-radius: 8px;
                                 }
                             </style>
                              <script>
@@ -116,8 +123,8 @@
 
 
                             </script>
-                            <div class="oe_kanban_global_click" >
-                                <div class="oe_kanban_details ">
+                                <div t-attf-class="oe_kanban_global_click #{(record.alerta_rechazo_material.raw_value or record.alerta_rechazo_calidad.raw_value) ? 'primera-pza-rechazada' : ''}">
+                                    <div class="oe_kanban_details ">
                                         <h2 style="color:#f00">
                                             <field name="pausado" />
                                         </h2>
@@ -148,14 +155,13 @@
                                             </li>
                                             <li>
                                                 <i class="fa fa-arrow-circle-up"></i>
-                                                Entrega <field name="date_rel"/>
+                                                Entrega <field name="date_rel"/>                                                
                                             </li>
                                             <li>
                                                 <i class="fa fa-file-text-o" style="padding-right: 5px;"></i>
                                                 <field name="notes"/>
                                             </li>
                                         </ul>
-
                                     </div >
                                     <div class="card-footer" >
                                         <strong class="o_kanban_record_title">
@@ -164,7 +170,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </t>
                     </template>
                 </kanban>
@@ -184,10 +189,10 @@
                         .o_field_widget.o_field_percent_pie {
                             justify-content: flex-end;
                             width: 100%;
-                        {
+                        }
                     </style>
                     <header>
-                        date_disign_finish
+                        <!-- date_disign_finish -->
                         <button type="object" name="action_imprimir_formato" string="ODT" attrs="{'invisible': [('tipe_order', '=', '')]}" icon="fa-print" title="print" class="btn btn-primary"/>
                         <button type="object" name="action_imprimir_materiales" string="Lista de Materiales" attrs="{'invisible': [('tipe_order', '=', '')]}" icon="fa-print" title="print" class="btn btn-primary"/>
                         <button type="object" name="action_firma" string="Firma"  icon="fa-pencil" title="pencil" class="btn btn-primary"/>
@@ -246,6 +251,8 @@
                         <field name="pausa" invisible="1" />
                         <field name="ot_number" invisible="1"/>
                         <field name="permiso" invisible="1"/>
+                        <field name="alerta_rechazo_material" invisible="1"/>
+                        <field name="alerta_rechazo_calidad" invisible="1"/>
 
 
 
@@ -274,33 +281,25 @@
                                     </tree>
                                 </field>
                             </page>
-                            <page string="RECHAZO">
-                                <field name="rechazo_id" >
-                                    <tree>
-                                        <field name="serial_no"/>
+                            <page string="RECHAZO (PNC)">
+                                <field name = "primera_pza_rechazo" invisible='1'/>
+                                <field name="rechazo_id" attrs="{'readonly':[('permiso','!=',True)]}" >
+                                    <tree editable='bottom'>                                        
                                         <field name="no_of_pieces_rejected" options='{"type": "number"}'/>
                                         <field name="inspector"/>
+                                        <field name="reason"/>                                  
+                                        <field name="disposicion" />                                            
+                                        <field name="date"/>
                                     </tree>
-                                    <form>
-                                        <div style="display:flex;justify-content:space-around;margin-bottom:20px">
-                                            <field name="serial_no" style="font-size:15px"/>
-                                            <field name="date"/>
-                                        </div>
-                                        <div class="col-6">
-                                            <group >
-                                                <field name="inspector"/>
-                                                <field name="no_of_pieces_rejected" options='{"type": "number"}'/>
-                                                <field name="revicion"/>
-                                            </group>
-                                        </div>
-
-                                        <group>
-                                            <field name="reason"/>
-                                        </group>
-                                    </form>
                                 </field>
                                 <div style="width:100%;text-align: right;">
+                                    <button type="object" name="action_limpiar_alerta" string="Quitar Alerta" class="btn btn-success" attrs="{'invisible': [('alerta_rechazo_material', '=', False)]}"/>
                                     <button type="object" name="action_rechazo" icon="fa-thumbs-down" string="Rechazo" class="btn btn-primary"/>
+                                </div>
+                                <div class="text-end text-muted mt-4" style="font-size: 0.7em; line-height: 1.3;">
+                                    <div>DTM-FOR-CAL-06</div>
+                                    <div>Revisión 01</div>
+                                    <div>Fecha de Revisión: 12/30/2022</div>
                                 </div>
                             </page>
                             <page string="PLANOS">
@@ -321,19 +320,22 @@
                             </page>
                             <page string="PRIMERA PIEZA" attrs="{'invisible': [('primera_pieza_id', '=', 'False')]}">
                                 <field name="primera_pieza_id">
-                                  <tree>
+                                    <tree>
                                             <field name="nombre" invisible="0"></field>
                                             <field name="cortado" />
                                             <field name="cortadora" />
-                                     </tree>
-                                     <form>
+                                    </tree>
+                                    <form>
                                         <group >
                                             <field name="documentos" filename="nombre" widget="pdf_viewer"></field>
                                             <field name="nombre" invisible="1"></field>
                                         </group>
-                                     </form>
+                                    </form>
                                 </field>
-                                 <button type="object" name="action_liberar" string="Liberar"  icon="fa-check" title="check" class="btn btn-primary" attrs="{'invisible': [('permiso', '!=', True)]}"/>
+                                <field name="liberacion_primera" attrs="{'readonly': [('permiso', '!=', True)]}"/>
+                                    <field name="permiso_primera" invisible="1"></field>
+                                    <field name="permiso" invisible="1"></field>
+                                <button type="object" name="action_liberar" string="Liberar"  icon="fa-check" title="check" class="btn btn-primary" attrs="{'invisible': ['|',('permiso', '!=', True),('permiso_primera', '!=', True)]}"/>
                             </page>
 
                             <page string="CORTADORA">
@@ -369,7 +371,7 @@
                             <page string="NOTAS">
                                 <field name="notes"/>
                             </page>
-                             <page string="CALIDAD" >
+                            <page string="CALIDAD" >
                                 <field name="calidad_liberacion"/>
                             </page>
                             <page string="CERTIFICACIONES" >

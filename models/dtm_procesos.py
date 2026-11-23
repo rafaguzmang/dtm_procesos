@@ -25,7 +25,7 @@ class Proceso(models.Model):
     date_in = fields.Date(string="ENTRADA", readonly=True)
     po_number = fields.Char(string="PO",readonly=True)
     date_rel = fields.Date(string="ENTREGA",readonly=True)
-    version_ot = fields.Integer(string="REVISIÓN",readonly=True)
+    version_ot = fields.Integer(string="PARTE",readonly=True)
     revision_ot = fields.Integer(string="VERSIÓN",readonly=True)
     color = fields.Char(string="COLOR",readonly=True)
     cuantity = fields.Integer(string="CANTIDAD",readonly=True)
@@ -36,12 +36,14 @@ class Proceso(models.Model):
     nesteos = fields.Boolean(string="Nesteos",default=False,readonly=True)
     date_terminado = fields.Date(string="Finalización",readonly=True)
 
-    rechazo_id = fields.One2many("dtm.proceso.rechazo",'model_id',readonly=False)
+    rechazo_id = fields.One2many("dtm.proceso.rechazo",'model_id',string='PRODUCTO NO CONFORME',readonly=False)
 
     anexos_id = fields.Many2many("dtm.proceso.anexos",readonly=True)
     cortadora_id = fields.One2many("dtm.proceso.cortadora","model_id",readonly=True)
     primera_pieza_id = fields.One2many("dtm.proceso.primer","model_id",readonly=True)
     tubos_id = fields.Many2many("dtm.proceso.tubos",readonly=True)
+
+    liberacion_primera = fields.One2many("dtm.procesos.liberacion.primera","model_id",string="Liberación")
 
     material_cortado = fields.Boolean(default=False)
 
@@ -70,11 +72,31 @@ class Proceso(models.Model):
     #Campo para guardar archivos de certificación
     anexos_certificacion = fields.Many2many("ir.attachment",string="Archivos")
 
-    permiso = fields.Boolean(compute='_compute_permiso')
+    permiso = fields.Boolean(compute='_compute_permiso', string='permiso')
+    permiso_primera = fields.Boolean(compute='_compute_permiso_primera', string='permiso primera')
 
     status_time = fields.Datetime() # Guarda el momento en que se cambia el status
     horas_atorado = fields.Float() # Calcula las horas que lleva en el mismo status
     atorado = fields.Boolean()
+    primera_pza_rechazo = fields.Boolean(compute='_compute_pza_rechazo', string='Rechazo primera pieza')  
+    
+    alerta_rechazo_material = fields.Boolean(
+        string="Rechazo de material",
+        default=False
+    )
+
+    alerta_rechazo_calidad = fields.Boolean(
+        string="Rechazo de calidad",
+        default=False
+    )
+
+    def action_limpiar_alerta(self):
+        self.write({'alerta_rechazo_material': False})
+        
+    @api.depends('rechazo_id')
+    def _compute_pza_rechazo(self):
+        for record in self:
+            record.primera_pza_rechazo = bool(record.rechazo_id)
 
     def _cron_revisar_atorados(self):
         ordenes = self.search([('status', '!=', 'terminado')])
@@ -87,8 +109,6 @@ class Proceso(models.Model):
                     'atorado': horas > 24,
                 })
                
-
-
     def write(self, vals):
         if 'status' in vals:
             registros_que_cambian = self.filtered(lambda r: r.status != vals['status'])
@@ -107,11 +127,17 @@ class Proceso(models.Model):
                         })
 
                 res = super(Proceso, self).write(vals)
+
                 registros_que_cambian.write({
                     'status_time': ahora,
                     'atorado': False,
                     'horas_atorado': 0,
                 })
+
+                if vals.get('status') == 'terminado':
+                    registros_que_cambian.write({
+                        'alerta_rechazo_calidad': False
+                    })
                 return res
 
         return super(Proceso, self).write(vals)
@@ -137,7 +163,13 @@ class Proceso(models.Model):
         for record in self:
             record.permiso = False
             if self.env.user.partner_id.email in ['calidad2@dtmindustry.com','calidad@dtmindustry.com','rafaguzmang@hotmail.com']:
-                record.permiso = True
+                record.permiso = True            
+    
+    def _compute_permiso_primera(self):
+        for record in self:
+            record.permiso_primera = False            
+            if record.liberacion_primera:
+                record.permiso_primera = True
 
     def action_pasive(self):
         pass
@@ -562,7 +594,6 @@ class Proceso(models.Model):
     # Función para registrar los rechasos en el modulo de calidad
     def action_rechazo(self):
         get_calidad = self.env['dtm.calidad.rechazo'].search([('job_no','=',self.ot_number)]).mapped('consecutivo')
-
         for exist in self.rechazo_id:
             if exist.serial_no in get_calidad:
                 self.env['dtm.calidad.rechazo'].search([('consecutivo','=',exist.serial_no)]).write({
@@ -592,7 +623,7 @@ class Proceso(models.Model):
         if email == 'manufactura@dtmindustry.com':
             self.firma = self.env.user.partner_id.name
             if self.status == 'calidad':
-                self.date_terminado = datetime.now();
+                self.date_terminado = datetime.now()
         if email in ['calidad@dtmindustry.com','calidad2@dtmindustry.com',"rafaguzmang@hotmail.com"]:
             if self.status == 'calidad' and not self.pausa:
                 # Si es una OT la manda a terminado
@@ -694,11 +725,38 @@ class Rechazo(models.Model):
 
     model_id = fields.Many2one('dtm.proceso')
     serial_no = fields.Integer(string='SERIAL NO',default=serial_number,readonly=True)
-    no_of_pieces_rejected = fields.Integer(string='NO. OF PIECES REJECTED')
-    reason = fields.Text(string='REASON')
-    inspector = fields.Selection(string='INSPECTOR',selection=[('leonardo','Leonardo Ramírez Ruiz'),('priscilla','Priscilla Chávez Díaz')],default='leonardo')
-    date = fields.Date(string='DATE',default=datetime.now(),readonly=True)
-    revicion = fields.Selection(string='Revición',selection=[('muestreo','Muestreo'),('cien','100%')],default='cien')
+    no_of_pieces_rejected = fields.Integer(string='NO. DE PIEZAS RECHAZADAS')
+    reason = fields.Text(string='RAZÓN')
+    inspector = fields.Selection(string='INSPECTOR',selection=[('alejandro','Alejandro Castorena')],default='alejandro')
+    date = fields.Date(string='FECHA',default=datetime.now(),readonly=True)
+    revicion = fields.Selection(string='Revisión',selection=[('muestreo','Muestreo'),('cien','100%')],default='cien')
+    disposicion = fields.Selection(string='DISPOSICIÓN', selection=[('retrabajo','Retrabajo'),('reparacion','Reparación'),('reclasificado','Reclasificado'),('scrap','Scrap')])
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super(Rechazo, self).create(vals_list)
+
+        for record in records:
+            if record.model_id:
+                record.model_id.alerta_rechazo_material = True
+
+        return records  
+
+
+def write(self, vals):
+    res = super(Rechazo, self).write(vals)
+
+    if any(campo in vals for campo in [
+        'no_of_pieces_rejected',
+        'reason',
+        'inspector',
+        'disposicion',
+    ]):
+        for record in self:
+            if record.model_id:
+                record.model_id.alerta_rechazo = True
+
+    return res
 
 class Documentos(models.Model):
     _name = "dtm.proceso.anexos"
@@ -803,5 +861,32 @@ class LiberacionPrimera(models.Model):
 
     aprobada = fields.Boolean(string="Pieza Aprobada:")
     motivo_rechazo = fields.Text(string="Motivo del Rechazo:")
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super(LiberacionPrimera, self).create(vals_list)
+
+        for record in records:
+            if record.model_id and record.motivo_rechazo:
+                record.model_id.alerta_rechazo_calidad = True
+
+        return records
+
+
+    def write(self, vals):
+        res = super(LiberacionPrimera, self).write(vals)
+
+        if 'motivo_rechazo' in vals:
+            procesos = self.mapped('model_id')
+
+            for proceso in procesos:
+                tiene_rechazo = self.search_count([
+                    ('model_id', '=', proceso.id),
+                    ('motivo_rechazo', '!=', False),
+                ]) > 0
+
+                proceso.alerta_rechazo_calidad = tiene_rechazo
+
+        return res
 
 
