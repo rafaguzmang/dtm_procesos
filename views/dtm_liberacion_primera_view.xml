@@ -45,7 +45,7 @@
                     <script>
                         var topic = document.getElementsByClassName('modal-title text-break');
                         topic = topic[0];
-                        topic.innerText="CHECK LIST DE LIBERACIÓN DE PIEZAS FINALES";
+                        topic.innerText="LIBERACIÓN DE PRIMERA PIEZA";
                     </script>
 
                     <div class="h2">
@@ -68,10 +68,10 @@
                                 <field name="saldadura"/>
                                 <field name="pieza_limpia"/>
                             </group>
-                            <group string="Adicional">
+                            <!-- <group string="Adicional">
                                 <field name="etiqueta_mexico"/>
                                 <field name="empaque"/>
-                            </group>
+                            </group> -->
                        </div>
 
                    </group>
