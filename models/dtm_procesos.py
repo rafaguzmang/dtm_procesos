@@ -79,6 +79,7 @@ class Proceso(models.Model):
     horas_atorado = fields.Float() # Calcula las horas que lleva en el mismo status
     atorado = fields.Boolean()
     primera_pza_rechazo = fields.Boolean(compute='_compute_pza_rechazo', string='Rechazo primera pieza')  
+    fecha_liberacion_calidad = fields.Date(readonly=True, string='Fecha de Término')
     
     alerta_rechazo_material = fields.Boolean(
         string="Rechazo de material",
@@ -626,6 +627,9 @@ class Proceso(models.Model):
                 self.date_terminado = datetime.now()
         if email in ['calidad@dtmindustry.com','calidad2@dtmindustry.com',"rafaguzmang@hotmail.com"]:
             if self.status == 'calidad' and not self.pausa:
+                if not self.calidad_liberacion:
+                    raise ValidationError("Debe llenar el formato de liberación de piezas antes de firmar.")
+                self.fecha_liberacion_calidad = datetime.now() 
                 # Si es una OT la manda a terminado
                 if self.date_terminado:
                     if self.tipe_order == 'OT': #Si es un OT se manda a facturado odt si tiene factura

@@ -224,7 +224,7 @@
 
                             <field name="materials" widget="percentpie" />
 
-                        <group >
+                        <group col="3">
                             <group>
                                 <field name="tipe_order"/>
                                 <field name="revision_ot"/>
@@ -240,6 +240,9 @@
                                 <field name="color" />
                                 <field name="pausado" style="color:#f00" attrs="{'invisible': [('pausado', 'not in', ['Pausado por Ventas','Pausado por Calidad'])]}"/>
                                 <field name="planos" widget="boolean_toggle" />
+                            </group>
+                            <group>
+                                <field name="fecha_liberacion_calidad"/>
                             </group>
                         </group>
 

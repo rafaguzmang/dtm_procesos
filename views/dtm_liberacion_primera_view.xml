@@ -53,13 +53,13 @@
                     </div>
 
                    <group class="col-12">
-                         <group string="Funcional" class="col-6">
+                         <!-- <group string="Funcional" class="col-6">
                             <field name="sujecion"/>
                             <field name="puertas"/>
                             <field name="puertas_siguen"/>
                             <field name="llantas"/>
                             <field name="rodillos"/>
-                        </group>
+                        </group> -->
                        <div class="col-6">
                             <group string="Estético" class="col-12">
                                 <field name="acabado_pintura"/>
@@ -76,12 +76,12 @@
 
                    </group>
                     <group class="col-12">
-                        <group string="Mecánico" class="col-6">
+                        <!-- <group string="Mecánico" class="col-6">
                             <field name="todas_piezas"/>
                             <field name="ensamble_indicado"/>
                             <field name="saldadura_uniones"/>
                             <field name="tornilleria"/>
-                        </group>
+                        </group> -->
                         <div class="col-6">
                             <group string="Dimensiones" class="col-12">
                                 <field name="dimensiones"/>
